@@ -7,9 +7,20 @@ import HomeButton from "@/components/home-button";
 import BulkPortalBox from "./bulk-portal-box";
 import type { Prisma } from "@prisma/client";
 
+const PAGE_SIZE = 25;
+
 function asString(v: string | string[] | undefined): string | undefined {
   if (Array.isArray(v)) return v[0];
   return v || undefined;
+}
+
+function pageHref(page: number, q: string | undefined, onlyPortal: boolean): string {
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  if (onlyPortal) params.set("portal", "1");
+  if (page > 1) params.set("page", String(page));
+  const qs = params.toString();
+  return qs ? `/dashboard/clientes?${qs}` : "/dashboard/clientes";
 }
 
 function formatLastLogin(d: Date | null | undefined): string {
@@ -31,6 +42,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
 
   const q = asString(searchParams.q)?.trim();
   const onlyPortal = asString(searchParams.portal) === "1";
+  const page = Math.max(1, Number(asString(searchParams.page)) || 1);
 
   const where: Prisma.ClientWhereInput = {
     AND: [
@@ -40,13 +52,15 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
     ],
   };
 
-  const [clients, portalPreview] = await Promise.all([
+  const [totalCount, clients, portalPreview] = await Promise.all([
+    prisma.client.count({ where }),
     prisma.client.findMany({
       where,
       orderBy: onlyPortal
         ? { clientAccount: { lastLoginAt: "desc" } }
         : { fullNameNormalized: "asc" },
-      take: 1000,
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
       include: {
         policies: {
           select: { id: true, status: true, seller: { select: { displayName: true } } },
@@ -56,6 +70,8 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
     }),
     previewBulkPortalAccess(scope),
   ]);
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   return (
     <div className="min-h-screen bg-texture-navy">
@@ -68,7 +84,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
         </div>
         <div className="mt-1 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">
-            Cartera de clientes ({clients.length})
+            Cartera de clientes ({totalCount})
           </h1>
           <Link href="/dashboard/clientes/nuevo" className={primaryButtonClass}>
             + Nuevo cliente
@@ -164,6 +180,38 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
             </tbody>
           </table>
         </div>
+
+        {totalPages > 1 && (
+          <div className="mt-4 flex items-center justify-center gap-4">
+            {page > 1 ? (
+              <Link
+                href={pageHref(page - 1, q, onlyPortal)}
+                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition hover:bg-gold-500/10"
+              >
+                ← Anterior
+              </Link>
+            ) : (
+              <span className="rounded-full border border-gold-500/10 px-4 py-2 text-sm font-medium text-white/30">
+                ← Anterior
+              </span>
+            )}
+            <span className="text-sm text-white/70">
+              Página {page} de {totalPages}
+            </span>
+            {page < totalPages ? (
+              <Link
+                href={pageHref(page + 1, q, onlyPortal)}
+                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition hover:bg-gold-500/10"
+              >
+                Siguiente →
+              </Link>
+            ) : (
+              <span className="rounded-full border border-gold-500/10 px-4 py-2 text-sm font-medium text-white/30">
+                Siguiente →
+              </span>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );
