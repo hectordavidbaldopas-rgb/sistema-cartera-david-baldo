@@ -4,11 +4,12 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  // La sesión efectiva se corta antes por SessionCloseGuard (se desloguea
-  // solo con cerrar el navegador), esto es un respaldo por si el
-  // navegador restaura sessionStorage entre reinicios: igual no queda
-  // logueado más de 12 horas.
-  session: { strategy: "jwt", maxAge: 12 * 60 * 60 },
+  // maxAge funciona como timeout por inactividad: middleware.ts llama a
+  // auth() en cada request y esto renueva la cookie con un maxAge nuevo,
+  // así que mientras el usuario esté activo la sesión no vence. Si pasa
+  // 1 hora sin ninguna request, la cookie expira sola. Sumado a
+  // SessionCloseGuard (cierra sesión si se cerró el navegador).
+  session: { strategy: "jwt", maxAge: 60 * 60 },
   pages: {
     signIn: "/login",
   },
