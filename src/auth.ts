@@ -29,10 +29,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
+        const now = new Date();
         await prisma.user.update({
           where: { id: user.id },
-          data: { lastLoginAt: new Date() },
+          data: { lastLoginAt: now },
         });
+        if (user.clientAccount) {
+          await prisma.clientAccount.update({
+            where: { id: user.clientAccount.id },
+            data: { lastLoginAt: now },
+          });
+        }
 
         return {
           id: user.id,
