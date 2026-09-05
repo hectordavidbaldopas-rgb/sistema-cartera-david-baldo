@@ -80,7 +80,7 @@ export default async function ComisionesPage(props: PageProps<"/dashboard/comisi
             <label className={labelClass}>Año</label>
             <input name="anio" type="number" defaultValue={periodYear} className={`${inputClass} w-24`} />
           </div>
-          <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition hover:brightness-105">
+          <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition duration-150 hover:brightness-105 active:translate-y-px active:shadow-none active:brightness-95">
             Ver
           </button>
         </form>

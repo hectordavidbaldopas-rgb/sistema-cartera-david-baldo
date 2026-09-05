@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { buildWhatsAppLink, sellerSignature } from "@/lib/whatsapp";
-import { inputClass, labelClass, cardClass } from "@/lib/ui";
+import { inputClass, labelClass, cardClass, whatsappButtonClass } from "@/lib/ui";
 
 function defaultMessage(params: {
   clientFirstName: string;
@@ -61,7 +61,7 @@ export default function PolicyReadyWhatsAppShare({
         href={buildWhatsAppLink(phone, message)}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-2 inline-block rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+        className={`mt-2 ${whatsappButtonClass}`}
       >
         Compartir por WhatsApp
       </a>

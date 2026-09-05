@@ -18,7 +18,7 @@ export default function TaskStatusButtons({ taskId, status }: { taskId: string; 
         <input type="hidden" name="status" value="completed" />
         <button
           type="submit"
-          className="rounded-lg border border-green-200 px-2.5 py-1 text-xs font-medium text-green-700 transition hover:bg-green-50"
+          className="rounded-lg border border-green-200 px-2.5 py-1 text-xs font-medium text-green-700 transition duration-150 hover:bg-green-50 active:translate-y-px active:bg-green-100"
         >
           ✓ Completar
         </button>
@@ -28,7 +28,7 @@ export default function TaskStatusButtons({ taskId, status }: { taskId: string; 
         <input type="hidden" name="status" value="cancelled" />
         <button
           type="submit"
-          className="rounded-lg border border-gold-500/30 px-2.5 py-1 text-xs font-medium text-white/70 transition hover:bg-navy-800"
+          className="rounded-lg border border-gold-500/30 px-2.5 py-1 text-xs font-medium text-white/70 transition duration-150 hover:bg-navy-800 active:translate-y-px active:bg-navy-950"
         >
           Descartar
         </button>

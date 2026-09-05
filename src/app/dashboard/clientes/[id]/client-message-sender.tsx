@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { renderTemplate, buildWhatsAppLink } from "@/lib/whatsapp";
-import { inputClass, labelClass, cardClass } from "@/lib/ui";
+import { inputClass, labelClass, cardClass, whatsappButtonClass } from "@/lib/ui";
 
 type Template = {
   id: string;
@@ -69,10 +69,10 @@ export default function ClientMessageSender({
                   key={t.id}
                   type="button"
                   onClick={() => onSelectTemplate(t)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition duration-150 active:translate-y-px ${
                     templateId === t.id
                       ? "border-gold-400 bg-gold-500/10 text-gold-300"
-                      : "border-gold-500/40 text-white/80 hover:bg-gold-500/10"
+                      : "border-gold-500/40 text-white/80 hover:border-gold-400 hover:bg-gold-500/10 active:bg-gold-500/20"
                   }`}
                 >
                   {t.name}
@@ -96,7 +96,7 @@ export default function ClientMessageSender({
             href={buildWhatsAppLink(phone, message)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-block rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+            className={`mt-2 ${whatsappButtonClass}`}
           >
             Compartir por WhatsApp
           </a>

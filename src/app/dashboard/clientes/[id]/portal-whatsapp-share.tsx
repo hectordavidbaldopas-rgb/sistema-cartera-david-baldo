@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { buildWhatsAppLink, MESSAGE_SIGNATURE } from "@/lib/whatsapp";
-import { inputClass, labelClass } from "@/lib/ui";
+import { inputClass, labelClass, whatsappButtonClass } from "@/lib/ui";
 
 function defaultMessage(clientName: string, link: string, username: string, password: string) {
   return `Hola ${clientName} 👋 ¿Cómo estás? ${MESSAGE_SIGNATURE}
@@ -48,7 +48,7 @@ export default function PortalWhatsAppShare({
         href={buildWhatsAppLink(phone, message)}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-2 inline-block rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+        className={`mt-2 ${whatsappButtonClass}`}
       >
         Compartir por WhatsApp
       </a>

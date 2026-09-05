@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { inputClass } from "@/lib/ui";
+import { inputClass, tileLinkClass } from "@/lib/ui";
 
 export default function ClientPicker({
   clients,
@@ -31,7 +31,7 @@ export default function ClientPicker({
           <Link
             key={c.id}
             href={`/dashboard/clientes/${c.id}/polizas/nuevo`}
-            className="block rounded-xl border border-gold-500/30 bg-navy-900 p-3 transition hover:border-gold-500/50"
+            className={`block rounded-xl border border-gold-500/30 bg-navy-900 p-3 hover:border-gold-500/50 ${tileLinkClass}`}
           >
             <p className="font-medium text-gold-300">{c.fullNameNormalized}</p>
             <p className="text-sm text-white/70">{c.phone ?? "—"}</p>

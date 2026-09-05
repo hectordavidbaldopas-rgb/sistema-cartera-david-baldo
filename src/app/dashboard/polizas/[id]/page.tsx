@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireStaff, policyScopeWhere } from "@/lib/authz";
-import { cardClass, secondaryButtonClass, primaryButtonClass } from "@/lib/ui";
+import { cardClass, secondaryButtonClass, primaryButtonClass, dangerOutlineButtonClass } from "@/lib/ui";
 import { expiryLabel, EXPIRY_BADGE_CLASS, expiryLevel } from "@/lib/expiry";
 import { formatDate } from "@/lib/dates";
 import { labelFor, FOLLOW_UP_STATUS } from "@/lib/crm-fields";
@@ -64,7 +64,7 @@ export default async function PolizaDetallePage(props: PageProps<"/dashboard/pol
                 </Link>
                 <Link
                   href={`/dashboard/polizas/${policy.id}/baja`}
-                  className="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                  className={dangerOutlineButtonClass}
                 >
                   Dar de baja
                 </Link>

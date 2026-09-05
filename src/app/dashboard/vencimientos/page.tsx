@@ -117,7 +117,7 @@ export default async function VencimientosPage(props: PageProps<"/dashboard/venc
             <input name="hasta" type="date" defaultValue={to ?? ""} className={inputClass} />
           </div>
           <div className="col-span-2 flex items-end gap-2 sm:col-span-3 lg:col-span-6">
-            <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition hover:brightness-105">
+            <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition duration-150 hover:brightness-105 active:translate-y-px active:shadow-none active:brightness-95">
               Filtrar
             </button>
             <Link href="/dashboard/vencimientos" className="text-sm text-white/70 underline">

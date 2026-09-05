@@ -5,6 +5,7 @@ import { EXPIRY_THRESHOLDS } from "@/lib/expiry";
 import LogoutButton from "../logout-button";
 import { LogoMark } from "@/components/logo";
 import Link from "next/link";
+import { navButtonClass, tileLinkClass } from "@/lib/ui";
 
 export default async function DashboardPage() {
   const session = await requireStaff();
@@ -47,11 +48,17 @@ export default async function DashboardPage() {
         </div>
         <div className="flex items-center gap-3">
           {admin && (
-            <Link href="/admin/vendedores" className="text-sm text-white/80 hover:text-white hover:underline">
+            <Link
+              href="/admin/vendedores"
+              className="rounded-full border border-white/25 px-3 py-1.5 text-sm text-white/80 transition duration-150 hover:border-white/40 hover:text-white hover:bg-navy-900/10 active:translate-y-px active:bg-navy-900/20"
+            >
               Administración
             </Link>
           )}
-          <Link href="/dashboard/mi-cuenta" className="text-sm text-white/80 hover:text-white hover:underline">
+          <Link
+            href="/dashboard/mi-cuenta"
+            className="rounded-full border border-white/25 px-3 py-1.5 text-sm text-white/80 transition duration-150 hover:border-white/40 hover:text-white hover:bg-navy-900/10 active:translate-y-px active:bg-navy-900/20"
+          >
             Mi cuenta
           </Link>
           <LogoutButton variant="dark" />
@@ -63,7 +70,7 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Link
             href="/dashboard/clientes/nuevo"
-            className="flex items-center gap-4 rounded-xl border border-gold-500/30 bg-navy-900 p-6 transition hover:border-gold-500/50 hover:shadow-sm"
+            className={`flex items-center gap-4 rounded-xl border border-gold-500/30 bg-navy-900 p-6 hover:border-gold-500/50 hover:shadow-sm ${tileLinkClass}`}
           >
             <span className="text-4xl">👤</span>
             <span>
@@ -73,7 +80,7 @@ export default async function DashboardPage() {
           </Link>
           <Link
             href="/dashboard/polizas/nuevo"
-            className="flex items-center gap-4 rounded-xl border border-gold-500/30 bg-navy-900 p-6 transition hover:border-gold-500/50 hover:shadow-sm"
+            className={`flex items-center gap-4 rounded-xl border border-gold-500/30 bg-navy-900 p-6 hover:border-gold-500/50 hover:shadow-sm ${tileLinkClass}`}
           >
             <span className="text-4xl">📄</span>
             <span>
@@ -87,7 +94,7 @@ export default async function DashboardPage() {
           <StatCard label="Clientes" value={clientCount} />
           <StatCard label="Pólizas" value={policyCount} />
           <StatCard label="Pólizas incompletas (draft)" value={draftPolicyCount} />
-          <Link href="/dashboard/vencimientos" className="block">
+          <Link href="/dashboard/vencimientos" className={`block ${tileLinkClass}`}>
             <StatCard label="Vencidas o por vencer (30d)" value={expiringSoonCount} highlight={expiringSoonCount > 0} />
           </Link>
         </div>
@@ -102,7 +109,7 @@ export default async function DashboardPage() {
                 <Link
                   key={s.id}
                   href={`/admin/vendedores/${s.id}`}
-                  className="rounded-xl border border-gold-500/30 bg-navy-900 p-4 transition hover:border-gold-500/40"
+                  className={`rounded-xl border border-gold-500/30 bg-navy-900 p-4 hover:border-gold-500/40 ${tileLinkClass}`}
                 >
                   <p className="font-medium text-gold-300">{s.fullName}</p>
                   <p className="text-sm text-white/70">{s.locality ?? "—"}</p>
@@ -112,59 +119,32 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="mt-8 flex gap-6">
-          <Link
-            href="/dashboard/clientes"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/dashboard/clientes" className={navButtonClass}>
             Ver cartera de clientes →
           </Link>
-          <Link
-            href="/dashboard/vencimientos"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/vencimientos" className={navButtonClass}>
             Ver vencimientos →
           </Link>
-          <Link
-            href="/dashboard/seguimientos"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/seguimientos" className={navButtonClass}>
             Ver seguimientos →
           </Link>
-          <Link
-            href="/dashboard/tareas"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/tareas" className={navButtonClass}>
             Centro de tareas →
           </Link>
-          <Link
-            href="/dashboard/estadisticas"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/estadisticas" className={navButtonClass}>
             Ver estadísticas →
           </Link>
-          <Link
-            href="/dashboard/importar"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/importar" className={navButtonClass}>
             Importar Excel →
           </Link>
-          <Link
-            href="/dashboard/oportunidades"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/oportunidades" className={navButtonClass}>
             Oportunidades →
           </Link>
-          <Link
-            href="/dashboard/comisiones"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/comisiones" className={navButtonClass}>
             Comisiones →
           </Link>
-          <Link
-            href="/dashboard/liquidaciones"
-            className="text-sm font-medium text-gold-300 underline underline-offset-4"
-          >
+          <Link href="/dashboard/liquidaciones" className={navButtonClass}>
             Liquidaciones →
           </Link>
         </div>

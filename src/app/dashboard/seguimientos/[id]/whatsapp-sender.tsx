@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { renderTemplate, buildWhatsAppLink, type TemplateVars } from "@/lib/whatsapp";
 import { logWhatsAppSentAction } from "../actions";
-import { inputClass, labelClass, cardClass } from "@/lib/ui";
+import { inputClass, labelClass, cardClass, whatsappButtonClass } from "@/lib/ui";
 
 type Template = { id: string; name: string; templateText: string };
 
@@ -72,7 +72,7 @@ export default function WhatsAppSender({
         type="button"
         onClick={handleSend}
         disabled={sending || !message.trim()}
-        className="mt-3 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-60"
+        className={`mt-3 ${whatsappButtonClass}`}
       >
         {sending ? "Abriendo..." : "Abrir WhatsApp"}
       </button>

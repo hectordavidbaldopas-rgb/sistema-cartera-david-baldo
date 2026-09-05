@@ -77,7 +77,7 @@ export default function QuestionCard({
             ) : (
               <CustomOptionFields />
             )}
-            <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-3 py-1.5 text-xs font-semibold text-navy-950 shadow-sm transition hover:brightness-105">
+            <button type="submit" className="rounded-full bg-[image:var(--gradient-gold)] px-3 py-1.5 text-xs font-semibold text-navy-950 shadow-sm transition duration-150 hover:brightness-105 active:translate-y-px active:shadow-none active:brightness-95">
               + Opción
             </button>
           </form>

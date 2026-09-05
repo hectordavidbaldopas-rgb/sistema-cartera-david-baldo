@@ -21,7 +21,7 @@ export default function CollectForm({ id, maxAmount }: { id: string; maxAmount: 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 disabled:opacity-60"
+        className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm transition duration-150 hover:bg-green-700 active:translate-y-px active:shadow-none active:bg-green-800 disabled:opacity-60"
       >
         {pending ? "..." : "Registrar cobro"}
       </button>

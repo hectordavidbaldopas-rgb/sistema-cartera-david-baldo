@@ -5,6 +5,7 @@ import LogoutButton from "../logout-button";
 import { LogoMark } from "@/components/logo";
 import Link from "next/link";
 import PolicyInfoForm from "./policy-info-form";
+import { navButtonClass } from "@/lib/ui";
 
 export default async function PortalPage() {
   const session = await requireClient();
@@ -45,7 +46,10 @@ export default async function PortalPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/portal/mi-cuenta" className="text-sm text-white/80 hover:text-white hover:underline">
+          <Link
+            href="/portal/mi-cuenta"
+            className="rounded-full border border-white/25 px-3 py-1.5 text-sm text-white/80 transition duration-150 hover:border-white/40 hover:text-white hover:bg-navy-900/10 active:translate-y-px active:bg-navy-900/20"
+          >
             Mi cuenta
           </Link>
           <LogoutButton variant="dark" />
@@ -54,11 +58,11 @@ export default async function PortalPage() {
       <div className="divider-gold" />
 
       <main className="mx-auto max-w-3xl px-6 py-8">
-        <div className="mb-6 flex gap-4 text-sm">
-          <Link href="/portal/datos" className="font-medium text-gold-300 underline underline-offset-4">
+        <div className="mb-6 flex flex-wrap gap-3">
+          <Link href="/portal/datos" className={navButtonClass}>
             Mis datos →
           </Link>
-          <Link href="/portal/encuestas" className="font-medium text-gold-300 underline underline-offset-4">
+          <Link href="/portal/encuestas" className={navButtonClass}>
             Encuestas →
           </Link>
         </div>
@@ -87,7 +91,7 @@ export default async function PortalPage() {
                     href={`/api/policies/${p.id}/pdf`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 inline-block text-sm text-gold-300 underline underline-offset-4"
+                    className="mt-2 inline-flex items-center gap-1 rounded-full border border-gold-500/40 px-3 py-1 text-xs font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:translate-y-px active:bg-gold-500/20"
                   >
                     Ver / descargar PDF
                   </a>

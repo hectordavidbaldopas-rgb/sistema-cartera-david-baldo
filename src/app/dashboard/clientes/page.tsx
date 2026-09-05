@@ -111,7 +111,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
           </label>
           <button
             type="submit"
-            className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition hover:brightness-105"
+            className="rounded-full bg-[image:var(--gradient-gold)] px-4 py-2 text-sm font-semibold text-navy-950 shadow-sm transition duration-150 hover:brightness-105 active:translate-y-px active:shadow-none active:brightness-95"
           >
             Buscar
           </button>
@@ -186,7 +186,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
             {page > 1 ? (
               <Link
                 href={pageHref(page - 1, q, onlyPortal)}
-                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition hover:bg-gold-500/10"
+                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:translate-y-px active:bg-gold-500/20"
               >
                 ← Anterior
               </Link>
@@ -201,7 +201,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
             {page < totalPages ? (
               <Link
                 href={pageHref(page + 1, q, onlyPortal)}
-                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition hover:bg-gold-500/10"
+                className="rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:translate-y-px active:bg-gold-500/20"
               >
                 Siguiente →
               </Link>

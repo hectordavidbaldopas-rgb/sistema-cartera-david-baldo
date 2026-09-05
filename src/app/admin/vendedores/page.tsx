@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/authz";
-import { cardClass, primaryButtonClass } from "@/lib/ui";
+import { cardClass, primaryButtonClass, secondaryButtonClass } from "@/lib/ui";
 import Link from "next/link";
 
 export default async function VendedoresPage() {
@@ -46,7 +46,7 @@ export default async function VendedoresPage() {
             </div>
             <Link
               href={`/admin/vendedores/${s.id}`}
-              className="text-sm font-medium text-gold-300 underline underline-offset-4"
+              className={secondaryButtonClass}
             >
               Editar
             </Link>

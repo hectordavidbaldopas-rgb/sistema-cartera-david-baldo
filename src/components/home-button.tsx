@@ -6,7 +6,7 @@ export default function HomeButton({ href = "/dashboard" }: { href?: string }) {
       href={href}
       aria-label="Ir al inicio"
       title="Ir al inicio"
-      className="inline-flex items-center justify-center rounded-full border border-gold-500/40 p-2 text-gold-300 transition hover:bg-gold-500/10"
+      className="inline-flex items-center justify-center rounded-full border border-gold-500/40 p-2 text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:translate-y-px active:bg-gold-500/20"
     >
       <svg
         viewBox="0 0 24 24"

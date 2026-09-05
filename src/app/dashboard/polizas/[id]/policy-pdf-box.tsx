@@ -32,7 +32,7 @@ export default function PolicyPdfBox({
             href={`/api/policies/${policyId}/pdf`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 inline-block text-gold-300 underline underline-offset-4"
+            className="mt-2 inline-flex items-center gap-1 rounded-full border border-gold-500/40 px-3 py-1 text-xs font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:translate-y-px active:bg-gold-500/20"
           >
             Ver / descargar PDF
           </a>
@@ -48,7 +48,7 @@ export default function PolicyPdfBox({
           name="pdfFile"
           accept="application/pdf"
           required
-          className="text-sm text-white/80 file:mr-3 file:rounded-lg file:border-0 file:bg-navy-800 file:px-3 file:py-1.5 file:text-sm file:text-gold-300"
+          className="text-sm text-white/80 file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-navy-800 file:px-3 file:py-1.5 file:text-sm file:text-gold-300 file:transition file:duration-150 hover:file:bg-navy-700"
         />
         <button type="submit" disabled={pending} className={primaryButtonClass}>
           {pending ? "Subiendo..." : pdfPath ? "Reemplazar PDF" : "Subir PDF"}
