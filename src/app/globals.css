@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Paleta de marca — David Baldo Seguros (ver DISEÑO APP/*.png) */
+  --color-navy-950: #0b111d;
+  --color-navy-900: #111929;
+  --color-navy-800: #1b2740;
+  --color-navy-700: #263457;
+
+  --color-steel-600: #4f6bae;
+  --color-steel-500: #698ccd;
+  --color-steel-400: #8aa5da;
+
+  --color-gold-600: #b8873c;
+  --color-gold-500: #d4a24f;
+  --color-gold-400: #eebc70;
+  --color-gold-300: #f3d08f;
+
+  --gradient-gold: linear-gradient(135deg, var(--color-gold-600), var(--color-gold-400) 60%, var(--color-gold-300));
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-poppins);
+
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-navy-700: var(--color-navy-700);
+  --color-steel-600: var(--color-steel-600);
+  --color-steel-500: var(--color-steel-500);
+  --color-steel-400: var(--color-steel-400);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-300: var(--color-gold-300);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading), var(--font-sans), sans-serif;
+}
+
+/* Línea divisoria dorada fina, como en las piezas de marca */
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold-500), transparent 85%);
+}
+
+/* Texturas de fondo de marca, para secciones "hero" (login, headers oscuros) */
+.bg-texture-navy {
+  background-image: linear-gradient(160deg, rgba(11, 17, 29, 0.82), rgba(11, 17, 29, 0.94)), url("/texture-navy.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-texture-steel {
+  background-image: linear-gradient(160deg, rgba(105, 140, 205, 0.55), rgba(79, 107, 174, 0.7)), url("/texture-steel.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.text-gradient-gold {
+  background-image: var(--gradient-gold);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}

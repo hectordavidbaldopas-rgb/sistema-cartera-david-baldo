@@ -1,0 +1,703 @@
+// Sistema de Gestión de Cartera PAS — David Baldo Seguros
+// Arquitectura basada en ARQUITECTURA_BASE_DE_DATOS_APP_PAS.md
+//
+// Nota sobre montos: los montos usan Float por simplicidad. El principio #15
+// del documento de arquitectura pide Decimal para precisión exacta — ahora
+// que la base es PostgreSQL ya se podría migrar a Decimal(12,2), pero es un
+// cambio aparte (afecta la aritmética en varios lugares del código, no solo
+// el schema) y se deja pendiente para no arriesgar el despliegue.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// 2. ROLES / USUARIOS
+// ---------------------------------------------------------------------------
+
+// role: "admin" | "seller" | "client"
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         String
+  sellerId     String?   @unique
+  clientId     String?   @unique
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  seller       Seller?       @relation(fields: [sellerId], references: [id])
+  clientAccount ClientAccount?
+
+  auditLogs AuditLog[]
+
+  @@index([role])
+}
+
+// ---------------------------------------------------------------------------
+// 3. VENDEDORES / PAS
+// ---------------------------------------------------------------------------
+
+model Seller {
+  id             String   @id @default(cuid())
+  fullName       String
+  displayName    String
+  branchName     String?
+  locality       String?
+  documentNumber String?  @unique
+  email          String?
+  phone          String?
+  whatsapp       String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user                User?
+  policies            Policy[]
+  policyVersions      PolicyVersion[]
+  followUps           FollowUp[]
+  followUpEvents      FollowUpEvent[]
+  tasks               Task[]
+  opportunities       Opportunity[]
+  commissionRecords   CommissionRecord[]
+  settlements         SellerSettlement[]
+}
+
+// ---------------------------------------------------------------------------
+// 4. CLIENTES
+// ---------------------------------------------------------------------------
+
+// informationStatus: "complete" | "partial" | "incomplete"
+model Client {
+  id                   String    @id @default(cuid())
+  firstName            String?
+  lastName             String?
+  fullNameNormalized   String
+  documentType         String?
+  documentNumber       String?
+  birthDate            DateTime?
+
+  phone                String?
+  whatsapp             String?
+  email                String?
+  alternatePhone       String?
+
+  address              String?
+  city                 String?
+  province             String?
+  postalCode           String?
+
+  occupation           String?
+  notes                String?
+  additionalData       Json?
+
+  informationStatus    String   @default("incomplete")
+  isActive             Boolean  @default(true)
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  createdBy            String?
+  updatedBy            String?
+
+  clientAccount        ClientAccount?
+  policies             Policy[]
+  policyVersions       PolicyVersion[]
+  followUps            FollowUp[]
+  followUpEvents       FollowUpEvent[]
+  tasks                Task[]
+  surveyResponses      SurveyResponse[]
+  opportunities        Opportunity[]
+  matchedImportRows    ImportRow[]      @relation("ImportRowMatchedClient")
+
+  @@index([documentNumber])
+  @@index([fullNameNormalized])
+  @@index([phone])
+  @@index([email])
+  @@index([informationStatus])
+}
+
+// ---------------------------------------------------------------------------
+// 5. RELACIÓN CLIENTE-USUARIO (portal del cliente)
+// ---------------------------------------------------------------------------
+
+model ClientAccount {
+  id          String    @id @default(cuid())
+  clientId    String    @unique
+  userId      String    @unique
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+
+  client Client @relation(fields: [clientId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+// ---------------------------------------------------------------------------
+// 6. RAMOS
+// ---------------------------------------------------------------------------
+
+model InsuranceBranch {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  code        String?  @unique
+  description String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  policies        Policy[]
+  policyVersions  PolicyVersion[]
+  messageTemplates MessageTemplate[]
+  surveyQuestions SurveyQuestion[]
+  opportunities   Opportunity[]
+}
+
+// ---------------------------------------------------------------------------
+// 7. COMPAÑÍAS
+// ---------------------------------------------------------------------------
+
+model InsuranceCompany {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  legalName String?
+  code      String?  @unique
+  cuit      String?
+  phone     String?
+  website   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  policies       Policy[]
+  policyVersions PolicyVersion[]
+}
+
+// ---------------------------------------------------------------------------
+// 8. PÓLIZAS
+// ---------------------------------------------------------------------------
+
+// status: "draft" | "active" | "pending_renewal" | "renewed" | "cancelled" | "expired" | "lost"
+// paymentStatus: "paid" | "partial" | "pending" | "overdue" | "unknown"
+// paymentMethod: "cash" | "transfer" | "debit" | "credit_card" | "other" | "unknown"
+// updateFrequency: "none" | "monthly" | "bimonthly" | "quarterly" | "semiannual" | "annual" | "custom"
+model Policy {
+  id         String @id @default(cuid())
+  clientId   String
+  branchId   String
+  companyId  String?
+  sellerId   String
+  policyNumber String?
+
+  coverageName  String?
+  insuredObject String?
+  insuredSum    Float?
+  startDate     DateTime?
+  endDate       DateTime?
+
+  premiumAmount        Float?
+  commissionPercentage Float?
+  commissionAmount     Float?
+  paymentMethod        String  @default("unknown")
+  installmentCount     Int?
+  paymentStatus        String  @default("unknown")
+
+  updateFrequency  String    @default("none")
+  updateRuleType   String?
+  updateRuleValue  String?
+  lastUpdateDate   DateTime?
+  nextUpdateDate   DateTime?
+
+  status             String    @default("active")
+  cancellationReason String?
+  cancellationDate   DateTime?
+
+  importBatchId     String?
+  sourceRowNumber   Int?
+  externalReference String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+
+  client   Client            @relation(fields: [clientId], references: [id])
+  branch   InsuranceBranch   @relation(fields: [branchId], references: [id])
+  company  InsuranceCompany? @relation(fields: [companyId], references: [id])
+  seller   Seller            @relation(fields: [sellerId], references: [id])
+
+  versions      PolicyVersion[]
+  cancellations PolicyCancellation[]
+  followUps     FollowUp[]
+  followUpEvents FollowUpEvent[]
+  tasks         Task[]
+  commissionRecords CommissionRecord[]
+  matchedImportRows ImportRow[] @relation("ImportRowMatchedPolicy")
+
+  @@index([clientId])
+  @@index([sellerId])
+  @@index([branchId])
+  @@index([companyId])
+  @@index([policyNumber])
+  @@index([endDate])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([nextUpdateDate])
+}
+
+// ---------------------------------------------------------------------------
+// 9. HISTORIAL DE PÓLIZAS / RENOVACIONES
+// ---------------------------------------------------------------------------
+
+// changeReason: "renewal" | "premium_update" | "coverage_change" | "company_change"
+//             | "seller_change" | "correction" | "import" | "other"
+model PolicyVersion {
+  id                 String   @id @default(cuid())
+  policyId           String
+  versionNumber      Int
+  previousVersionId  String?  @unique
+
+  clientId  String
+  branchId  String
+  companyId String?
+  sellerId  String
+
+  policyNumber  String?
+  coverageName  String?
+  insuredObject String?
+  insuredSum    Float?
+  startDate     DateTime?
+  endDate       DateTime?
+
+  premiumAmount        Float?
+  commissionPercentage Float?
+  commissionAmount     Float?
+  paymentMethod        String  @default("unknown")
+  installmentCount     Int?
+  paymentStatus        String  @default("unknown")
+
+  updateFrequency String  @default("none")
+  updateRuleType  String?
+  updateRuleValue String?
+
+  createdAt    DateTime @default(now())
+  createdBy    String?
+  changeReason String
+
+  policy          Policy          @relation(fields: [policyId], references: [id])
+  previousVersion PolicyVersion?  @relation("PolicyVersionHistory", fields: [previousVersionId], references: [id])
+  nextVersion     PolicyVersion?  @relation("PolicyVersionHistory")
+  client          Client            @relation(fields: [clientId], references: [id])
+  branch          InsuranceBranch   @relation(fields: [branchId], references: [id])
+  company         InsuranceCompany? @relation(fields: [companyId], references: [id])
+  seller          Seller            @relation(fields: [sellerId], references: [id])
+
+  commissionRecords CommissionRecord[]
+
+  @@index([policyId])
+  @@index([clientId])
+}
+
+// ---------------------------------------------------------------------------
+// 11. BAJAS Y PÉRDIDAS
+// ---------------------------------------------------------------------------
+
+// reason: "price" | "changed_company" | "sold_asset" | "moved" | "other" | "unknown"
+model PolicyCancellation {
+  id               String   @id @default(cuid())
+  policyId         String
+  cancellationDate DateTime
+  reason           String
+  notes            String?
+  createdBy        String?
+  createdAt        DateTime @default(now())
+
+  policy Policy @relation(fields: [policyId], references: [id])
+
+  @@index([policyId])
+}
+
+// ---------------------------------------------------------------------------
+// 12. SEGUIMIENTO CRM
+// ---------------------------------------------------------------------------
+
+// status: "pending" | "contacted" | "quote_sent" | "negotiating" | "renewed" | "lost"
+// priority: "low" | "medium" | "high" | "urgent"
+model FollowUp {
+  id             String    @id @default(cuid())
+  policyId       String
+  clientId       String
+  sellerId       String
+  status         String    @default("pending")
+  dueDate        DateTime?
+  nextActionDate DateTime?
+  priority       String    @default("medium")
+  subject        String
+  notes          String?
+  completedAt    DateTime?
+  createdBy      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  policy Policy @relation(fields: [policyId], references: [id])
+  client Client @relation(fields: [clientId], references: [id])
+  seller Seller @relation(fields: [sellerId], references: [id])
+
+  events FollowUpEvent[]
+
+  @@index([sellerId])
+  @@index([policyId])
+  @@index([dueDate])
+  @@index([nextActionDate])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// 13. LÍNEA DE TIEMPO DEL CRM
+// ---------------------------------------------------------------------------
+
+// eventType: "whatsapp_sent" | "whatsapp_received" | "phone_call" | "email_sent"
+//          | "email_received" | "quote_sent" | "meeting" | "note" | "status_change"
+//          | "renewal_confirmed" | "lost" | "other"
+model FollowUpEvent {
+  id         String   @id @default(cuid())
+  followUpId String
+  policyId   String
+  clientId   String
+  sellerId   String
+  eventType  String
+  eventDate  DateTime @default(now())
+  notes      String?
+  metadata   Json?
+  createdBy  String?
+  createdAt  DateTime @default(now())
+
+  followUp FollowUp @relation(fields: [followUpId], references: [id])
+  policy   Policy   @relation(fields: [policyId], references: [id])
+  client   Client   @relation(fields: [clientId], references: [id])
+  seller   Seller   @relation(fields: [sellerId], references: [id])
+
+  @@index([followUpId])
+}
+
+// ---------------------------------------------------------------------------
+// 14. CENTRO DE TAREAS
+// ---------------------------------------------------------------------------
+
+// taskType: "renewal" | "follow_up" | "missing_data" | "payment" | "quote"
+//         | "client_contact" | "update_data" | "other"
+// status: "pending" | "in_progress" | "completed" | "cancelled"
+model Task {
+  id          String    @id @default(cuid())
+  clientId    String?
+  policyId    String?
+  sellerId    String
+  taskType    String
+  title       String
+  description String?
+  dueDate     DateTime?
+  priority    String    @default("medium")
+  status      String    @default("pending")
+  completedAt DateTime?
+  createdBy   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  client Client? @relation(fields: [clientId], references: [id])
+  policy Policy? @relation(fields: [policyId], references: [id])
+  seller Seller  @relation(fields: [sellerId], references: [id])
+
+  @@index([sellerId])
+  @@index([dueDate])
+  @@index([status])
+  @@index([priority])
+}
+
+// ---------------------------------------------------------------------------
+// 16. WHATSAPP
+// ---------------------------------------------------------------------------
+
+model MessageTemplate {
+  id           String   @id @default(cuid())
+  name         String
+  branchId     String?
+  eventType    String
+  templateText String
+  isActive     Boolean  @default(true)
+  createdBy    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  branch InsuranceBranch? @relation(fields: [branchId], references: [id])
+}
+
+// ---------------------------------------------------------------------------
+// 17. ENCUESTA INTELIGENTE
+// ---------------------------------------------------------------------------
+
+model Survey {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  version     Int      @default(1)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions SurveyQuestion[]
+  responses SurveyResponse[]
+}
+
+// questionType: "single_choice" | "multiple_choice" | "text" | "number" | "date" | "boolean"
+model SurveyQuestion {
+  id               String  @id @default(cuid())
+  surveyId         String
+  question         String
+  questionType     String
+  branchId         String?
+  sortOrder        Int     @default(0)
+  isRequired       Boolean @default(false)
+  conditionalLogic Json?
+
+  survey  Survey           @relation(fields: [surveyId], references: [id])
+  branch  InsuranceBranch? @relation(fields: [branchId], references: [id])
+  options SurveyOption[]
+  answers SurveyAnswer[]
+}
+
+model SurveyOption {
+  id         String @id @default(cuid())
+  questionId String
+  label      String
+  value      String
+  sortOrder  Int    @default(0)
+
+  question SurveyQuestion @relation(fields: [questionId], references: [id])
+  answers  SurveyAnswer[]
+}
+
+// status: "pending" | "completed" | "abandoned"
+model SurveyResponse {
+  id          String    @id @default(cuid())
+  surveyId    String
+  clientId    String
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  status      String    @default("pending")
+
+  survey  Survey         @relation(fields: [surveyId], references: [id])
+  client  Client         @relation(fields: [clientId], references: [id])
+  answers SurveyAnswer[]
+}
+
+model SurveyAnswer {
+  id             String    @id @default(cuid())
+  responseId     String
+  questionId     String
+  optionId       String?
+  answerText     String?
+  answerNumber   Float?
+  answerBoolean  Boolean?
+  answerDate     DateTime?
+  createdAt      DateTime  @default(now())
+
+  response SurveyResponse @relation(fields: [responseId], references: [id])
+  question SurveyQuestion @relation(fields: [questionId], references: [id])
+  option   SurveyOption?  @relation(fields: [optionId], references: [id])
+}
+
+// ---------------------------------------------------------------------------
+// 18. OPORTUNIDADES COMERCIALES
+// ---------------------------------------------------------------------------
+
+// source: "survey" | "missing_coverage" | "manual" | "renewal" | "other"
+// status: "new" | "contacted" | "quote_sent" | "negotiating" | "won" | "lost"
+model Opportunity {
+  id             String    @id @default(cuid())
+  clientId       String
+  sellerId       String
+  source         String
+  branchId       String?
+  title          String
+  description    String?
+  status         String    @default("new")
+  priority       String    @default("medium")
+  estimatedValue Float?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  closedAt       DateTime?
+
+  client Client           @relation(fields: [clientId], references: [id])
+  seller Seller           @relation(fields: [sellerId], references: [id])
+  branch InsuranceBranch? @relation(fields: [branchId], references: [id])
+
+  @@index([sellerId])
+  @@index([clientId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// 19. COMISIONES
+// ---------------------------------------------------------------------------
+
+// status: "generated" | "partially_collected" | "collected" | "partially_paid" | "paid" | "cancelled"
+model CommissionRecord {
+  id               String   @id @default(cuid())
+  policyId         String
+  policyVersionId  String?
+  sellerId         String
+  periodMonth      Int
+  periodYear       Int
+  premiumBase      Float
+  commissionPercentage Float
+  generatedAmount  Float
+  collectedAmount  Float    @default(0)
+  pendingAmount    Float    @default(0)
+  paidAmount       Float    @default(0)
+  status           String   @default("generated")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  policy        Policy         @relation(fields: [policyId], references: [id])
+  policyVersion PolicyVersion? @relation(fields: [policyVersionId], references: [id])
+  seller        Seller         @relation(fields: [sellerId], references: [id])
+
+  settlementItems SettlementItem[]
+
+  @@index([sellerId])
+  @@index([periodYear, periodMonth])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// 20. LIQUIDACIONES
+// ---------------------------------------------------------------------------
+
+// status: "draft" | "calculated" | "approved" | "partially_paid" | "paid" | "cancelled"
+model SellerSettlement {
+  id              String    @id @default(cuid())
+  sellerId        String
+  periodMonth     Int
+  periodYear      Int
+  generatedAmount Float
+  collectedAmount Float     @default(0)
+  pendingAmount   Float     @default(0)
+  payableAmount   Float     @default(0)
+  paidAmount      Float     @default(0)
+  status          String    @default("draft")
+  paidAt          DateTime?
+  notes           String?
+  createdBy       String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  seller Seller           @relation(fields: [sellerId], references: [id])
+  items  SettlementItem[]
+
+  @@index([sellerId])
+  @@index([periodYear, periodMonth])
+}
+
+// ---------------------------------------------------------------------------
+// 21. DETALLE DE LIQUIDACIÓN
+// ---------------------------------------------------------------------------
+
+model SettlementItem {
+  id                 String  @id @default(cuid())
+  settlementId       String
+  commissionRecordId String
+  amount             Float
+  notes              String?
+
+  settlement       SellerSettlement @relation(fields: [settlementId], references: [id])
+  commissionRecord CommissionRecord @relation(fields: [commissionRecordId], references: [id])
+}
+
+// ---------------------------------------------------------------------------
+// 22 / 23. IMPORTACIÓN DE EXCEL
+// ---------------------------------------------------------------------------
+
+// status: "uploaded" | "analyzing" | "preview" | "importing" | "completed" | "failed" | "cancelled"
+model ImportBatch {
+  id           String    @id @default(cuid())
+  fileName     String
+  importedBy   String?
+  importedAt   DateTime  @default(now())
+  totalRows    Int       @default(0)
+  validRows    Int       @default(0)
+  incompleteRows Int     @default(0)
+  reviewRows   Int       @default(0)
+  importedRows Int       @default(0)
+  status       String    @default("uploaded")
+  errorSummary Json?
+
+  rows ImportRow[]
+}
+
+// validationStatus: "valid" | "incomplete" | "error" | "review"
+// duplicateStatus: "none" | "possible" | "confirmed"
+// action: "create" | "update" | "skip" | "review"
+model ImportRow {
+  id                String   @id @default(cuid())
+  batchId           String
+  rowNumber         Int
+  rawData           Json
+  normalizedData    Json?
+  validationStatus  String   @default("review")
+  validationErrors  Json?
+  duplicateStatus   String   @default("none")
+  matchedClientId   String?
+  matchedPolicyId   String?
+  action            String   @default("review")
+  createdAt         DateTime @default(now())
+
+  batch         ImportBatch @relation(fields: [batchId], references: [id])
+  matchedClient Client?     @relation("ImportRowMatchedClient", fields: [matchedClientId], references: [id])
+  matchedPolicy Policy?     @relation("ImportRowMatchedPolicy", fields: [matchedPolicyId], references: [id])
+
+  @@index([batchId])
+}
+
+// ---------------------------------------------------------------------------
+// 25. AUDITORÍA
+// ---------------------------------------------------------------------------
+
+// action: "create" | "update" | "delete" | "login" | "import" | "export" | "status_change" | "settlement" | "other"
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  entityType String
+  entityId   String
+  action     String
+  oldValues  Json?
+  newValues  Json?
+  createdAt  DateTime @default(now())
+  ipAddress  String?
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// 26. CONFIGURACIÓN DEL SISTEMA
+// ---------------------------------------------------------------------------
+
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  valueType   String   @default("string")
+  description String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?
+}
