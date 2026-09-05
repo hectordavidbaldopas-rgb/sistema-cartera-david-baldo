@@ -54,7 +54,7 @@ export async function createClientAction(
   const session = await requireStaff();
   const data = readClientForm(formData);
 
-  const fullName = [data.firstName, data.lastName].filter(Boolean).join(" ").trim();
+  const fullName = [data.lastName, data.firstName].filter(Boolean).join(" ").trim();
   if (!fullName) {
     return { error: "Ingresá al menos nombre o apellido." };
   }
@@ -111,7 +111,7 @@ export async function updateClientAction(
   if (!existing) notFound();
 
   const data = readClientForm(formData);
-  const fullName = [data.firstName, data.lastName].filter(Boolean).join(" ").trim();
+  const fullName = [data.lastName, data.firstName].filter(Boolean).join(" ").trim();
   if (!fullName) {
     return { error: "Ingresá al menos nombre o apellido." };
   }

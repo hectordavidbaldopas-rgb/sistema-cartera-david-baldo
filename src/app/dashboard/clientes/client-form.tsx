@@ -29,12 +29,12 @@ export default function ClientForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className={labelClass}>Nombre</label>
-          <input name="firstName" defaultValue={client?.firstName ?? ""} className={inputClass} />
-        </div>
-        <div>
           <label className={labelClass}>Apellido</label>
           <input name="lastName" defaultValue={client?.lastName ?? ""} className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Nombre</label>
+          <input name="firstName" defaultValue={client?.firstName ?? ""} className={inputClass} />
         </div>
       </div>
 
