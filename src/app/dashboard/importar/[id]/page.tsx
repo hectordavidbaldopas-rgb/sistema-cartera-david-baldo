@@ -3,6 +3,7 @@ import { requireStaff } from "@/lib/authz";
 import { isAdmin } from "@/lib/roles";
 import { cardClass, secondaryButtonClass } from "@/lib/ui";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 import { confirmImportAction, cancelImportAction } from "../actions";
 import ConfirmButton from "./confirm-button";
@@ -28,9 +29,12 @@ export default async function ImportBatchPage(props: PageProps<"/dashboard/impor
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard/importar" className="text-sm text-white/70 hover:underline">
-          ← Importar
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard/importar" className="text-sm text-white/70 hover:underline">
+            ← Importar
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">{batch.fileName}</h1>
           <span className="rounded-full bg-navy-800 px-2 py-0.5 text-xs font-medium text-white/80">

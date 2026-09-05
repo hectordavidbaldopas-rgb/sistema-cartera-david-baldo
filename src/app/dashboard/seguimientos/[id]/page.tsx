@@ -4,6 +4,7 @@ import { cardClass, secondaryButtonClass } from "@/lib/ui";
 import { formatDate } from "@/lib/dates";
 import { labelFor, FOLLOW_UP_STATUS, EVENT_TYPE } from "@/lib/crm-fields";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 import StatusEventForm from "./status-form";
 import WhatsAppSender from "./whatsapp-sender";
@@ -37,9 +38,12 @@ export default async function SeguimientoDetallePage(props: PageProps<"/dashboar
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href={`/dashboard/polizas/${followUp.policyId}`} className="text-sm text-white/70 hover:underline">
-          ← {followUp.client.fullNameNormalized} · {followUp.policy.branch.name}
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href={`/dashboard/polizas/${followUp.policyId}`} className="text-sm text-white/70 hover:underline">
+            ← {followUp.client.fullNameNormalized} · {followUp.policy.branch.name}
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <div className="mt-1 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">{followUp.subject}</h1>
           <span className="rounded-full bg-navy-800 px-2 py-0.5 text-xs font-medium text-white/80">

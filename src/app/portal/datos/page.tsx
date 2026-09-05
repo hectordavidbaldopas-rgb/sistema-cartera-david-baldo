@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireClient } from "@/lib/authz";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 import EditDataForm from "./form";
 
@@ -15,9 +16,12 @@ export default async function MisDatosPage() {
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/portal" className="text-sm text-white/70 hover:underline">
-          ← Volver
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/portal" className="text-sm text-white/70 hover:underline">
+            ← Volver
+          </Link>
+          <HomeButton href="/portal" />
+        </div>
         <h1 className="text-lg font-semibold text-gold-300">Mis datos de contacto</h1>
         <p className="text-sm text-white/70">
           Para corregir tu fecha de nacimiento, escribinos.

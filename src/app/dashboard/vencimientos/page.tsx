@@ -5,6 +5,7 @@ import { cardClass, inputClass, labelClass } from "@/lib/ui";
 import { expiryLabel, expiryLevel, EXPIRY_BADGE_CLASS } from "@/lib/expiry";
 import { POLICY_STATUS } from "@/lib/policy-fields";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import type { Prisma } from "@prisma/client";
 
 export default async function VencimientosPage(props: PageProps<"/dashboard/vencimientos">) {
@@ -47,9 +48,12 @@ export default async function VencimientosPage(props: PageProps<"/dashboard/venc
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
-          ← Volver
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
+            ← Volver
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <h1 className="text-lg font-semibold text-gold-300">
           Vencimientos ({policies.length})
         </h1>

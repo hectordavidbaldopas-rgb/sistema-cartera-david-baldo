@@ -6,6 +6,7 @@ import { cardClass } from "@/lib/ui";
 import { formatDate } from "@/lib/dates";
 import { labelFor, TASK_TYPE, PRIORITY } from "@/lib/crm-fields";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import TaskStatusButtons from "./task-status-buttons";
 import NewTaskForm from "./new-task-form";
 import AutoGenerateBox from "./auto-generate-box";
@@ -59,9 +60,12 @@ export default async function TareasPage() {
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
-          ← Volver
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
+            ← Volver
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <h1 className="text-lg font-semibold text-gold-300">Centro de tareas</h1>
       </header>
       <main className="mx-auto max-w-3xl space-y-8 px-6 py-8">

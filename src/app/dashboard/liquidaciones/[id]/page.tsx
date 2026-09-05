@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/roles";
 import { money } from "@/lib/format";
 import { cardClass, secondaryButtonClass } from "@/lib/ui";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { requireSettlementAccess, cancelSettlementAction } from "../actions";
 import PayForm from "./pay-form";
 
@@ -24,9 +25,12 @@ export default async function LiquidacionDetallePage(props: PageProps<"/dashboar
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard/liquidaciones" className="text-sm text-white/70 hover:underline">
-          ← Liquidaciones
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard/liquidaciones" className="text-sm text-white/70 hover:underline">
+            ← Liquidaciones
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">
             {seller?.displayName} — {settlement.periodMonth}/{settlement.periodYear}

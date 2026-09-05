@@ -4,6 +4,7 @@ import { missingFields } from "@/lib/client-status";
 import { cardClass, secondaryButtonClass, primaryButtonClass } from "@/lib/ui";
 import { expiryLabel, EXPIRY_BADGE_CLASS, expiryLevel } from "@/lib/expiry";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 import PortalAccessBox from "./portal-access-box";
 
@@ -28,9 +29,12 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard/clientes" className="text-sm text-white/70 hover:underline">
-          ← Cartera de clientes
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard/clientes" className="text-sm text-white/70 hover:underline">
+            ← Cartera de clientes
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <div className="mt-1 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">{client.fullNameNormalized}</h1>
           <Link href={`/dashboard/clientes/${client.id}/editar`} className={secondaryButtonClass}>

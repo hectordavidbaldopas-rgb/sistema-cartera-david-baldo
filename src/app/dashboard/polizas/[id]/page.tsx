@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/dates";
 import { labelFor, FOLLOW_UP_STATUS } from "@/lib/crm-fields";
 import { money } from "@/lib/format";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 
 const CHANGE_REASON_LABEL: Record<string, string> = {
@@ -42,9 +43,12 @@ export default async function PolizaDetallePage(props: PageProps<"/dashboard/pol
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href={`/dashboard/clientes/${policy.clientId}`} className="text-sm text-white/70 hover:underline">
-          ← {policy.client.fullNameNormalized}
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href={`/dashboard/clientes/${policy.clientId}`} className="text-sm text-white/70 hover:underline">
+            ← {policy.client.fullNameNormalized}
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <div className="mt-1 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">{policy.branch.name}</h1>
           <div className="flex gap-2">

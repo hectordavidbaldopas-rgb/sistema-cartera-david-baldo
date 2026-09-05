@@ -5,6 +5,7 @@ import { cardClass } from "@/lib/ui";
 import { formatDate } from "@/lib/dates";
 import { labelFor, FOLLOW_UP_STATUS, PRIORITY } from "@/lib/crm-fields";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 
 const PRIORITY_BADGE: Record<string, string> = {
   urgent: "bg-red-100 text-red-700",
@@ -30,9 +31,12 @@ export default async function SeguimientosPage() {
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
-          ← Volver
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/dashboard" className="text-sm text-white/70 hover:underline">
+            ← Volver
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <h1 className="text-lg font-semibold text-gold-300">
           Seguimientos abiertos ({followUps.length})
         </h1>

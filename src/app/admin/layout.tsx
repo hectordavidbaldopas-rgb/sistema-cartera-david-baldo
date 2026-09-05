@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LogoutButton from "../logout-button";
+import HomeButton from "@/components/home-button";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +13,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
             <h1 className="text-lg font-semibold text-gold-300">Administración</h1>
           </div>
-          <LogoutButton />
+          <div className="flex items-center gap-3">
+            <HomeButton href="/dashboard" />
+            <LogoutButton />
+          </div>
         </div>
         <nav className="mt-4 flex gap-4 text-sm">
           <Link href="/admin/vendedores" className="text-white/80 hover:text-gold-300">

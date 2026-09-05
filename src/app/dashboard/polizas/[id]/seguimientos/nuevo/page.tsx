@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { requireStaff, policyScopeWhere } from "@/lib/authz";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import HomeButton from "@/components/home-button";
 import FollowUpForm from "./form";
 
 export default async function NuevoSeguimientoPage(
@@ -19,9 +20,12 @@ export default async function NuevoSeguimientoPage(
   return (
     <div className="min-h-screen bg-texture-navy">
       <header className="border-b border-gold-500/30 bg-navy-900 px-6 py-4">
-        <Link href={`/dashboard/polizas/${policy.id}`} className="text-sm text-white/70 hover:underline">
-          ← Volver
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href={`/dashboard/polizas/${policy.id}`} className="text-sm text-white/70 hover:underline">
+            ← Volver
+          </Link>
+          <HomeButton href="/dashboard" />
+        </div>
         <h1 className="text-lg font-semibold text-gold-300">
           Nuevo seguimiento — {policy.client.fullNameNormalized} · {policy.branch.name}
         </h1>
