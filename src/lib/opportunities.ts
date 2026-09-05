@@ -1,5 +1,18 @@
 import { prisma } from "@/lib/prisma";
 
+// Las oportunidades generadas automáticamente (encuestas, actividad en el
+// portal) son manejo exclusivo del admin: los vendedores no ven esa
+// información y, si sale una póliza nueva de ahí, la carga el admin a su
+// nombre sin importar de qué vendedor venía el cliente originalmente.
+async function getAdminSellerId(): Promise<string | null> {
+  const admin = await prisma.user.findFirst({
+    where: { role: "admin", isActive: true, sellerId: { not: null } },
+    select: { sellerId: true },
+    orderBy: { createdAt: "asc" },
+  });
+  return admin?.sellerId ?? null;
+}
+
 // Ver ARQUITECTURA_BASE_DE_DATOS_APP_PAS.md sección 18, ejemplo:
 // "Cliente tiene Auto pero no Hogar" => oportunidad "Hogar — revisar cobertura".
 //
@@ -37,11 +50,7 @@ export async function generateOpportunitiesFromResponse(responseId: string) {
   const missingBranchIds = [...interestedBranchIds].filter((id) => !coveredBranchIds.has(id));
   if (missingBranchIds.length === 0) return 0;
 
-  // Vendedor responsable: el de la primera póliza del cliente, si tiene.
-  const sellerId = response.client.policies.length
-    ? (await prisma.policy.findFirst({ where: { clientId: response.clientId }, select: { sellerId: true } }))
-        ?.sellerId
-    : null;
+  const sellerId = await getAdminSellerId();
   if (!sellerId) return 0;
 
   let created = 0;
@@ -77,21 +86,7 @@ export async function generatePortalEngagementOpportunity(clientId: string) {
   });
   if (existing) return null;
 
-  const firstPolicy = await prisma.policy.findFirst({
-    where: { clientId },
-    select: { sellerId: true },
-  });
-
-  // Clientes sin ninguna póliza todavía (prospectos importados) no tienen
-  // vendedor vía policy — se usa el vendedor de quien lo cargó, si lo tiene.
-  let sellerId = firstPolicy?.sellerId;
-  if (!sellerId) {
-    const client = await prisma.client.findUnique({ where: { id: clientId }, select: { createdBy: true } });
-    const creator = client?.createdBy
-      ? await prisma.user.findUnique({ where: { id: client.createdBy }, select: { sellerId: true } })
-      : null;
-    sellerId = creator?.sellerId ?? undefined;
-  }
+  const sellerId = await getAdminSellerId();
   if (!sellerId) return null;
 
   return prisma.opportunity.create({
