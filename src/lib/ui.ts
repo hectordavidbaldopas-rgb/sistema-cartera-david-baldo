@@ -22,9 +22,10 @@ export const whatsappButtonClass =
 
 // Para links de navegación que antes eran texto subrayado y ahora tienen
 // que verse y comportarse como un botón (mismo look que secondaryButtonClass
-// pero pensado para ir en fila/grilla de accesos).
+// pero pensado para ir en una grilla de accesos, por eso ocupa todo el
+// ancho de su celda — así quedan todos alineados y del mismo tamaño).
 export const navButtonClass =
-  `inline-flex items-center gap-1 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:bg-gold-500/20 ${pressEffect}`;
+  `flex w-full items-center justify-center rounded-full border border-gold-500/40 px-4 py-2.5 text-center text-sm font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:bg-gold-500/20 ${pressEffect}`;
 
 // Para tarjetas/filas clickeables más grandes (accesos rápidos, listas de
 // vendedores/clientes) — el hundimiento es más sutil para no verse raro en

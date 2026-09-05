@@ -35,7 +35,7 @@ export default async function PortalPage() {
 
   return (
     <div className="min-h-screen bg-texture-navy">
-      <header className="bg-texture-navy flex items-center justify-between px-6 py-5">
+      <header className="bg-texture-navy flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <LogoMark size={40} />
           <div>
@@ -45,7 +45,7 @@ export default async function PortalPage() {
             <p className="text-sm text-white/70">Portal David Baldo Seguros</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/portal/mi-cuenta"
             className="rounded-full border border-white/25 px-3 py-1.5 text-sm text-white/80 transition duration-150 hover:border-white/40 hover:text-white hover:bg-navy-900/10 active:translate-y-px active:bg-navy-900/20"
@@ -58,7 +58,7 @@ export default async function PortalPage() {
       <div className="divider-gold" />
 
       <main className="mx-auto max-w-3xl px-6 py-8">
-        <div className="mb-6 flex flex-wrap gap-3">
+        <div className="mb-6 grid grid-cols-2 gap-3">
           <Link href="/portal/datos" className={navButtonClass}>
             Mis datos
           </Link>

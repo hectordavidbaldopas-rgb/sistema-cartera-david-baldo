@@ -34,7 +34,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-texture-navy">
-      <header className="bg-texture-navy flex items-center justify-between px-6 py-5">
+      <header className="bg-texture-navy flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <LogoMark size={40} />
           <div>
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           {admin && (
             <Link
               href="/admin/vendedores"
@@ -91,7 +91,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <StatCard label="Clientes" value={clientCount} />
+          <Link href="/dashboard/clientes" className={`block ${tileLinkClass}`}>
+            <StatCard label="Clientes" value={clientCount} />
+          </Link>
           <StatCard label="Pólizas" value={policyCount} />
           <StatCard label="Pólizas incompletas (draft)" value={draftPolicyCount} />
           <Link href="/dashboard/vencimientos" className={`block ${tileLinkClass}`}>
@@ -119,7 +121,7 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           <Link href="/dashboard/clientes" className={navButtonClass}>
             Ver cartera de clientes
           </Link>
