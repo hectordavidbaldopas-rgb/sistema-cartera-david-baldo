@@ -5,17 +5,22 @@ import { generatePortalAccessAction } from "../portal-access-actions";
 import { clientUsernameFromPhone, CLIENT_DEFAULT_PASSWORD } from "@/lib/credentials";
 import { cardClass, primaryButtonClass } from "@/lib/ui";
 import PortalWhatsAppShare from "./portal-whatsapp-share";
+import MissingDataWhatsAppShare from "./missing-data-whatsapp-share";
 
 export default function PortalAccessBox({
   clientId,
   clientName,
   phone,
   hasAccount,
+  informationStatus,
+  missing,
 }: {
   clientId: string;
   clientName: string;
   phone: string | null;
   hasAccount: boolean;
+  informationStatus: string;
+  missing: string[];
 }) {
   const [state, formAction, pending] = useActionState(generatePortalAccessAction, {
     error: null,
@@ -63,13 +68,21 @@ export default function PortalAccessBox({
         </div>
       )}
 
-      {phone && knownUsername && (hasAccount || state.credentials) && (
+      {phone && knownUsername && (state.credentials || !hasAccount) && (
         <PortalWhatsAppShare
           clientName={clientName}
           phone={phone}
           username={state.credentials?.user ?? knownUsername}
           password={state.credentials?.password ?? CLIENT_DEFAULT_PASSWORD}
         />
+      )}
+
+      {phone && hasAccount && !state.credentials && informationStatus !== "complete" && missing.length > 0 && (
+        <MissingDataWhatsAppShare clientName={clientName} phone={phone} missing={missing} />
+      )}
+
+      {hasAccount && !state.credentials && informationStatus === "complete" && (
+        <p className="mt-3 text-sm text-green-500">✓ Datos completos — no hace falta enviarle nada.</p>
       )}
     </div>
   );

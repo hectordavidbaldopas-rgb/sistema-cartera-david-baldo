@@ -3,10 +3,12 @@ import { requireStaff, clientScopeWhere } from "@/lib/authz";
 import { missingFields } from "@/lib/client-status";
 import { cardClass, secondaryButtonClass, primaryButtonClass } from "@/lib/ui";
 import { expiryLabel, EXPIRY_BADGE_CLASS, expiryLevel } from "@/lib/expiry";
+import { formatDate } from "@/lib/dates";
 import Link from "next/link";
 import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
 import PortalAccessBox from "./portal-access-box";
+import ClientMessageSender from "./client-message-sender";
 
 export default async function ClienteDetallePage(props: PageProps<"/dashboard/clientes/[id]">) {
   const session = await requireStaff();
@@ -25,6 +27,28 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
   if (!client) notFound();
 
   const missing = missingFields(client);
+
+  const templates = await prisma.messageTemplate.findMany({
+    where: { isActive: true },
+    include: { branch: true },
+    orderBy: { name: "asc" },
+  });
+
+  const sellerName = client.policies[0]?.seller.displayName ?? session.user.name ?? "David Baldo Seguros";
+
+  const policiesByBranch: Record<
+    string,
+    { branchId: string; companyName: string; policyNumber: string; endDateFormatted: string }
+  > = {};
+  for (const p of client.policies) {
+    if (policiesByBranch[p.branchId]) continue;
+    policiesByBranch[p.branchId] = {
+      branchId: p.branchId,
+      companyName: p.company?.name ?? "",
+      policyNumber: p.policyNumber ?? "",
+      endDateFormatted: p.endDate ? formatDate(p.endDate) : "",
+    };
+  }
 
   return (
     <div className="min-h-screen bg-texture-navy">
@@ -85,7 +109,25 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
           clientName={client.fullNameNormalized}
           phone={client.phone}
           hasAccount={!!client.clientAccount}
+          informationStatus={client.informationStatus}
+          missing={missing}
         />
+
+        {client.phone && (
+          <ClientMessageSender
+            clientName={client.fullNameNormalized}
+            phone={client.phone}
+            sellerName={sellerName}
+            templates={templates.map((t) => ({
+              id: t.id,
+              name: t.name,
+              templateText: t.templateText,
+              branchId: t.branchId,
+              branchName: t.branch?.name ?? null,
+            }))}
+            policiesByBranch={policiesByBranch}
+          />
+        )}
 
         <div>
           <div className="mb-3 flex items-center justify-between">
