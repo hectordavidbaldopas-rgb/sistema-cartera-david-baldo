@@ -2,6 +2,11 @@
 // almacenan mensajes de WhatsApp, solo se arma el link con el texto ya
 // completado y se abre wa.me. La conversación en sí vive en WhatsApp.
 
+// El seguimiento por WhatsApp lo maneja siempre Lucas, sin importar de qué
+// vendedor sea el cliente — por eso la firma es fija, no una variable.
+export const MESSAGE_SIGNATURE =
+  "Te escribe Lucas de DB Seguros. David Baldo PAS. MAT. 63225.";
+
 export type TemplateVars = {
   cliente?: string;
   vendedor?: string;

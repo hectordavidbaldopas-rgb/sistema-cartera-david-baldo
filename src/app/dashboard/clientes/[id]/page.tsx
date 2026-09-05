@@ -27,14 +27,16 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
   if (!client) notFound();
 
   const missing = missingFields(client);
+  const isAdmin = session.user.role === "admin";
+  const clientFirstName = client.firstName || client.fullNameNormalized;
 
-  const templates = await prisma.messageTemplate.findMany({
-    where: { isActive: true },
-    include: { branch: true },
-    orderBy: { name: "asc" },
-  });
-
-  const sellerName = client.policies[0]?.seller.displayName ?? session.user.name ?? "David Baldo Seguros";
+  const templates = isAdmin
+    ? await prisma.messageTemplate.findMany({
+        where: { isActive: true },
+        include: { branch: true },
+        orderBy: { name: "asc" },
+      })
+    : [];
 
   const policiesByBranch: Record<
     string,
@@ -106,18 +108,18 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
 
         <PortalAccessBox
           clientId={client.id}
-          clientName={client.fullNameNormalized}
+          clientName={clientFirstName}
           phone={client.phone}
           hasAccount={!!client.clientAccount}
           informationStatus={client.informationStatus}
           missing={missing}
+          isAdmin={isAdmin}
         />
 
-        {client.phone && (
+        {isAdmin && client.phone && (
           <ClientMessageSender
-            clientName={client.fullNameNormalized}
+            clientName={clientFirstName}
             phone={client.phone}
-            sellerName={sellerName}
             templates={templates.map((t) => ({
               id: t.id,
               name: t.name,

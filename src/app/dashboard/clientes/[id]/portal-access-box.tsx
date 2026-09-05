@@ -14,6 +14,7 @@ export default function PortalAccessBox({
   hasAccount,
   informationStatus,
   missing,
+  isAdmin,
 }: {
   clientId: string;
   clientName: string;
@@ -21,6 +22,7 @@ export default function PortalAccessBox({
   hasAccount: boolean;
   informationStatus: string;
   missing: string[];
+  isAdmin: boolean;
 }) {
   const [state, formAction, pending] = useActionState(generatePortalAccessAction, {
     error: null,
@@ -68,7 +70,7 @@ export default function PortalAccessBox({
         </div>
       )}
 
-      {phone && knownUsername && (state.credentials || !hasAccount) && (
+      {isAdmin && phone && knownUsername && (state.credentials || !hasAccount) && (
         <PortalWhatsAppShare
           clientName={clientName}
           phone={phone}
@@ -77,11 +79,11 @@ export default function PortalAccessBox({
         />
       )}
 
-      {phone && hasAccount && !state.credentials && informationStatus !== "complete" && missing.length > 0 && (
+      {isAdmin && phone && hasAccount && !state.credentials && informationStatus !== "complete" && missing.length > 0 && (
         <MissingDataWhatsAppShare clientName={clientName} phone={phone} missing={missing} />
       )}
 
-      {hasAccount && !state.credentials && informationStatus === "complete" && (
+      {isAdmin && hasAccount && !state.credentials && informationStatus === "complete" && (
         <p className="mt-3 text-sm text-green-500">✓ Datos completos — no hace falta enviarle nada.</p>
       )}
     </div>

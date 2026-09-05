@@ -22,13 +22,11 @@ type PolicyInfo = {
 export default function ClientMessageSender({
   clientName,
   phone,
-  sellerName,
   templates,
   policiesByBranch,
 }: {
   clientName: string;
   phone: string;
-  sellerName: string;
   templates: Template[];
   policiesByBranch: Record<string, PolicyInfo>;
 }) {
@@ -41,7 +39,6 @@ export default function ClientMessageSender({
     setMessage(
       renderTemplate(template.templateText, {
         cliente: clientName,
-        vendedor: sellerName,
         ramo: template.branchName ?? "",
         compania: policy?.companyName ?? "",
         poliza: policy?.policyNumber ?? "",

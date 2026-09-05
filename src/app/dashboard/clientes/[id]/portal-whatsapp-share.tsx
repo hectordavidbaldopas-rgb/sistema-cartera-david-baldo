@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { buildWhatsAppLink, MESSAGE_SIGNATURE } from "@/lib/whatsapp";
 import { inputClass, labelClass } from "@/lib/ui";
 
 function defaultMessage(clientName: string, link: string, username: string, password: string) {
-  return `Hola ${clientName}! Somos David Baldo Seguros.
+  return `Hola ${clientName} 👋 ¿Cómo estás? ${MESSAGE_SIGNATURE}
 
 Armamos un portal online para que puedas ver tus pólizas, coberturas y vencimientos cuando quieras, y actualizar tus datos de contacto.
 

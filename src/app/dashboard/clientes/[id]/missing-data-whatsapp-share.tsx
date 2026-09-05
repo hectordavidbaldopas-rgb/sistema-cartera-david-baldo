@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { buildWhatsAppLink, MESSAGE_SIGNATURE } from "@/lib/whatsapp";
 import { inputClass, labelClass } from "@/lib/ui";
 
 function defaultMessage(clientName: string, link: string, missing: string[]) {
-  return `Hola ${clientName}! Somos David Baldo Seguros.
+  return `Hola ${clientName} 👋 ¿Cómo estás? ${MESSAGE_SIGNATURE}
 
 Vimos que entraste al portal, ¡genial! Nos falta que completes estos datos para tener todo al día: ${missing.join(", ")}.
 
