@@ -4,7 +4,11 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  session: { strategy: "jwt" },
+  // La sesión efectiva se corta antes por SessionCloseGuard (se desloguea
+  // solo con cerrar el navegador), esto es un respaldo por si el
+  // navegador restaura sessionStorage entre reinicios: igual no queda
+  // logueado más de 12 horas.
+  session: { strategy: "jwt", maxAge: 12 * 60 * 60 },
   pages: {
     signIn: "/login",
   },

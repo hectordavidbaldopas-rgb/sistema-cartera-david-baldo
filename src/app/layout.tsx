@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { auth } from "@/auth";
+import SessionCloseGuard from "@/components/session-close-guard";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,13 +25,18 @@ export const metadata: Metadata = {
   description: "Gestión de cartera de clientes y pólizas de David Baldo Seguros.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const session = await auth();
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SessionCloseGuard hasSession={!!session?.user} />
+        {children}
+      </body>
     </html>
   );
 }

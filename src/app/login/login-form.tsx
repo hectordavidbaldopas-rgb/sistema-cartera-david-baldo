@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useSearchParams } from "next/navigation";
 import { loginAction } from "./actions";
 import { inputClass, labelClass, primaryButtonClass } from "@/lib/ui";
+import PasswordInput from "@/components/password-input";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -30,13 +31,7 @@ export default function LoginForm() {
       </div>
       <div>
         <label className={labelClass}>Contraseña</label>
-        <input
-          name="password"
-          type="password"
-          required
-          className={inputClass}
-          placeholder="••••••••"
-        />
+        <PasswordInput name="password" required autoComplete="current-password" placeholder="••••••••" />
       </div>
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       <button type="submit" disabled={pending} className={`${primaryButtonClass} mt-2 w-full`}>
