@@ -63,3 +63,20 @@ export async function generatePortalAccessAction(
   revalidatePath(`/dashboard/clientes/${clientId}`);
   return { error: null, credentials: { user: username, password } };
 }
+
+// Se llama al clickear "Compartir por WhatsApp" en el mensaje de invitación
+// al portal — así sabemos a quién ya le mandamos el link (para no repetirle
+// el mismo mensaje) y desde cuándo espera respuesta.
+export async function recordInviteLinkSentAction(clientId: string): Promise<void> {
+  const session = await requireStaff();
+  const client = await prisma.client.findFirst({ where: { id: clientId, ...clientScopeWhere(session) } });
+  if (!client) return;
+
+  await prisma.clientAccount.updateMany({
+    where: { clientId },
+    data: { inviteLinkSentAt: new Date(), inviteLinkSentCount: { increment: 1 } },
+  });
+
+  revalidatePath(`/dashboard/clientes/${clientId}`);
+  revalidatePath("/dashboard/clientes");
+}

@@ -137,6 +137,14 @@ model ClientAccount {
   updatedAt   DateTime  @updatedAt
   lastLoginAt DateTime?
 
+  // Para no mandarle a un cliente el mismo mensaje de invitación al portal
+  // dos veces tal cual — inviteLinkSentAt es la última vez que un vendedor
+  // clickeó "Compartir por WhatsApp" con el link/credenciales, y
+  // inviteLinkSentCount cuántas veces en total (si ya es >0 y todavía no
+  // inició sesión, el mensaje por defecto cambia a uno de recordatorio).
+  inviteLinkSentAt    DateTime?
+  inviteLinkSentCount Int       @default(0)
+
   client Client @relation(fields: [clientId], references: [id])
   user   User   @relation(fields: [userId], references: [id])
 }

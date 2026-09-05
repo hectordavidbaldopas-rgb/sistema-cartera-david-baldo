@@ -111,9 +111,12 @@ export default async function ClienteDetallePage(props: PageProps<"/dashboard/cl
           clientName={clientFirstName}
           phone={client.phone}
           hasAccount={!!client.clientAccount}
+          hasLoggedIn={!!client.clientAccount?.lastLoginAt}
           informationStatus={client.informationStatus}
           missing={missing}
           isAdmin={isAdmin}
+          inviteLinkSentCount={client.clientAccount?.inviteLinkSentCount ?? 0}
+          inviteLinkSentAt={client.clientAccount?.inviteLinkSentAt ?? null}
         />
 
         {isAdmin && client.phone && (
