@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireClient } from "@/lib/authz";
 import { computeInformationStatus } from "@/lib/client-status";
+import { generatePortalEngagementOpportunity } from "@/lib/opportunities";
 import { logAudit } from "@/lib/audit";
 import { notFound, redirect } from "next/navigation";
 
@@ -84,6 +85,8 @@ export async function updateMyDataAction(
     oldValues: existing,
     newValues: client,
   });
+
+  await generatePortalEngagementOpportunity(clientId);
 
   redirect("/portal");
 }

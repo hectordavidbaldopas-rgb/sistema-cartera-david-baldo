@@ -66,3 +66,42 @@ export async function generateOpportunitiesFromResponse(responseId: string) {
   }
   return created;
 }
+
+// Cuando un cliente entra al portal y actualiza sus propios datos de
+// contacto, es una señal de buena predisposición: ya mostró que usa el
+// portal. Se genera una oportunidad (una sola vez por cliente) para que
+// el vendedor lo tenga anotado y le mande las primeras encuestas/ofertas.
+export async function generatePortalEngagementOpportunity(clientId: string) {
+  const existing = await prisma.opportunity.findFirst({
+    where: { clientId, source: "portal_engagement" },
+  });
+  if (existing) return null;
+
+  const firstPolicy = await prisma.policy.findFirst({
+    where: { clientId },
+    select: { sellerId: true },
+  });
+
+  // Clientes sin ninguna póliza todavía (prospectos importados) no tienen
+  // vendedor vía policy — se usa el vendedor de quien lo cargó, si lo tiene.
+  let sellerId = firstPolicy?.sellerId;
+  if (!sellerId) {
+    const client = await prisma.client.findUnique({ where: { id: clientId }, select: { createdBy: true } });
+    const creator = client?.createdBy
+      ? await prisma.user.findUnique({ where: { id: client.createdBy }, select: { sellerId: true } })
+      : null;
+    sellerId = creator?.sellerId ?? undefined;
+  }
+  if (!sellerId) return null;
+
+  return prisma.opportunity.create({
+    data: {
+      clientId,
+      sellerId,
+      source: "portal_engagement",
+      title: "Cliente activo en el portal — enviar encuesta/oferta",
+      description:
+        "Generada automáticamente: el cliente ingresó al portal y actualizó sus datos de contacto.",
+    },
+  });
+}
