@@ -60,10 +60,10 @@ export default async function PortalPage() {
       <main className="mx-auto max-w-3xl px-6 py-8">
         <div className="mb-6 flex flex-wrap gap-3">
           <Link href="/portal/datos" className={navButtonClass}>
-            Mis datos →
+            Mis datos
           </Link>
           <Link href="/portal/encuestas" className={navButtonClass}>
-            Encuestas →
+            Encuestas
           </Link>
         </div>
 

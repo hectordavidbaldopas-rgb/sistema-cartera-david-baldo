@@ -121,31 +121,31 @@ export default async function DashboardPage() {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/dashboard/clientes" className={navButtonClass}>
-            Ver cartera de clientes →
+            Ver cartera de clientes
           </Link>
           <Link href="/dashboard/vencimientos" className={navButtonClass}>
-            Ver vencimientos →
+            Ver vencimientos
           </Link>
           <Link href="/dashboard/seguimientos" className={navButtonClass}>
-            Ver seguimientos →
+            Ver seguimientos
           </Link>
           <Link href="/dashboard/tareas" className={navButtonClass}>
-            Centro de tareas →
+            Centro de tareas
           </Link>
           <Link href="/dashboard/estadisticas" className={navButtonClass}>
-            Ver estadísticas →
+            Ver estadísticas
           </Link>
           <Link href="/dashboard/importar" className={navButtonClass}>
-            Importar Excel →
+            Importar Excel
           </Link>
           <Link href="/dashboard/oportunidades" className={navButtonClass}>
-            Oportunidades →
+            Oportunidades
           </Link>
           <Link href="/dashboard/comisiones" className={navButtonClass}>
-            Comisiones →
+            Comisiones
           </Link>
           <Link href="/dashboard/liquidaciones" className={navButtonClass}>
-            Liquidaciones →
+            Liquidaciones
           </Link>
         </div>
       </main>

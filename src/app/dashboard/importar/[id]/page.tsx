@@ -132,7 +132,7 @@ export default async function ImportBatchPage(props: PageProps<"/dashboard/impor
               Importación completada — {batch.importedRows} clientes procesados.
             </p>
             <Link href="/dashboard/clientes" className="text-sm text-white/80 underline">
-              Ver cartera de clientes →
+              Ver cartera de clientes
             </Link>
           </div>
         )}
