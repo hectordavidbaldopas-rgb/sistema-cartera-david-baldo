@@ -221,6 +221,12 @@ model Policy {
   cancellationReason String?
   cancellationDate   DateTime?
 
+  // PDF original de la póliza emitido por la compañía (Supabase Storage,
+  // bucket privado — pdfPath es la ruta dentro del bucket, no una URL pública).
+  pdfPath         String?
+  pdfOriginalName String?
+  pdfUploadedAt   DateTime?
+
   importBatchId     String?
   sourceRowNumber   Int?
   externalReference String?

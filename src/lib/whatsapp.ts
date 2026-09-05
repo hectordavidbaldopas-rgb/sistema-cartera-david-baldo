@@ -7,6 +7,13 @@
 export const MESSAGE_SIGNATURE =
   "Te escribe Lucas de DB Seguros. David Baldo PAS. MAT. 63225.";
 
+// Para avisos operativos (por ejemplo "tu póliza ya está lista") sí puede
+// escribir cualquier vendedor a su propio cliente — ahí la firma lleva su
+// nombre, pero la matrícula del PAS es siempre la misma (David Baldo).
+export function sellerSignature(sellerName: string): string {
+  return `Te escribe ${sellerName} de DB Seguros. David Baldo PAS. MAT. 63225.`;
+}
+
 export type TemplateVars = {
   cliente?: string;
   vendedor?: string;

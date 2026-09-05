@@ -82,6 +82,16 @@ export default async function PortalPage() {
                   {p.company?.name ?? "Compañía a confirmar"}
                   {p.policyNumber ? ` · Póliza ${p.policyNumber}` : ""}
                 </p>
+                {p.pdfPath && (
+                  <a
+                    href={`/api/policies/${p.id}/pdf`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-block text-sm text-gold-300 underline underline-offset-4"
+                  >
+                    Ver / descargar PDF
+                  </a>
+                )}
                 {(!p.companyId || p.branch.name === "Otro") && (
                   <PolicyInfoForm
                     policyId={p.id}

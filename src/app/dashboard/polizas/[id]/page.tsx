@@ -8,6 +8,8 @@ import { money } from "@/lib/format";
 import Link from "next/link";
 import HomeButton from "@/components/home-button";
 import { notFound } from "next/navigation";
+import PolicyPdfBox from "./policy-pdf-box";
+import PolicyReadyWhatsAppShare from "./policy-ready-whatsapp-share";
 
 const CHANGE_REASON_LABEL: Record<string, string> = {
   renewal: "Renovación",
@@ -120,6 +122,24 @@ export default async function PolizaDetallePage(props: PageProps<"/dashboard/pol
             </div>
           )}
         </div>
+
+        <PolicyPdfBox
+          policyId={policy.id}
+          pdfPath={policy.pdfPath}
+          pdfOriginalName={policy.pdfOriginalName}
+          pdfUploadedAt={policy.pdfUploadedAt}
+        />
+
+        {policy.pdfPath && policy.client.phone && (
+          <PolicyReadyWhatsAppShare
+            clientFirstName={policy.client.firstName || policy.client.fullNameNormalized}
+            phone={policy.client.phone}
+            sellerName={policy.seller.displayName}
+            branchName={policy.branch.name}
+            companyName={policy.company?.name ?? ""}
+            policyNumber={policy.policyNumber ?? ""}
+          />
+        )}
 
         <div>
           <h2 className="mb-3 text-sm font-semibold text-white/90">
