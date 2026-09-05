@@ -46,7 +46,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
       orderBy: onlyPortal
         ? { clientAccount: { lastLoginAt: "desc" } }
         : { fullNameNormalized: "asc" },
-      take: q || onlyPortal ? 300 : 100,
+      take: 1000,
       include: {
         policies: {
           select: { id: true, status: true, seller: { select: { displayName: true } } },
@@ -68,8 +68,7 @@ export default async function ClientesPage(props: PageProps<"/dashboard/clientes
         </div>
         <div className="mt-1 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gold-300">
-            Cartera de clientes ({clients.length}
-            {!q && !onlyPortal && clients.length === 100 ? "+" : ""})
+            Cartera de clientes ({clients.length})
           </h1>
           <Link href="/dashboard/clientes/nuevo" className={primaryButtonClass}>
             + Nuevo cliente
