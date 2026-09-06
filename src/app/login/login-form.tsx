@@ -9,7 +9,16 @@ import PasswordInput from "@/components/password-input";
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const portal = searchParams.get("portal");
   const [state, formAction, pending] = useActionState(loginAction, { error: null });
+
+  const placeholder = portal === "cliente" ? "" : portal === "vendedor" ? "DNI" : "DNI o teléfono";
+  const helperText =
+    portal === "cliente"
+      ? null
+      : portal === "vendedor"
+        ? "Tu DNI."
+        : "Vendedores: tu DNI. Clientes: los últimos 6 números de tu teléfono.";
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -23,11 +32,9 @@ export default function LoginForm() {
           autoComplete="username"
           required
           className={inputClass}
-          placeholder="DNI o teléfono"
+          placeholder={placeholder}
         />
-        <p className="mt-1 text-xs text-white/50">
-          Vendedores: tu DNI. Clientes: los últimos 6 números de tu teléfono.
-        </p>
+        {helperText && <p className="mt-1 text-xs text-white/50">{helperText}</p>}
       </div>
       <div>
         <label className={labelClass}>Contraseña</label>

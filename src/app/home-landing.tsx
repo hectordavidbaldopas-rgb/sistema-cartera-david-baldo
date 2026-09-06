@@ -76,10 +76,10 @@ const TEAM = [
 function PortalButtons({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <Link href="/login" className={secondaryButtonClass}>
+      <Link href="/login?portal=cliente" className={secondaryButtonClass}>
         Portal clientes
       </Link>
-      <Link href="/login" className={primaryButtonClass}>
+      <Link href="/login?portal=vendedor" className={primaryButtonClass}>
         Portal vendedores
       </Link>
     </div>
