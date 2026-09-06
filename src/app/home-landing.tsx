@@ -68,9 +68,9 @@ const STEPS = [
 ];
 
 const TEAM = [
-  { initials: "DB", name: "David Baldo", role: "Productor Asesor de Seguros — Mat. N° 63225" },
-  { initials: "LB", name: "Lucas Baldo", role: "Asesor comercial" },
-  { initials: "R", name: "Rubén", role: "Asesor comercial" },
+  { photo: "/team-david.jpg", name: "David Baldo", role: "Productor Asesor de Seguros — Mat. N° 63225" },
+  { photo: "/team-lucas.jpg", name: "Lucas Baldo", role: "Representante oficial en San Jorge" },
+  { photo: "/team-ruben.jpg", name: "Rubén Ide", role: "Representante oficial en Las Rosas" },
 ];
 
 function PortalButtons({ className = "" }: { className?: string }) {
@@ -119,7 +119,7 @@ export default function HomeLanding() {
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold-500/40 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-gold-400">
+            <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">
               Nueva imagen — la confianza, la de siempre
             </p>
             <h1 className="max-w-xl text-4xl font-bold leading-tight text-white sm:text-5xl">
@@ -200,22 +200,18 @@ export default function HomeLanding() {
                 aria-hidden
                 className="absolute -bottom-4 -right-4 h-full w-full rounded-2xl bg-[image:var(--gradient-gold)] opacity-90"
               />
-              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-gold-500/30">
+              <div className="relative aspect-square overflow-hidden rounded-2xl border border-gold-500/30">
                 <Image
                   src="/david-quien-soy.jpg"
-                  alt="David Baldo, Productor Asesor de Seguros"
+                  alt="David Baldo, Productor Asesor de Seguros — Quién soy"
                   fill
-                  className="object-cover object-[88%_35%]"
+                  className="object-cover"
                   sizes="(max-width: 640px) 100vw, 420px"
                 />
               </div>
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold-400">
-              Quién soy
-            </p>
-            <h2 className="mb-5 text-3xl font-bold text-white sm:text-4xl">David Baldo</h2>
             <p className="mb-4 text-white/70">
               Hace 20 años acompaño a familias y empresas de Las Parejas y la zona a proteger lo
               que más les importa: el auto, el hogar, el campo, el negocio.
@@ -342,8 +338,8 @@ export default function HomeLanding() {
             {TEAM.map((t, i) => (
               <Reveal key={t.name} delay={i * 100}>
                 <div className="rounded-2xl border border-gold-500/30 bg-navy-950 p-6">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-gold)] text-sm font-bold text-navy-950">
-                    {t.initials}
+                  <div className="relative mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-gold-400 shadow-[0_0_0_3px_rgba(11,17,29,1)]">
+                    <Image src={t.photo} alt={t.name} fill className="object-cover" sizes="64px" />
                   </div>
                   <p className="font-semibold text-gold-300">{t.name}</p>
                   <p className="text-sm text-white/60">{t.role}</p>
