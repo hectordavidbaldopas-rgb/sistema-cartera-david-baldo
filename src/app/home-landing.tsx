@@ -44,12 +44,12 @@ const STATS = [
 
 const COMPANIES = [
   { name: "Mapfre", logo: "/logo-mapfre.png" },
-  { name: "San Cristóbal Seguros", logo: "/logo-sancristobal.png" },
-  { name: "Mercantil Andina", logo: "/logo-mercantilandina.png" },
-  { name: "Asociart", logo: "/logo-asociart.png" },
   { name: "Swiss Medical", logo: "/logo-swissmedical.png" },
-  { name: "Segurometal", logo: "/logo-segurometal.png" },
+  { name: "Mercantil Andina", logo: "/logo-mercantilandina.png" },
   { name: "Andina ART", logo: "/logo-andinaart.png" },
+  { name: "San Cristóbal Seguros", logo: "/logo-sancristobal.png" },
+  { name: "Asociart", logo: "/logo-asociart.png" },
+  { name: "Segurometal", logo: "/logo-segurometal.png" },
 ];
 
 const BRANCHES = [
