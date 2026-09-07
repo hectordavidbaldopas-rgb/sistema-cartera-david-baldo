@@ -38,7 +38,7 @@ const NAV_LINKS = [
 
 const STATS = [
   { value: "20+", label: "años de experiencia" },
-  { value: "5", label: "compañías aseguradoras" },
+  { value: "7", label: "compañías aseguradoras" },
   { value: "8", label: "rubros cubiertos" },
 ];
 
@@ -48,6 +48,8 @@ const COMPANIES = [
   { name: "Mercantil Andina", logo: "/logo-mercantilandina.png" },
   { name: "Asociart", logo: "/logo-asociart.png" },
   { name: "Swiss Medical", logo: "/logo-swissmedical.png" },
+  { name: "Segurometal", logo: "/logo-segurometal.png" },
+  { name: "Andina ART", logo: "/logo-andinaart.png" },
 ];
 
 const BRANCHES = [
@@ -63,7 +65,7 @@ const BRANCHES = [
 
 const STEPS = [
   { n: "01", title: "Escribime por WhatsApp", text: "Contame qué querés asegurar, sin vueltas." },
-  { n: "02", title: "Comparo compañías por vos", text: "Reviso opciones entre Mapfre, San Cristóbal, Mercantil Andina, Asociart y Swiss Medical." },
+  { n: "02", title: "Comparo compañías por vos", text: "Reviso opciones entre Mapfre, San Cristóbal, Mercantil Andina, Asociart, Swiss Medical, Segurometal y Andina ART." },
   { n: "03", title: "Elegís la mejor opción", text: "Vos decidís, con asesoramiento real de tu lado." },
 ];
 
@@ -217,12 +219,12 @@ export default function HomeLanding() {
               que más les importa: el auto, el hogar, el campo, el negocio.
             </p>
             <p className="mb-6 text-white/70">
-              Trabajo junto a Mapfre, San Cristóbal, Mercantil Andina, Asociart y Swiss Medical
-              para ofrecerte la cobertura que mejor se adapta a vos, con asesoramiento real — no
-              solo una póliza más.
+              Trabajo junto a Mapfre, San Cristóbal, Mercantil Andina, Asociart, Swiss Medical,
+              Segurometal y Andina ART para ofrecerte la cobertura que mejor se adapta a vos, con
+              asesoramiento real — no solo una póliza más.
             </p>
             <ul className="space-y-2">
-              {["Atención personalizada, cara a cara", "Multicompañía, con foco en Mapfre", "Seguimiento durante toda la vigencia"].map(
+              {["Atención personalizada, cara a cara", "Trabajo con varias aseguradoras", "Seguimiento durante toda la vigencia"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-white/80">
                     <CheckIcon className="h-4 w-4 shrink-0 text-gold-400" />
@@ -294,7 +296,7 @@ export default function HomeLanding() {
         <div className="mx-auto max-w-6xl">
           <Reveal>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold-400">
-              Multicompañía · Foco Mapfre
+              Cómo trabajo
             </p>
             <h2 className="mb-12 text-3xl font-bold text-white sm:text-4xl">
               Cotizá tu seguro en 24 horas
