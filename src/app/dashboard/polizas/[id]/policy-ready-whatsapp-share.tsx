@@ -19,7 +19,7 @@ function defaultMessage(params: {
 
 Te cuento que ya está lista y cargada tu póliza de ${coverage} — ya contás con la cobertura activa.
 
-La podés ver y descargar cuando quieras entrando a la app: ${params.link}
+La podés ver y descargar cuando quieras entrando a la app: ${params.link} — hacé clic en "Portal clientes" (arriba a la derecha).
 
 Cualquier duda, escribinos.`;
 }

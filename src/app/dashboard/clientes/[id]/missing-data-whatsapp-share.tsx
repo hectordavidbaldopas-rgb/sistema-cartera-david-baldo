@@ -9,7 +9,7 @@ function defaultMessage(clientName: string, link: string, missing: string[]) {
 
 Vimos que entraste al portal, ¡genial! Nos falta que completes estos datos para tener todo al día: ${missing.join(", ")}.
 
-Podés hacerlo entrando de nuevo acá: ${link}
+Podés hacerlo entrando de nuevo acá: ${link} — hacé clic en "Portal clientes" (arriba a la derecha).
 
 Cualquier duda, escribinos por acá.`;
 }

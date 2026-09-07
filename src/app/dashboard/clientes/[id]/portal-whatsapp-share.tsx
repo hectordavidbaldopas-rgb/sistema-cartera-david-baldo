@@ -12,6 +12,7 @@ function firstMessage(clientName: string, link: string, username: string, passwo
 Armamos un portal online para que puedas ver tus pólizas, coberturas y vencimientos cuando quieras, y actualizar tus datos de contacto.
 
 Entrá acá: ${link}
+Hacé clic en "Portal clientes" (arriba a la derecha) e ingresá con estos datos:
 Usuario: ${username}
 Contraseña: ${password}
 
@@ -26,6 +27,7 @@ function reminderMessage(clientName: string, link: string, username: string, pas
 Te había pasado el acceso al portal hace unos días y no llegué a ver si pudiste entrar. Te reenvío los datos por las dudas:
 
 ${link}
+Hacé clic en "Portal clientes" (arriba a la derecha) e ingresá con estos datos:
 Usuario: ${username}
 Contraseña: ${password}
 
