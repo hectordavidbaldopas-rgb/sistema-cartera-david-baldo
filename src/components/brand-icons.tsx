@@ -132,6 +132,101 @@ export function LinkIcon({ className = base }: IconProps) {
   );
 }
 
+export function FlameIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M12 21.5c-3.6 0-6.3-2.5-6.3-6 0-2.7 1.7-4.4 2.6-6.5.5 1.3 1.3 2 2.1 2-.4-2.6.5-5 3-6.5-.6 2.3.2 3.8 1.6 5.3 1.5 1.6 2.9 3.2 2.9 5.7 0 3.5-2.4 6-5.9 6Z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function GlassIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <rect x="4" y="3.5" width="16" height="17" rx="1.5" />
+      <path d="M4 12h16M12 3.5V20M8 3.5 4 9M16 3.5l4 5.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function GearIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 3.5v2.3M12 18.2v2.3M20.5 12h-2.3M5.8 12H3.5M17.8 6.2l-1.6 1.6M7.8 16.2l-1.6 1.6M17.8 17.8l-1.6-1.6M7.8 7.8 6.2 6.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function TruckIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M2.5 6.5h10v9h-10Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.5 10h4l3 3v2.5h-7Z" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="6" cy="17.5" r="1.6" />
+      <circle cx="16.5" cy="17.5" r="1.6" />
+    </svg>
+  );
+}
+
+export function AnchorIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <circle cx="12" cy="5" r="1.8" />
+      <path d="M12 7v14M7 13H4.5a7.5 7.5 0 0 0 7.5 7.5A7.5 7.5 0 0 0 19.5 13H17" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.5 8.5h7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function PersonShieldIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <circle cx="12" cy="6.5" r="2.7" />
+      <path d="M6 20.5c0-3.6 2.7-6 6-6s6 2.4 6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function LockIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <rect x="5" y="11" width="14" height="9.5" rx="1.5" />
+      <path d="M8 11V7.5a4 4 0 0 1 8 0V11" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="15.5" r="1.4" />
+    </svg>
+  );
+}
+
+export function HailIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M6.5 12.5a4 4 0 0 1 .3-8 5 5 0 0 1 9.7-1.2A4.3 4.3 0 0 1 17 12.5Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 16v1.5M12 16v1.5M16 16v1.5M8 19.5v.5M12 19.5v.5M16 19.5v.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ScaleIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M12 3v18M8 21h8" strokeLinecap="round" />
+      <path d="M12 5.5 5 7.5l3.2 6.3a3.2 3.2 0 0 0 3.6 0Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 5.5 19 7.5l-3.2 6.3a3.2 3.2 0 0 1-3.6 0Z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function BuildingIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <rect x="5" y="3" width="10" height="18" rx="1" />
+      <path d="M15 9h4v12h-4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 7h1M11 7h1M8 11h1M11 11h1M8 15h1M11 15h1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function CheckIcon({ className = base }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>

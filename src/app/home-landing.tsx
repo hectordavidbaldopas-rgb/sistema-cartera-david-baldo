@@ -4,20 +4,13 @@ import { LogoFull, LogoMark } from "@/components/logo";
 import { primaryButtonClass, secondaryButtonClass, whatsappButtonClass } from "@/lib/ui";
 import Reveal from "@/components/reveal";
 import {
-  CarIcon,
-  WheatIcon,
-  HomeIcon,
-  StoreIcon,
-  FactoryIcon,
-  ShieldHeartIcon,
-  HardHatIcon,
-  PlaneIcon,
   WhatsAppIcon,
   InstagramIcon,
   FacebookIcon,
   MailIcon,
   CheckIcon,
 } from "@/components/brand-icons";
+import BranchesGrid from "@/components/branches-grid";
 
 // Datos de contacto verificados contra linktr.ee/hectordavidbaldo.pas — no
 // inventar otros: si cambian, actualizar acá (única fuente de verdad de la
@@ -39,7 +32,7 @@ const NAV_LINKS = [
 const STATS = [
   { value: "20+", label: "años de experiencia" },
   { value: "7", label: "compañías aseguradoras" },
-  { value: "8", label: "rubros cubiertos" },
+  { value: "14", label: "ramas de seguros" },
 ];
 
 const COMPANIES = [
@@ -50,17 +43,6 @@ const COMPANIES = [
   { name: "San Cristóbal Seguros", logo: "/logo-sancristobal.png" },
   { name: "Asociart", logo: "/logo-asociart.png" },
   { name: "Segurometal", logo: "/logo-segurometal.png" },
-];
-
-const BRANCHES = [
-  { Icon: CarIcon, label: "Automotor" },
-  { Icon: WheatIcon, label: "Agro" },
-  { Icon: HomeIcon, label: "Hogar" },
-  { Icon: StoreIcon, label: "Comercio" },
-  { Icon: FactoryIcon, label: "Industrias" },
-  { Icon: ShieldHeartIcon, label: "Vida" },
-  { Icon: HardHatIcon, label: "ART" },
-  { Icon: PlaneIcon, label: "Turismo" },
 ];
 
 const STEPS = [
@@ -272,22 +254,15 @@ export default function HomeLanding() {
             <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
               Ramas que trabajo
             </p>
-            <h2 className="mb-12 text-center text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mb-3 text-center text-3xl font-bold text-white sm:text-4xl">
               Un seguro para cada necesidad
             </h2>
+            <p className="mx-auto mb-12 max-w-2xl text-center text-sm text-white/50">
+              Muchas de estas coberturas se combinan entre sí: por ejemplo, granizo o robo pueden ir incluidos
+              dentro de tu seguro de auto o de tu combinado familiar. Tocá cada rama para ver el detalle.
+            </p>
           </Reveal>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {BRANCHES.map((b, i) => (
-              <Reveal key={b.label} delay={i * 60}>
-                <div className="flex flex-col items-center gap-3 rounded-2xl border border-gold-500/25 bg-navy-950 px-4 py-6 text-center transition duration-150 hover:border-gold-400/60 hover:bg-navy-950/60">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-gold-500/40 text-gold-300">
-                    <b.Icon className="h-5 w-5" />
-                  </span>
-                  <p className="text-sm font-medium text-white/90">{b.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <BranchesGrid />
         </div>
       </section>
 
