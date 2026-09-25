@@ -54,7 +54,6 @@ const STEPS = [
 const TEAM = [
   { photo: "/team-david.jpg", name: "David Baldo", role: "Productor Asesor de Seguros — Mat. N° 63225 — Las Parejas" },
   { photo: "/team-lucas.jpg", name: "Lucas Baldo", role: "Representante oficial en San Jorge" },
-  { photo: "/team-ruben.jpg", name: "Rubén Ide", role: "Representante oficial en Las Rosas" },
 ];
 
 function PortalButtons({ className = "" }: { className?: string }) {

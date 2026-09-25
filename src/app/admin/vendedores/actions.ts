@@ -173,3 +173,91 @@ export async function updateSellerAction(
   revalidatePath("/admin/vendedores");
   redirect("/admin/vendedores");
 }
+
+export type ReassignSellerState = { error: string | null; ok: boolean };
+
+// Baja de un vendedor: sus pólizas pasan a otro vendedor (queda registrado
+// como una versión nueva de cada póliza, changeReason "seller_change", igual
+// que cualquier otra edición) y se desactivan su Seller y su User para que
+// no pueda volver a entrar ni aparezca en los selectores de vendedor activo
+// (esos ya filtran por isActive en todo el resto de la app).
+export async function reassignAndDeactivateSellerAction(
+  _prevState: ReassignSellerState,
+  formData: FormData,
+): Promise<ReassignSellerState> {
+  const session = await requireAdmin();
+  const sellerId = formData.get("sellerId") as string;
+  const newSellerId = formData.get("newSellerId") as string;
+
+  if (!newSellerId) return { error: "Elegí a qué vendedor pasan las pólizas.", ok: false };
+  if (newSellerId === sellerId) return { error: "Elegí un vendedor distinto.", ok: false };
+
+  const seller = await prisma.seller.findUnique({ where: { id: sellerId }, include: { user: true } });
+  if (!seller) return { error: "Vendedor no encontrado.", ok: false };
+
+  const newSeller = await prisma.seller.findUnique({ where: { id: newSellerId } });
+  if (!newSeller) return { error: "El vendedor de destino no existe.", ok: false };
+
+  const policies = await prisma.policy.findMany({ where: { sellerId } });
+  const policyIds = policies.map((p) => p.id);
+
+  if (policyIds.length > 0) {
+    const versions = await prisma.policyVersion.findMany({ where: { policyId: { in: policyIds } } });
+    const latestByPolicy = new Map<string, (typeof versions)[number]>();
+    for (const v of versions) {
+      const current = latestByPolicy.get(v.policyId);
+      if (!current || v.versionNumber > current.versionNumber) latestByPolicy.set(v.policyId, v);
+    }
+
+    const newVersions = policies.map((p) => {
+      const last = latestByPolicy.get(p.id);
+      return {
+        policyId: p.id,
+        versionNumber: (last?.versionNumber ?? 0) + 1,
+        previousVersionId: last?.id ?? null,
+        clientId: p.clientId,
+        branchId: p.branchId,
+        companyId: p.companyId,
+        sellerId: newSellerId,
+        policyNumber: p.policyNumber,
+        coverageName: p.coverageName,
+        insuredObject: p.insuredObject,
+        insuredSum: p.insuredSum,
+        startDate: p.startDate,
+        endDate: p.endDate,
+        premiumAmount: p.premiumAmount,
+        commissionPercentage: p.commissionPercentage,
+        commissionAmount: p.commissionAmount,
+        paymentMethod: p.paymentMethod,
+        installmentCount: p.installmentCount,
+        paymentStatus: p.paymentStatus,
+        updateFrequency: p.updateFrequency,
+        createdBy: session.user.id,
+        changeReason: "seller_change",
+      };
+    });
+
+    await prisma.$transaction([
+      prisma.policy.updateMany({ where: { sellerId }, data: { sellerId: newSellerId } }),
+      prisma.policyVersion.createMany({ data: newVersions }),
+    ]);
+  }
+
+  await prisma.seller.update({ where: { id: sellerId }, data: { isActive: false } });
+  if (seller.user) {
+    await prisma.user.update({ where: { id: seller.user.id }, data: { isActive: false } });
+  }
+
+  await logAudit({
+    userId: session.user.id,
+    entityType: "Seller",
+    entityId: sellerId,
+    action: "status_change",
+    oldValues: { isActive: true, policiesReassigned: policyIds.length },
+    newValues: { isActive: false, reassignedTo: newSellerId },
+  });
+
+  revalidatePath("/admin/vendedores");
+  revalidatePath(`/admin/vendedores/${sellerId}`);
+  return { error: null, ok: true };
+}
