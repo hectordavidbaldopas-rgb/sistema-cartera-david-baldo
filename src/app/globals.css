@@ -5,10 +5,10 @@
   --foreground: #171717;
 
   /* Paleta de marca — Baldo Seguros (ver DISEÑO APP/*.png) */
-  --color-navy-950: #0b111d;
-  --color-navy-900: #111929;
-  --color-navy-800: #1b2740;
-  --color-navy-700: #263457;
+  --color-navy-950: #071a36;
+  --color-navy-900: #0b2347;
+  --color-navy-800: #112d59;
+  --color-navy-700: #1a3a6e;
 
   --color-steel-600: #4f6bae;
   --color-steel-500: #698ccd;
@@ -47,7 +47,9 @@ html {
 }
 
 body {
-  background: var(--background);
+  /* 40px arriba para el "techo" del plafón de luces (components/stage-lights) */
+  padding-top: 40px;
+  background: var(--color-navy-950);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -64,9 +66,37 @@ h1, h2, h3 {
 
 /* Texturas de fondo de marca, para secciones "hero" (login, headers oscuros) */
 .bg-texture-navy {
-  background-image: linear-gradient(160deg, rgba(11, 17, 29, 0.82), rgba(11, 17, 29, 0.94)), url("/texture-navy.jpg");
-  background-size: cover;
+  /* Transparente: debajo está la textura fija de toda la app (.bg-app-texture) */
+  background-color: transparent;
+}
+
+/* Textura navy de fondo de toda la app: capa fija detrás de todo (layout raíz).
+   Con background-attachment fixed también se usa en el "techo" del plafón
+   para que coincida exacto con el fondo. */
+.bg-app-texture {
+  background-color: #071a36;
+  background-image: url("/bg-textura-navy.webp");
   background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Fondo de cada pantalla (los contenedores de página son "min-h-screen
+   bg-texture-navy"): las cintas del banner abajo a la derecha. Los focos de
+   luz van aparte, en el plafón fijo del layout (components/stage-lights). */
+.min-h-screen.bg-texture-navy {
+  background-image: url("/banner-waves.svg");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: min(720px, 95vw) auto;
+}
+
+/* Cintas del banner sueltas, para secciones de la landing */
+.bg-banner-waves {
+  background-image: url("/banner-waves.svg");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: min(720px, 95vw) auto;
 }
 
 .bg-texture-steel {
@@ -81,3 +111,9 @@ h1, h2, h3 {
   -webkit-background-clip: text;
   color: transparent;
 }
+
+/* Prueba "estilo banner": logo en blanco */
+.logo-white {
+  filter: brightness(0) invert(1);
+}
+

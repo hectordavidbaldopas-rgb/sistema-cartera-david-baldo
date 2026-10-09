@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import { auth } from "@/auth";
 import SessionCloseGuard from "@/components/session-close-guard";
+import StageLights from "@/components/stage-lights";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,8 +37,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <div aria-hidden className="bg-app-texture pointer-events-none fixed inset-0 -z-10" />
         <SessionCloseGuard hasSession={!!session?.user} />
         {children}
+        {/* Plafón con focos de luz fijo debajo del header, en todas las páginas */}
+        <StageLights />
       </body>
     </html>
   );

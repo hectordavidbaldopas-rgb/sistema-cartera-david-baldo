@@ -34,7 +34,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-texture-navy">
-      <header className="bg-texture-navy flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+      <header className="flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <LogoMark size={40} />
           <div>

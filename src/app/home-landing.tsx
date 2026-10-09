@@ -92,8 +92,8 @@ function SocialButtons({ className = "" }: { className?: string }) {
 
 export default function HomeLanding() {
   return (
-    <div className="min-h-screen bg-navy-950">
-      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-navy-950/85 backdrop-blur">
+    <div className="min-h-screen">
+      <header className="sticky top-10 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <LogoMark size={36} className="shrink-0 sm:hidden" />
           <LogoFull width={160} className="hidden shrink-0 sm:block" />
@@ -113,15 +113,7 @@ export default function HomeLanding() {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-texture-navy px-6 pb-24 pt-20">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-gold-500/[0.04] blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-steel-500/10 blur-3xl"
-        />
+      <section className="bg-banner-waves relative overflow-hidden bg-texture-navy px-6 pb-24 pt-20">
         <div className="relative mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">
@@ -247,7 +239,7 @@ export default function HomeLanding() {
       </section>
 
       {/* COMPAÑÍAS */}
-      <section className="border-y border-gold-500/15 bg-navy-900 px-6 py-10">
+      <section className="border-y border-gold-500/15 bg-navy-900/40 px-6 py-10">
         <div className="mx-auto max-w-6xl">
           <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-white/40">
             Trabajo con las principales aseguradoras
@@ -275,7 +267,7 @@ export default function HomeLanding() {
       </section>
 
       {/* RAMAS */}
-      <section id="ramas" className="bg-navy-900 px-6 py-16">
+      <section id="ramas" className="bg-navy-900/40 px-6 py-16">
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
@@ -329,7 +321,7 @@ export default function HomeLanding() {
       </section>
 
       {/* EQUIPO */}
-      <section id="equipo" className="bg-navy-900 px-6 py-24">
+      <section id="equipo" className="bg-navy-900/40 px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <Reveal>
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold-400">
@@ -356,7 +348,7 @@ export default function HomeLanding() {
       </section>
 
       {/* CONTACTO / FOOTER */}
-      <footer id="contacto" className="border-t border-gold-500/20 bg-texture-navy px-6 py-16">
+      <footer id="contacto" className="bg-banner-waves border-t border-gold-500/20 bg-texture-navy px-6 py-16">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
           <LogoStacked width={150} />
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>

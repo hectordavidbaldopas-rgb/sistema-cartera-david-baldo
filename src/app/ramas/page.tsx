@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 // tan cargada (ahí solo se muestran los nombres como accesos directos).
 export default function RamasPage() {
   return (
-    <div className="min-h-screen bg-navy-950">
-      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-navy-950/85 backdrop-blur">
+    <div className="min-h-screen bg-texture-navy">
+      <header className="sticky top-10 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <Link href="/" aria-label="Ir al inicio">
             <LogoMark size={36} className="shrink-0 sm:hidden" />
@@ -29,7 +29,7 @@ export default function RamasPage() {
         </div>
       </header>
 
-      <section className="bg-navy-900 px-6 py-16">
+      <section className="px-6 py-16">
         <div className="mx-auto max-w-6xl">
           <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
             Ramas que trabajo

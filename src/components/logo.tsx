@@ -8,7 +8,7 @@ export function LogoMark({ size = 40, className = "" }: { size?: number; classNa
       width={327}
       height={440}
       style={{ height: size, width: "auto" }}
-      className={className}
+      className={`logo-white ${className}`}
       priority
     />
   );
@@ -22,7 +22,7 @@ export function LogoFull({ width = 220, className = "" }: { width?: number; clas
       width={1000}
       height={274}
       style={{ width, height: "auto" }}
-      className={className}
+      className={`logo-white ${className}`}
       priority
     />
   );
@@ -37,7 +37,7 @@ export function LogoStacked({ width = 160, className = "" }: { width?: number; c
       width={600}
       height={570}
       style={{ width, height: "auto" }}
-      className={className}
+      className={`logo-white ${className}`}
     />
   );
 }
