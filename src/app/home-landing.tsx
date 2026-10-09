@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { LogoFull, LogoMark } from "@/components/logo";
+import { LogoFull, LogoMark, LogoStacked } from "@/components/logo";
 import { primaryButtonClass, secondaryButtonClass, whatsappButtonClass } from "@/lib/ui";
 import Reveal from "@/components/reveal";
 import {
@@ -10,16 +10,8 @@ import {
   MailIcon,
   CheckIcon,
 } from "@/components/brand-icons";
-import BranchesGrid from "@/components/branches-grid";
-
-// Datos de contacto verificados contra linktr.ee/hectordavidbaldo.pas — no
-// inventar otros: si cambian, actualizar acá (única fuente de verdad de la
-// landing pública).
-const WHATSAPP_NUMBER = "5493406415230";
-const WHATSAPP_HREF = (msg: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-const INSTAGRAM_HREF = "https://www.instagram.com/pas.david.baldo";
-const FACEBOOK_HREF = "https://www.facebook.com/profile.php?id=100027309113999";
-const EMAIL = "hectordavidbaldo.pas@gmail.com";
+import { BranchesChips } from "@/components/branches-grid";
+import { WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, EMAIL } from "@/lib/contact";
 
 const NAV_LINKS = [
   { href: "#quien-soy", label: "Quién soy" },
@@ -69,12 +61,42 @@ function PortalButtons({ className = "" }: { className?: string }) {
   );
 }
 
+// Redes y medios de contacto: van en el hero (debajo de los botones principales,
+// para tenerlos a mano) y se repiten en el footer.
+const socialLinkClass =
+  "flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300";
+
+function SocialButtons({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex flex-wrap items-center gap-3 ${className}`}>
+      <a
+        href={WHATSAPP_HREF("Hola David! Quiero hacer una consulta.")}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={socialLinkClass}
+      >
+        <WhatsAppIcon className="h-4 w-4" /> WhatsApp
+      </a>
+      <a href={INSTAGRAM_HREF} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+        <InstagramIcon className="h-4 w-4" /> Instagram
+      </a>
+      <a href={FACEBOOK_HREF} target="_blank" rel="noopener noreferrer" className={socialLinkClass}>
+        <FacebookIcon className="h-4 w-4" /> Facebook
+      </a>
+      <a href={`mailto:${EMAIL}`} className={socialLinkClass}>
+        <MailIcon className="h-4 w-4" /> Email
+      </a>
+    </div>
+  );
+}
+
 export default function HomeLanding() {
   return (
     <div className="min-h-screen bg-navy-950">
       <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-navy-950/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-          <LogoFull width={130} />
+          <LogoMark size={36} className="shrink-0 sm:hidden" />
+          <LogoFull width={160} className="hidden shrink-0 sm:block" />
           <nav className="hidden items-center gap-6 lg:flex">
             {NAV_LINKS.map((l) => (
               <a
@@ -94,7 +116,7 @@ export default function HomeLanding() {
       <section className="relative overflow-hidden bg-texture-navy px-6 pb-24 pt-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-gold-500/10 blur-3xl"
+          className="pointer-events-none absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-gold-500/[0.04] blur-3xl"
         />
         <div
           aria-hidden
@@ -127,6 +149,12 @@ export default function HomeLanding() {
               <a href="#quien-soy" className={secondaryButtonClass}>
                 Conocé más
               </a>
+            </div>
+            <div className="mt-10 max-w-lg rounded-2xl border border-gold-500/20 bg-navy-950/40 px-5 py-6">
+              <p className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-gold-400">
+                Nuestras redes y contacto
+              </p>
+              <SocialButtons className="justify-center" />
             </div>
             <div className="mt-12 grid max-w-md grid-cols-3 gap-4 border-t border-gold-500/20 pt-6">
               {STATS.map((s) => (
@@ -247,21 +275,22 @@ export default function HomeLanding() {
       </section>
 
       {/* RAMAS */}
-      <section id="ramas" className="bg-navy-900 px-6 py-24">
-        <div className="mx-auto max-w-6xl">
+      <section id="ramas" className="bg-navy-900 px-6 py-16">
+        <div className="mx-auto max-w-4xl">
           <Reveal>
             <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
               Ramas que trabajo
             </p>
-            <h2 className="mb-3 text-center text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mb-8 text-center text-3xl font-bold text-white sm:text-4xl">
               Un seguro para cada necesidad
             </h2>
-            <p className="mx-auto mb-12 max-w-2xl text-center text-sm text-white/50">
-              Muchas de estas coberturas se combinan entre sí: por ejemplo, granizo o robo pueden ir incluidos
-              dentro de tu seguro de auto o de tu combinado familiar. Tocá cada rama para ver el detalle.
-            </p>
+            <BranchesChips />
+            <div className="mt-8 flex justify-center">
+              <Link href="/ramas" className={secondaryButtonClass}>
+                Ver el detalle de cada rama →
+              </Link>
+            </div>
           </Reveal>
-          <BranchesGrid />
         </div>
       </section>
 
@@ -329,42 +358,11 @@ export default function HomeLanding() {
       {/* CONTACTO / FOOTER */}
       <footer id="contacto" className="border-t border-gold-500/20 bg-texture-navy px-6 py-16">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 text-center">
-          <LogoFull width={120} />
+          <LogoStacked width={150} />
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={WHATSAPP_HREF("Hola David! Quiero hacer una consulta.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300"
-            >
-              <WhatsAppIcon className="h-4 w-4" /> WhatsApp
-            </a>
-            <a
-              href={INSTAGRAM_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300"
-            >
-              <InstagramIcon className="h-4 w-4" /> Instagram
-            </a>
-            <a
-              href={FACEBOOK_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300"
-            >
-              <FacebookIcon className="h-4 w-4" /> Facebook
-            </a>
-            <a
-              href={`mailto:${EMAIL}`}
-              className="flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300"
-            >
-              <MailIcon className="h-4 w-4" /> Email
-            </a>
-          </div>
+          <SocialButtons className="justify-center" />
           <PortalButtons className="mt-4" />
-          <p className="text-xs text-white/30">© {new Date().getFullYear()} David Baldo Seguros</p>
+          <p className="text-xs text-white/30">© {new Date().getFullYear()} Baldo Seguros</p>
         </div>
       </footer>
 

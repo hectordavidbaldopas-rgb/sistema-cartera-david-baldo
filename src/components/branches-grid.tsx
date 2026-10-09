@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Reveal from "@/components/reveal";
 import {
   CarIcon,
@@ -139,8 +140,51 @@ const BRANCHES = [
   },
 ];
 
+// "Seguro combinado familiar" -> "seguro-combinado-familiar": ancla para /ramas#<slug>.
+function slugify(label: string) {
+  return label
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-");
+}
+
+// Versión compacta para la landing: solo ícono + nombre, cada uno lleva a su
+// detalle en /ramas. El listado completo con descripciones vive en esa página.
+export function BranchesChips() {
+  return (
+    <div className="flex flex-wrap justify-center gap-2">
+      {BRANCHES.map((b) => (
+        <Link
+          key={b.label}
+          href={`/ramas#${slugify(b.label)}`}
+          className="flex items-center gap-2 rounded-full border border-gold-500/25 bg-navy-950 px-3.5 py-2 text-sm text-white/80 transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
+        >
+          <b.Icon className="h-4 w-4 text-gold-300" />
+          {b.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function BranchesGrid() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Si se llega desde un chip de la landing (/ramas#vida), abrir esa rama.
+  useEffect(() => {
+    function openFromHash() {
+      const slug = window.location.hash.slice(1);
+      const i = BRANCHES.findIndex((b) => slugify(b.label) === slug);
+      if (i !== -1) setOpenIndex(i);
+    }
+    const frame = requestAnimationFrame(openFromHash);
+    window.addEventListener("hashchange", openFromHash);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("hashchange", openFromHash);
+    };
+  }, []);
 
   useEffect(() => {
     if (openIndex === null) return;

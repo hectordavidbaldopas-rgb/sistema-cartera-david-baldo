@@ -21,8 +21,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema de Cartera — David Baldo Seguros",
-  description: "Gestión de cartera de clientes y pólizas de David Baldo Seguros.",
+  title: "Sistema de Cartera — Baldo Seguros",
+  description: "Gestión de cartera de clientes y pólizas de Baldo Seguros.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

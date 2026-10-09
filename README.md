@@ -1,4 +1,4 @@
-# Sistema de Cartera — David Baldo Seguros
+# Sistema de Cartera — Baldo Seguros
 
 Etapas 1 a 9 del sistema descripto en `../ARQUITECTURA_BASE_DE_DATOS_APP_PAS.md`
 (arquitectura, clientes/vendedores/ramos/compañías, pólizas con historial y

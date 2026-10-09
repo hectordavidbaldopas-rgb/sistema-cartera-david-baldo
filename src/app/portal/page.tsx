@@ -42,7 +42,7 @@ export default async function PortalPage() {
             <h1 className="text-lg font-bold text-gold-300">
               Hola, {client?.fullNameNormalized ?? "cliente"}
             </h1>
-            <p className="text-sm text-white/70">Portal David Baldo Seguros</p>
+            <p className="text-sm text-white/70">Portal Baldo Seguros</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">

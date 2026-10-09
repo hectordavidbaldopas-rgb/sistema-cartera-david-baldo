@@ -9,7 +9,7 @@ export default function LoginPage() {
         <div className="mb-5 flex flex-col items-center text-center">
           <LogoMark size={64} />
           <h1 className="mt-3 text-xl font-bold text-gold-300">Sistema de Cartera</h1>
-          <p className="text-sm text-white/70">David Baldo Seguros</p>
+          <p className="text-sm text-white/70">Baldo Seguros</p>
         </div>
         <div className="divider-gold mb-6" />
         <Suspense>

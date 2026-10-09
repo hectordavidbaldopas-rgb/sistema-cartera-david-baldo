@@ -144,7 +144,7 @@ async function seedSystemSettings() {
     contact_phone: "3406415230",
     contact_email: "hectordavidbaldo.pas@gmail.com",
     portal_terms_text: [
-      "Este portal es un canal informativo para que consultes tus pólizas, coberturas y vigencias contratadas a través de David Baldo Seguros (Productor Asesor de Seguros, matrícula PAS N° 63225).",
+      "Este portal es un canal informativo para que consultes tus pólizas, coberturas y vigencias contratadas a través de Baldo Seguros (David Baldo, Productor Asesor de Seguros, matrícula PAS N° 63225).",
       "La información mostrada es de carácter informativo; ante cualquier discrepancia, prevalece la póliza emitida por la compañía aseguradora.",
       "Tus datos personales se utilizan exclusivamente para la gestión de tu cartera de seguros y no se comparten con terceros salvo para trámites propios de la póliza (compañía aseguradora, organismos de control).",
       "Podés solicitar la corrección o eliminación de tus datos personales escribiendo a hectordavidbaldo.pas@gmail.com o al 3406415230.",

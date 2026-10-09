@@ -1,4 +1,4 @@
-// Sistema de Gestión de Cartera PAS — David Baldo Seguros
+// Sistema de Gestión de Cartera PAS — Baldo Seguros
 // Arquitectura basada en ARQUITECTURA_BASE_DE_DATOS_APP_PAS.md
 //
 // Nota sobre montos: los montos usan Float por simplicidad. El principio #15
