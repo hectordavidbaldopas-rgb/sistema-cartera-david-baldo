@@ -48,7 +48,7 @@ export default function OfficeJourney() {
     // - títulos con <Lines>: cada línea sube desde atrás de una ranura
     // - párrafos con <Words>: se pintan palabra por palabra
     // - tarjetas ([data-fx]): se deslizan de costado, una atrás de otra
-    // - botones: barrido de izquierda a derecha
+    // - botones: entran enteros, subiendo
     // - resto (textos, ítems de lista): suben / se deslizan desenfocados
     // Si uno está dentro de otro (un link dentro de un párrafo) se anima el de afuera.
     type Kind = "line" | "words" | "text" | "button" | "list" | "card";
@@ -172,7 +172,9 @@ export default function OfficeJourney() {
             el.style.opacity = String(v);
             return;
           }
-          if (v >= 1) {
+          // Cerca del final se deja el elemento limpio (sin recorte ni desplazamiento
+          // residual), así los botones quedan exactamente con su forma.
+          if (v >= 0.985) {
             el.style.opacity = "";
             el.style.transform = "";
             el.style.filter = "";
@@ -186,10 +188,10 @@ export default function OfficeJourney() {
               el.style.transformOrigin = "0% 100%";
               el.style.opacity = entering ? "1" : String(smooth(0, 1, v));
               return;
-            case "button": // barrido de izquierda a derecha
-              el.style.clipPath = `inset(-20% ${(w * 100).toFixed(1)}% -20% 0 round 9999px)`;
-              el.style.transform = `translate3d(${(-w * 24).toFixed(1)}px, ${(w * 12 * dir).toFixed(1)}px, 0)`;
-              el.style.opacity = String(smooth(0, 0.6, v));
+            case "button": // entra entero: sube y se agranda apenas, sin recortes
+              el.style.clipPath = "";
+              el.style.transform = `translate3d(0, ${(w * 30 * dir).toFixed(1)}px, 0) scale(${(1 - w * 0.12).toFixed(3)})`;
+              el.style.opacity = String(smooth(0, 1, v));
               el.style.filter = "";
               return;
             case "card": // se desliza desde la derecha, en fila

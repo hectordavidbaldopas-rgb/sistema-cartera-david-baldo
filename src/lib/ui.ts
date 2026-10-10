@@ -18,7 +18,7 @@ export const dangerButtonClass =
 export const dangerOutlineButtonClass =
   `rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 transition duration-150 hover:bg-red-50 active:bg-red-100 ${pressEffect}`;
 export const whatsappButtonClass =
-  `inline-block rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition duration-150 hover:bg-green-700 active:bg-green-800 ${pressEffect} disabled:opacity-60`;
+  `inline-block rounded-full border-2 border-white bg-green-600 px-[19px] py-[9px] text-sm font-semibold text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.65),0_4px_14px_-4px_rgba(22,163,74,0.55)] transition duration-200 hover:-translate-y-0.5 hover:border-green-600 hover:bg-white hover:text-green-700 hover:shadow-[0_12px_26px_-6px_rgba(0,0,0,0.7),0_6px_18px_-4px_rgba(22,163,74,0.6)] active:bg-green-50 ${pressEffect} disabled:opacity-60 disabled:hover:translate-y-0`;
 
 // Para links de navegación que antes eran texto subrayado y ahora tienen
 // que verse y comportarse como un botón (mismo look que secondaryButtonClass

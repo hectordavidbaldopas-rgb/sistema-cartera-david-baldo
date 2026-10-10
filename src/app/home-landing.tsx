@@ -378,7 +378,7 @@ export default function HomeLanding() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escribir por WhatsApp"
-        className="fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-xl transition duration-150 hover:bg-green-700 active:translate-y-px"
+        className="fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-green-600 text-white shadow-[0_10px_24px_-6px_rgba(0,0,0,0.7),0_4px_16px_-4px_rgba(22,163,74,0.6)] transition duration-200 hover:-translate-y-0.5 hover:border-green-600 hover:bg-white hover:text-green-700 active:translate-y-px"
       >
         <WhatsAppIcon className="h-6 w-6" />
       </a>
