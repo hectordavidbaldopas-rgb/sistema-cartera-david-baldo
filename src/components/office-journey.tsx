@@ -24,6 +24,9 @@ const SCENES = [
 
 const ZOOM_OUT = 2.4; // cuánto se acerca la escena que se va
 const ZOOM_IN = 1.3; // de qué tamaño arranca la escena que llega
+// Desenfoque fijo de las fotos: las pantallas de los monitores tienen texto y
+// no tiene que competir con el contenido de la página.
+const BASE_BLUR = 1.5;
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a: number, b: number, v: number) => {
@@ -135,7 +138,7 @@ export default function OfficeJourney() {
         const px = reduced ? 0 : mx * 14;
         const py = reduced ? 0 : my * 10;
         el.style.transform = `translate3d(${px}px, ${py}px, 0) scale(${scale * 1.04})`;
-        el.style.filter = blur > 0.2 ? `blur(${blur.toFixed(1)}px)` : "none";
+        el.style.filter = `blur(${(BASE_BLUR + blur).toFixed(1)}px)`;
       });
 
       // Texto: entra mientras la sección sube a su lugar y sale al irse
@@ -252,7 +255,12 @@ export default function OfficeJourney() {
             layers.current[j] = el;
           }}
           className="absolute inset-0 bg-cover bg-center will-change-transform"
-          style={{ backgroundImage: `url(${s.src})`, opacity: j === 0 ? 1 : 0, visibility: j === 0 ? "visible" : "hidden" }}
+          style={{
+            backgroundImage: `url(${s.src})`,
+            opacity: j === 0 ? 1 : 0,
+            visibility: j === 0 ? "visible" : "hidden",
+            filter: `blur(${BASE_BLUR}px)`,
+          }}
         />
       ))}
       {/* Velo navy (sin desenfoque) para que el texto se lea sobre las fotos
