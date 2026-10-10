@@ -45,8 +45,8 @@ const STEPS = [
 ];
 
 const TEAM = [
-  { photo: "/team-david.jpg", name: "David Baldo", role: "Productor Asesor de Seguros — Mat. N° 63225 — Las Parejas" },
-  { photo: "/team-lucas.jpg", name: "Lucas Baldo", role: "Representante oficial en San Jorge" },
+  { photo: "/team-david.jpg", name: "David Baldo", role: "Las Parejas, Santa Fe" },
+  { photo: "/team-lucas-4.jpg", name: "Lucas Baldo", role: "San Jorge, Santa Fe" },
 ];
 
 // Cada sección es una "parada" del recorrido por la oficina (ver
@@ -347,10 +347,11 @@ export default function HomeLanding() {
           </div>
           <div className="grid gap-5 sm:grid-cols-3">
             {TEAM.map((t) => (
-              <div key={t.name}>
-                <div data-fx className="rounded-2xl border border-gold-500/30 bg-navy-950/70 p-6">
-                  <div className="relative mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-gold-400 shadow-[0_0_0_3px_rgba(11,17,29,1)]">
-                    <Image src={t.photo} alt={t.name} fill className="object-cover" sizes="64px" />
+              <div key={t.name} className="h-full">
+                {/* h-full: todas las tarjetas del mismo tamaño */}
+                <div data-fx className="h-full rounded-2xl border border-gold-500/30 bg-navy-950/70 p-6">
+                  <div className="relative mb-4 h-20 w-20 overflow-hidden rounded-full border-2 border-gold-400 shadow-[0_0_0_3px_rgba(11,17,29,1)]">
+                    <Image src={t.photo} alt={t.name} fill className="object-cover" sizes="80px" />
                   </div>
                   <p className="font-semibold text-gold-300">{t.name}</p>
                   <p className="text-sm text-white/60">{t.role}</p>
