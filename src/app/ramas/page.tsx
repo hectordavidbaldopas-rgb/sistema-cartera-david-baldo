@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RamasPage() {
   return (
     <div className="min-h-screen bg-texture-navy">
-      <header className="sticky top-10 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <Link href="/" aria-label="Ir al inicio">
             <LogoMark size={36} className="shrink-0 sm:hidden" />
