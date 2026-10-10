@@ -12,7 +12,7 @@ const pressEffect =
 export const primaryButtonClass =
   `rounded-full bg-[image:var(--gradient-gold)] px-5 py-2.5 text-sm font-semibold text-navy-950 shadow-sm transition duration-150 hover:brightness-105 active:brightness-95 ${pressEffect} disabled:opacity-60 disabled:hover:brightness-100`;
 export const secondaryButtonClass =
-  `rounded-full border border-gold-500/40 px-5 py-2.5 text-sm font-medium text-gold-300 transition duration-150 hover:border-gold-400 hover:bg-gold-500/10 active:bg-gold-500/20 ${pressEffect}`;
+  `rounded-full border border-gold-500/50 bg-navy-950/85 px-5 py-2.5 text-sm font-medium text-gold-300 shadow-[0_6px_16px_-6px_rgba(0,0,0,0.6)] transition duration-150 hover:border-gold-400 hover:bg-navy-900 active:bg-navy-800 ${pressEffect}`;
 export const dangerButtonClass =
   `rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition duration-150 hover:bg-red-700 active:bg-red-800 ${pressEffect} disabled:opacity-60`;
 export const dangerOutlineButtonClass =

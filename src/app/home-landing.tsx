@@ -71,7 +71,7 @@ function PortalButtons({ className = "" }: { className?: string }) {
 // Redes y medios de contacto: van en el hero (debajo de los botones principales,
 // para tenerlos a mano) y se repiten en el footer.
 const socialLinkClass =
-  "flex items-center gap-2 rounded-full border border-gold-500/40 px-4 py-2 text-sm font-medium text-white/80 transition hover:border-gold-400 hover:text-gold-300";
+  "flex items-center gap-2 rounded-full border border-gold-500/50 bg-navy-950/85 px-4 py-2 text-sm font-medium text-white/90 shadow-[0_6px_16px_-6px_rgba(0,0,0,0.6)] transition hover:border-gold-400 hover:bg-navy-900 hover:text-gold-300";
 
 function SocialButtons({ className = "" }: { className?: string }) {
   return (

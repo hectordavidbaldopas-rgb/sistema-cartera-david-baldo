@@ -8,17 +8,18 @@ import { useEffect, useRef } from "react";
 // siguiente la cámara se acerca al objeto donde está la próxima parada y se
 // funde con la foto de ese ángulo. El contenido de cada sección ([data-panel])
 // entra desde abajo, de desenfocado a nítido y escalonado, a medida que la
-// cámara llega, y sale hacia arriba cuando se va. Fotos: sesión de Tran Mau Tri Tam (Pexels,
-// uso libre), en public/oficina.
+// cámara llega, y sale hacia arriba cuando se va. Fotos en public/oficina:
+// versiones con la marca BALDO editadas por el cliente (v2-*), a partir de la
+// sesión de Tran Mau Tri Tam en Pexels (uso libre).
 const SCENES = [
   // focus = hacia dónde se acerca la cámara al salir de esta escena (% de la foto)
-  { src: "/oficina/2-monitor.webp", focus: "50% 55%" }, // → alejándose a la vista general
-  { src: "/oficina/1-general.webp", focus: "60% 76%" }, // → la agenda del escritorio
-  { src: "/oficina/3-agenda.webp", focus: "80% 86%" }, // → el mouse
-  { src: "/oficina/4-mouse.webp", focus: "62% 80%" }, // → el escritorio desde arriba
-  { src: "/oficina/5-arriba.webp", focus: "18% 40%" }, // → el costado de los monitores
-  { src: "/oficina/6-planta.webp", focus: "58% 4%" }, // → el estante de arriba
-  { src: "/oficina/7-estante.webp", focus: "50% 50%" },
+  { src: "/oficina/v2-1-inicio-monitor.webp", focus: "50% 50%" }, // → alejándose a la vista general
+  { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%" }, // → la agenda del escritorio
+  { src: "/oficina/v2-3-companias-agenda.webp", focus: "78% 84%" }, // → el mouse
+  { src: "/oficina/v2-4-ramas-mouse.webp", focus: "55% 78%" }, // → el escritorio desde arriba
+  { src: "/oficina/v2-5-como-trabajo-arriba.webp", focus: "18% 40%" }, // → el costado de los monitores
+  { src: "/oficina/v2-6-equipo-gatito.webp", focus: "50% 3%" }, // → el estante de arriba
+  { src: "/oficina/v2-7-contacto-estante.webp", focus: "50% 50%" },
 ];
 
 const ZOOM_OUT = 2.4; // cuánto se acerca la escena que se va
