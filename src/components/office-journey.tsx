@@ -13,9 +13,9 @@ import { useEffect, useRef } from "react";
 // sesión de Tran Mau Tri Tam en Pexels (uso libre).
 const SCENES = [
   // focus = hacia dónde se acerca la cámara al salir de esta escena (% de la foto)
-  { src: "/oficina/v2-1-inicio-monitor.webp", focus: "50% 50%" }, // → alejándose a la vista general
+  { src: "/oficina/v2-3-companias-agenda.webp", focus: "50% 50%" }, // → alejándose a la vista general
   { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%" }, // → la agenda del escritorio
-  { src: "/oficina/v2-3-companias-agenda.webp", focus: "78% 84%" }, // → el mouse
+  { src: "/oficina/v2-1-inicio-monitor.webp", focus: "60% 80%" }, // → bajando hacia el escritorio
   { src: "/oficina/v2-4-ramas-mouse.webp", focus: "55% 78%" }, // → el escritorio desde arriba
   { src: "/oficina/v2-5-como-trabajo-arriba.webp", focus: "18% 40%" }, // → el costado de los monitores
   { src: "/oficina/v2-6-equipo-gatito.webp", focus: "50% 3%" }, // → el estante de arriba
