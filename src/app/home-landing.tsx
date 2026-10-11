@@ -96,13 +96,19 @@ function ZoomWords({ text, className = "" }: { text: string; className?: string 
   );
 }
 
-function PortalButtons({ className = "" }: { className?: string }) {
+// En el encabezado van más chicos en el celular, para que no se superpongan
+// ni queden más grandes que el logo.
+const compactSize = "px-3 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm";
+const compactSecondaryClass = secondaryButtonClass.replace("px-5 py-2.5 text-sm", compactSize);
+const compactPrimaryClass = primaryButtonClass.replace("px-5 py-2.5 text-sm", compactSize);
+
+function PortalButtons({ className = "", compact = false }: { className?: string; compact?: boolean }) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <Link href="/login?portal=cliente" className={secondaryButtonClass}>
+    <div className={`flex items-center gap-1.5 sm:gap-2 ${className}`}>
+      <Link href="/login?portal=cliente" className={`${compact ? compactSecondaryClass : secondaryButtonClass} whitespace-nowrap`}>
         Portal clientes
       </Link>
-      <Link href="/login?portal=vendedor" className={primaryButtonClass}>
+      <Link href="/login?portal=vendedor" className={`${compact ? compactPrimaryClass : primaryButtonClass} whitespace-nowrap`}>
         Portal vendedores
       </Link>
     </div>
@@ -143,7 +149,7 @@ export default function HomeLanding() {
     <div className="min-h-screen">
       <OfficeJourney />
       <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <LogoMark size={36} className="shrink-0 sm:hidden" />
           <LogoFull width={160} className="hidden shrink-0 sm:block" />
           <nav className="hidden items-center gap-6 lg:flex">
@@ -157,12 +163,30 @@ export default function HomeLanding() {
               </a>
             ))}
           </nav>
-          <PortalButtons />
+          <PortalButtons compact />
         </div>
       </header>
 
+      {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
+      <section data-scene className="relative flex min-h-[calc(100svh-68px)] flex-col items-center justify-center px-4 py-16">
+        <div className="flex flex-col items-center" data-panel>
+          <div data-fx="fade">
+            <LogoStacked width="100%" autoPlay className="block w-[min(72vw,360px)]" />
+          </div>
+          <a
+            href="#inicio"
+            className="mt-14 flex flex-col items-center gap-1 text-xs font-medium uppercase tracking-widest text-gold-300/80 transition hover:text-gold-300"
+          >
+            Conocenos
+            <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 animate-bounce" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
       {/* HERO */}
-      <section data-scene className="relative flex min-h-[calc(100svh-68px)] items-center overflow-hidden px-6 py-16">
+      <section id="inicio" data-scene className="relative flex min-h-[100svh] scroll-mt-16 items-center overflow-hidden px-6 py-16">
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div className={panelClass} data-panel>
             <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">

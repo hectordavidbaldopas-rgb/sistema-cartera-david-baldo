@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 // sesión de Tran Mau Tri Tam en Pexels (uso libre).
 const SCENES = [
   // focus = hacia dónde se acerca la cámara al salir de esta escena (% de la foto)
+  { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%", key: "intro" }, // portada del logo → la agenda
   { src: "/oficina/v2-3-companias-agenda.webp", focus: "50% 50%" }, // → alejándose a la vista general
   { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%" }, // → la agenda del escritorio
   { src: "/oficina/v2-1-inicio-monitor.webp", focus: "60% 80%" }, // → bajando hacia el escritorio
@@ -247,7 +248,7 @@ export default function OfficeJourney() {
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-navy-950">
       {SCENES.map((s, j) => (
         <div
-          key={s.src}
+          key={s.key ?? s.src}
           ref={(el) => {
             layers.current[j] = el;
           }}

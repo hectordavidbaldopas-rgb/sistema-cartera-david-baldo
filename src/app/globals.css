@@ -216,6 +216,22 @@ h1, h2, h3 {
   .logo-fx.is-playing .logo-fx-inner,
   .logo-fx.is-playing .logo-fx-spark { animation: none; }
 }
+/* Portada de la landing: el logo llega desde lejos (mientras gira y lo recorre el brillo).
+   Queda invisible hasta que su imagen cargó (logo-fx.tsx agrega .is-intro). */
+.logo-fx--intro {
+  opacity: 0;
+}
+.logo-fx--intro.is-intro {
+  animation: logo-intro 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes logo-intro {
+  0% { opacity: 0; transform: scale(0.15); }
+  35% { opacity: 1; }
+  100% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-fx--intro.is-intro { animation: none; opacity: 1; }
+}
 /* Variante para fotos redondas (equipo): el brillo cubre todo el círculo */
 .logo-fx-shine--plain {
   mask-image: none;

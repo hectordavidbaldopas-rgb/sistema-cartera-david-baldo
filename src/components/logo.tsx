@@ -34,9 +34,17 @@ export function LogoFull({ width = 220, className = "" }: { width?: number; clas
 }
 
 // Versión vertical: la B arriba y "BALDO SEGUROS" abajo (se usa en el footer).
-export function LogoStacked({ width = 160, className = "" }: { width?: number; className?: string }) {
+export function LogoStacked({
+  width = 160,
+  className = "",
+  autoPlay = false,
+}: {
+  width?: number | string;
+  className?: string;
+  autoPlay?: boolean;
+}) {
   return (
-    <LogoFx mark={{ left: 29, top: 0, width: 43.3, height: 61.4 }} className={className}>
+    <LogoFx mark={{ left: 29, top: 0, width: 43.3, height: 61.4 }} className={className} autoPlay={autoPlay}>
       <Image
         src="/logo-baldo-vertical.png"
         alt="Baldo Seguros"
@@ -44,6 +52,7 @@ export function LogoStacked({ width = 160, className = "" }: { width?: number; c
         height={570}
         style={{ width, height: "auto" }}
         className="logo-white block"
+        priority={autoPlay}
       />
     </LogoFx>
   );

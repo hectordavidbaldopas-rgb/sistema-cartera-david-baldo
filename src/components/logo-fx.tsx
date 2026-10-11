@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 // Envoltorio con el efecto del logo (ver .logo-fx en globals.css): gira sobre
 // su eje acercándose y alejándose, mientras un brillo dorado con un destello
@@ -11,19 +11,23 @@ import { useRef } from "react";
 //
 // Se dispara al pasar el mouse, al hacer clic o al tocarlo en el celular, y
 // una vez que arranca se completa entero aunque el mouse se vaya; recién al
-// terminar se puede volver a disparar.
+// terminar se puede volver a disparar. Con autoPlay entra solo al cargar
+// (portada de la landing): llega desde lejos mientras gira, recién cuando la
+// imagen ya está cargada para que el brillo no aparezca sobre un logo vacío.
 export type Box = { left: number; top: number; width: number; height: number };
 
 export default function LogoFx({
   mark,
   className,
   round = false,
+  autoPlay = false,
   children,
 }: {
   mark: Box;
   className: string;
   // round: para fotos circulares (equipo): el brillo cubre el círculo, sin máscara de la B
   round?: boolean;
+  autoPlay?: boolean;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -32,6 +36,25 @@ export default function LogoFx({
     if (!el || el.classList.contains("is-playing")) return;
     el.classList.add("is-playing");
   };
+  useEffect(() => {
+    const el = ref.current;
+    const img = el?.querySelector("img");
+    if (!autoPlay || !el || !img) return;
+    let t = 0;
+    const start = () => {
+      t = window.setTimeout(() => el.classList.add("is-intro", "is-playing"), 150);
+    };
+    if (img.complete && img.naturalWidth) start();
+    else {
+      img.addEventListener("load", start, { once: true });
+      img.addEventListener("error", start, { once: true });
+    }
+    return () => {
+      clearTimeout(t);
+      img.removeEventListener("load", start);
+      img.removeEventListener("error", start);
+    };
+  }, [autoPlay]);
   const done = (e: React.AnimationEvent) => {
     // El brillo dura lo mismo que el giro y corre siempre (aun con "reducir movimiento")
     if (e.animationName === "logo-shine") ref.current?.classList.remove("is-playing");
@@ -42,7 +65,7 @@ export default function LogoFx({
   return (
     <span
       ref={ref}
-      className={`logo-fx ${display} ${className}`}
+      className={`logo-fx ${autoPlay ? "logo-fx--intro" : ""} ${display} ${className}`}
       onPointerEnter={play}
       onPointerDown={play}
       onAnimationEnd={done}
