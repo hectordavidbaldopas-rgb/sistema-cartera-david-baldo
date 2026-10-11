@@ -14,7 +14,18 @@ import { useRef } from "react";
 // terminar se puede volver a disparar.
 export type Box = { left: number; top: number; width: number; height: number };
 
-export default function LogoFx({ mark, className, children }: { mark: Box; className: string; children: React.ReactNode }) {
+export default function LogoFx({
+  mark,
+  className,
+  round = false,
+  children,
+}: {
+  mark: Box;
+  className: string;
+  // round: para fotos circulares (equipo): el brillo cubre el círculo, sin máscara de la B
+  round?: boolean;
+  children: React.ReactNode;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const play = () => {
     const el = ref.current;
@@ -40,10 +51,10 @@ export default function LogoFx({ mark, className, children }: { mark: Box; class
         {children}
         <span
           aria-hidden
-          className="logo-fx-mark"
+          className={`logo-fx-mark ${round ? "overflow-hidden rounded-full" : ""}`}
           style={{ left: `${mark.left}%`, top: `${mark.top}%`, width: `${mark.width}%`, height: `${mark.height}%` }}
         >
-          <span className="logo-fx-shine" />
+          <span className={`logo-fx-shine ${round ? "logo-fx-shine--plain" : ""}`} />
           {/* Destello: un punto de luz que sube junto con el brillo */}
           <span className="logo-fx-spark" />
         </span>

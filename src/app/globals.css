@@ -216,3 +216,30 @@ h1, h2, h3 {
   .logo-fx.is-playing .logo-fx-inner,
   .logo-fx.is-playing .logo-fx-spark { animation: none; }
 }
+/* Variante para fotos redondas (equipo): el brillo cubre todo el círculo */
+.logo-fx-shine--plain {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+/* Títulos principales de la landing: leve zoom al pasar el mouse. El del hero
+   (h1) se agranda sílaba por sílaba (.word-zoom en home-landing.tsx) */
+.word-zoom {
+  display: inline-block;
+  transition: scale 0.25s ease;
+}
+@media (hover: hover) {
+  .scene-text h2 {
+    transform-origin: left center;
+    transition: scale 0.3s ease;
+  }
+  .scene-text h2.text-center {
+    transform-origin: center;
+  }
+  .scene-text h2:hover {
+    scale: 1.04;
+  }
+  .word-zoom:hover {
+    scale: 1.08;
+  }
+}

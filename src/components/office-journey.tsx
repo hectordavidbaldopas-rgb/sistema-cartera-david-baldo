@@ -50,17 +50,19 @@ export default function OfficeJourney() {
 
     // Elementos animados de cada sección (dentro de [data-panel]):
     // - títulos con <Lines>: cada línea sube desde atrás de una ranura
-    // - párrafos con <Words>: se pintan palabra por palabra
-    // - tarjetas ([data-fx]): se deslizan de costado, una atrás de otra
+    // - tarjetas ([data-fx]): se deslizan de costado, una atrás de otra;
+    //   con data-fx="zoom" crecen desde su centro (logos de compañías) y con
+    //   data-fx="fade" aparecen en su lugar, de desenfocado a nítido (foto de Quién soy)
     // - botones: entran enteros, subiendo
     // - resto (textos, ítems de lista): suben / se deslizan desenfocados
     // Si uno está dentro de otro (un link dentro de un párrafo) se anima el de afuera.
-    type Kind = "line" | "words" | "text" | "button" | "list" | "card";
-    type Item = { el: HTMLElement; kind: Kind; words?: HTMLElement[] };
+    type Kind = "line" | "text" | "button" | "list" | "card" | "zoom" | "fade";
+    type Item = { el: HTMLElement; kind: Kind };
     const SEL = "h1, h2, h3, p, li, a, button, [data-fx]";
     const kindOf = (el: HTMLElement): Kind => {
+      if (el.getAttribute("data-fx") === "zoom") return "zoom";
+      if (el.getAttribute("data-fx") === "fade") return "fade";
       if (el.hasAttribute("data-fx")) return "card";
-      if (el.hasAttribute("data-fx-words")) return "words";
       const tag = el.tagName;
       if (tag === "A" || tag === "BUTTON") return "button";
       if (tag === "LI") return "list";
@@ -76,11 +78,7 @@ export default function OfficeJourney() {
           .flatMap((el): Item[] => {
             const lines = Array.from(el.querySelectorAll<HTMLElement>("[data-fx-line]"));
             if (lines.length) return lines.map((l) => ({ el: l, kind: "line" }));
-            const kind = kindOf(el);
-            if (kind === "words") {
-              return [{ el, kind, words: Array.from(el.querySelectorAll<HTMLElement>("[data-fx-word]")) }];
-            }
-            return [{ el, kind }];
+            return [{ el, kind: kindOf(el) }];
           }),
       );
     let sectionItems: Item[][] = [];
@@ -152,7 +150,8 @@ export default function OfficeJourney() {
           const { el, kind } = item;
           // Escalonado: cada elemento arranca un poco después que el anterior;
           // las tarjetas tienen su propio escalonado para deslizarse en fila.
-          const delay = kind === "card" ? Math.min(0.15 + cardN++ * 0.14, 0.8) : Math.min(n * 0.07, 0.75);
+          const delay =
+            kind === "card" || kind === "zoom" || kind === "fade" ? Math.min(0.15 + cardN++ * 0.14, 0.8) : Math.min(n * 0.07, 0.75);
           let a = clamp(enter * (1 + delay) - delay);
           if (k === 0) a = Math.min(a, clamp(intro * (1 + delay) - delay));
           const b = leave;
@@ -160,18 +159,6 @@ export default function OfficeJourney() {
           const entering = a < b; // entra desde abajo; al irse sale hacia arriba
           const dir = entering ? 1 : -0.7;
 
-          if (kind === "words" && item.words) {
-            // El párrafo aparece y se va "pintando" a medida que sube por la pantalla
-            const r = el.getBoundingClientRect();
-            const fill = clamp((vh * 0.9 - r.top) / (vh * 0.55));
-            const total = item.words.length;
-            item.words.forEach((w, wi) => {
-              const on = clamp(fill * total - wi);
-              w.style.opacity = String(0.18 + 0.82 * on);
-            });
-            el.style.opacity = String(smooth(0, 1, Math.min(1, b * 1.2)));
-            return;
-          }
           if (reduced) {
             el.style.opacity = String(v);
             return;
@@ -203,6 +190,16 @@ export default function OfficeJourney() {
               el.style.opacity = String(smooth(0, 1, v));
               el.style.filter = `blur(${(w * 6).toFixed(1)}px)`;
               return;
+            case "zoom": // crece desde su centro, desde cero (logos de compañías)
+              el.style.transform = `scale(${v.toFixed(3)})`;
+              el.style.opacity = String(smooth(0, 0.5, v));
+              el.style.filter = "";
+              return;
+            case "fade": // queda fija en su lugar y aparece de difuminada a nítida
+              el.style.transform = "";
+              el.style.opacity = String(smooth(0, 1, v));
+              el.style.filter = `blur(${(w * 14).toFixed(1)}px)`;
+              return;
             case "list": // se desliza desde la izquierda
               el.style.transform = `translate3d(${(-w * 60).toFixed(1)}px, ${(w * 10 * dir).toFixed(1)}px, 0)`;
               break;
@@ -213,12 +210,12 @@ export default function OfficeJourney() {
           el.style.filter = `blur(${(w * 10).toFixed(1)}px)`;
         });
 
-        // Números que cuentan (data-count="20+") a medida que entra la sección
+        // Números que cuentan (data-count="+20") a medida que entra la sección
         sec.querySelectorAll<HTMLElement>("[data-count]").forEach((el) => {
-          const m = (el.dataset.count ?? "").match(/^(\d+)(.*)$/);
+          const m = (el.dataset.count ?? "").match(/^(\D*)(\d+)(.*)$/); // "+20" → "+", 20, ""
           if (!m) return;
           const p = k === 0 ? Math.min(enter, intro) : enter;
-          el.textContent = `${Math.round(Number(m[1]) * easeInOut(clamp(p * 1.3 - 0.2)))}${m[2]}`;
+          el.textContent = `${m[1]}${Math.round(Number(m[2]) * easeInOut(clamp(p * 1.3 - 0.2)))}${m[3]}`;
         });
       });
 

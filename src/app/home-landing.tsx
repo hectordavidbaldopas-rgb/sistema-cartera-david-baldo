@@ -3,7 +3,8 @@ import Link from "next/link";
 import { LogoFull, LogoMark, LogoStacked } from "@/components/logo";
 import { primaryButtonClass, secondaryButtonClass, whatsappButtonClass } from "@/lib/ui";
 import OfficeJourney from "@/components/office-journey";
-import { Lines, Words } from "@/components/fx-text";
+import LogoFx from "@/components/logo-fx";
+import { Lines } from "@/components/fx-text";
 import {
   WhatsAppIcon,
   InstagramIcon,
@@ -23,9 +24,10 @@ const NAV_LINKS = [
 ];
 
 const STATS = [
-  { value: "20+", label: "años de experiencia" },
-  { value: "7", label: "compañías aseguradoras" },
-  { value: "14", label: "ramas de seguros" },
+  // href: cada número lleva a la sección que lo explica
+  { value: "+20", label: "años de experiencia", href: "#quien-soy" },
+  { value: "7", label: "compañías aseguradoras", href: "#companias" },
+  { value: "14", label: "ramas de seguros", href: "#ramas" },
 ];
 
 const COMPANIES = [
@@ -45,8 +47,9 @@ const STEPS = [
 ];
 
 const TEAM = [
-  { photo: "/team-david.jpg", name: "David Baldo", role: "Las Parejas, Santa Fe" },
-  { photo: "/team-lucas-4.jpg", name: "Lucas Baldo", role: "San Jorge, Santa Fe" },
+  { photo: "/team-david.jpg", name: "David Baldo", role: "Las Parejas, Santa Fe", whatsapp: "" },
+  // whatsapp: la tarjeta abre el chat con ese mensaje (por ahora al número de la oficina)
+  { photo: "/team-lucas-4.jpg", name: "Lucas Baldo", role: "San Jorge, Santa Fe", whatsapp: "Hola Lucas! Quiero hacer una consulta." },
 ];
 
 // Cada sección es una "parada" del recorrido por la oficina (ver
@@ -54,6 +57,44 @@ const TEAM = [
 // entra y sale animado acompañando el movimiento de la cámara.
 const sceneClass = "flex min-h-[100svh] items-center overflow-x-clip px-4 py-20 sm:px-6";
 const panelClass = "scene-text";
+
+// Tarjetas que llevan a WhatsApp: se agrandan apenas y el borde se pone dorado
+const linkCardClass = "transition-[scale,border-color] duration-200 hover:scale-[1.03] hover:border-gold-400/60";
+
+function TeamCard({ href, children }: { href?: string; children: React.ReactNode }) {
+  const className = "block h-full rounded-2xl border border-gold-500/30 bg-navy-950/70 p-6";
+  return href ? (
+    <a data-fx href={href} target="_blank" rel="noopener noreferrer" className={`${className} ${linkCardClass}`}>
+      {children}
+    </a>
+  ) : (
+    <div data-fx className={className}>
+      {children}
+    </div>
+  );
+}
+
+// Título del hero: cada sílaba se agranda sola al pasar el mouse (.word-zoom).
+// Las sílabas se marcan con "·" en el texto; cada palabra queda junta (sin
+// cortarse entre renglones).
+function ZoomWords({ text, className = "" }: { text: string; className?: string }) {
+  return (
+    <>
+      {text.split(" ").map((w, i) => (
+        <span key={i}>
+          {i > 0 && " "}
+          <span className="inline-block whitespace-nowrap">
+            {w.split("·").map((syl, j) => (
+              <span key={j} className={`word-zoom ${className}`}>
+                {syl}
+              </span>
+            ))}
+          </span>
+        </span>
+      ))}
+    </>
+  );
+}
 
 function PortalButtons({ className = "" }: { className?: string }) {
   return (
@@ -130,9 +171,9 @@ export default function HomeLanding() {
             <h1 className="max-w-xl text-4xl font-bold leading-tight text-white sm:text-5xl">
               <Lines
                 lines={[
-                  "Protegemos lo que",
-                  "más te importa,",
-                  <span key="g" className="text-gradient-gold">hace 20 años.</span>,
+                  <ZoomWords key="1" text="Pro·te·ge·mos lo que" />,
+                  <ZoomWords key="2" text="más te im·por·ta," />,
+                  <ZoomWords key="3" text="ha·ce 20 a·ños." className="text-gradient-gold" />,
                 ]}
               />
             </h1>
@@ -163,10 +204,16 @@ export default function HomeLanding() {
             </div>
             <div className="mt-12 grid max-w-md grid-cols-3 gap-4 border-t border-gold-500/20 pt-6">
               {STATS.map((s) => (
-                <div key={s.label}>
-                  <p className="text-2xl font-bold text-gold-300" data-count={s.value}>{s.value}</p>
-                  <p className="text-xs text-white/50">{s.label}</p>
-                </div>
+                <a
+                  key={s.label}
+                  href={s.href}
+                  className="group block rounded-xl transition-[scale] duration-200 hover:scale-105"
+                >
+                  <span className="block text-2xl font-bold text-gold-300" data-count={s.value}>{s.value}</span>
+                  <span className="block text-xs text-white/50 transition-colors group-hover:text-gold-300">
+                    {s.label}
+                  </span>
+                </a>
               ))}
             </div>
           </div>
@@ -211,27 +258,29 @@ export default function HomeLanding() {
       <section id="quien-soy" data-scene className={sceneClass}>
         <div className={`mx-auto grid w-full max-w-6xl items-center gap-14 sm:grid-cols-2 ${panelClass}`} data-panel>
           <div>
-            <div data-fx className="relative mx-auto max-w-sm">
+            <div data-fx="fade" className="group relative mx-auto max-w-sm transition-[scale] duration-500 ease-out hover:scale-105">
               <div
                 aria-hidden
                 className="absolute -bottom-4 -right-4 h-full w-full rounded-2xl bg-[image:var(--gradient-gold)] opacity-90"
               />
-              <div className="relative aspect-square overflow-hidden rounded-2xl border border-gold-500/30">
+              {/* Foto recortada sin la franja de logos de abajo; al pasar el mouse crece todo el
+                  recuadro y, sutilmente, también la foto dentro del marco */}
+              <div className="relative aspect-[1000/850] overflow-hidden rounded-2xl border border-gold-500/30">
                 <Image
-                  src="/david-quien-soy.jpg"
+                  src="/david-quien-soy-2.jpg"
                   alt="David Baldo, Productor Asesor de Seguros — Quién soy"
                   fill
-                  className="object-cover"
+                  className="object-cover transition-[scale] duration-700 ease-out group-hover:scale-[1.06]"
                   sizes="(max-width: 640px) 100vw, 420px"
                 />
               </div>
             </div>
           </div>
           <div>
-            <Words
-              className="mb-5 text-xl font-medium leading-snug text-white sm:text-2xl"
-              text="Hace 20 años acompaño a familias y empresas de Las Parejas y la zona a proteger lo que más les importa: el auto, el hogar, el campo, el negocio."
-            />
+            <p className="mb-5 text-xl font-medium leading-snug text-white sm:text-2xl">
+              Hace 20 años acompaño a familias y empresas de Las Parejas y la zona a proteger lo que más
+              les importa: el auto, el hogar, el campo, el negocio.
+            </p>
             <p className="mb-6 text-white/70">
               Trabajo junto a Mapfre, San Cristóbal, Mercantil Andina, Asociart, Swiss Medical,
               Segurometal y Andina ART para ofrecerte la cobertura que mejor se adapta a vos, con
@@ -252,7 +301,7 @@ export default function HomeLanding() {
       </section>
 
       {/* COMPAÑÍAS */}
-      <section data-scene className={sceneClass}>
+      <section id="companias" data-scene className={sceneClass}>
         <div className={`mx-auto w-full max-w-6xl ${panelClass}`} data-panel>
           <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-white/40">
             Trabajo con las principales aseguradoras
@@ -262,8 +311,8 @@ export default function HomeLanding() {
               c.logo ? (
                 <span
                   key={c.name}
-                  data-fx
-                  className="flex items-center rounded-lg bg-white/95 px-4 py-2.5 shadow-sm"
+                  data-fx="zoom"
+                  className="flex items-center rounded-lg bg-white/95 px-4 py-2.5 shadow-sm transition-[scale] duration-200 hover:scale-115"
                 >
                   <Image src={c.logo} alt={c.name} width={110} height={28} className="h-6 w-auto object-contain" />
                 </span>
@@ -308,17 +357,26 @@ export default function HomeLanding() {
               Cómo trabajo
             </p>
             <h2 className="mb-12 text-3xl font-bold text-white sm:text-4xl">
-              <Lines lines={["Cotizá tu seguro", <span key="m" className="text-gradient-gold">en 24 horas.</span>]} />
+              <a href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")} target="_blank" rel="noopener noreferrer">
+                <Lines lines={["Cotizá tu seguro", <span key="m" className="text-gradient-gold">en 24 horas.</span>]} />
+              </a>
             </h2>
           </div>
           <div className="mb-10 grid gap-8 sm:grid-cols-3">
             {STEPS.map((s) => (
               <div key={s.n}>
-                <div data-fx className="relative h-full rounded-2xl border border-white/10 bg-navy-950/60 p-6">
+                {/* Cada paso abre el chat de WhatsApp para cotizar */}
+                <a
+                  data-fx
+                  href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`relative block h-full rounded-2xl border border-white/10 bg-navy-950/60 p-6 ${linkCardClass}`}
+                >
                   <p className="mb-3 text-3xl font-bold text-gold-400">{s.n}</p>
                   <p className="mb-1 font-semibold text-white">{s.title}</p>
                   <p className="text-sm text-white/60">{s.text}</p>
-                </div>
+                </a>
               </div>
             ))}
           </div>
@@ -349,13 +407,17 @@ export default function HomeLanding() {
             {TEAM.map((t) => (
               <div key={t.name} className="h-full">
                 {/* h-full: todas las tarjetas del mismo tamaño */}
-                <div data-fx className="h-full rounded-2xl border border-gold-500/30 bg-navy-950/70 p-6">
-                  <div className="relative mb-4 h-20 w-20 overflow-hidden rounded-full border-2 border-gold-400 shadow-[0_0_0_3px_rgba(11,17,29,1)]">
-                    <Image src={t.photo} alt={t.name} fill className="object-cover" sizes="80px" />
-                  </div>
+                {/* Las tarjetas con whatsapp abren el chat (por ahora solo Lucas) */}
+                <TeamCard href={t.whatsapp ? WHATSAPP_HREF(t.whatsapp) : undefined}>
+                  {/* La foto gira con zoom y brillo igual que el logo (mouse, clic o toque) */}
+                  <LogoFx mark={{ left: 0, top: 0, width: 100, height: 100 }} round className="mb-4">
+                    <span className="relative block h-20 w-20 overflow-hidden rounded-full border-2 border-gold-400 shadow-[0_0_0_3px_rgba(11,17,29,1)]">
+                      <Image src={t.photo} alt={t.name} fill className="object-cover" sizes="80px" />
+                    </span>
+                  </LogoFx>
                   <p className="font-semibold text-gold-300">{t.name}</p>
                   <p className="text-sm text-white/60">{t.role}</p>
-                </div>
+                </TeamCard>
               </div>
             ))}
           </div>
