@@ -130,3 +130,89 @@ h1, h2, h3 {
 .scene-text button {
   text-shadow: none;
 }
+
+/* Logo BALDO al pasar el mouse, clic o toque (components/logo-fx.tsx agrega .is-playing): gira una vuelta sobre su
+   eje acercándose y alejándose, y un brillo dorado lo recorre de punta a punta.
+   Sin display acá para no pisar clases como "hidden sm:block" del que lo usa. */
+.logo-fx {
+  perspective: 700px;
+}
+.logo-fx-inner {
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+}
+/* Recuadro de la B dentro del logo: ahí viven el brillo y el destello */
+.logo-fx-mark {
+  position: absolute;
+  pointer-events: none;
+}
+.logo-fx-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mask-image: url("/logo-baldo-mark.png");
+  -webkit-mask-image: url("/logo-baldo-mark.png");
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  /* Franja a 45° que sube de abajo-izquierda a arriba-derecha, siguiendo
+     las ondas diagonales de la B */
+  background-image: linear-gradient(
+    45deg,
+    transparent 38%,
+    rgba(243, 208, 143, 0.35) 44%,
+    rgba(255, 250, 235, 1) 50%,
+    rgba(243, 208, 143, 0.35) 56%,
+    transparent 62%
+  );
+  background-size: 300% 300%;
+  background-position: 100% 0%;
+  opacity: 0;
+}
+/* Punto de luz con cruz de destello (estrella de 4 puntas) */
+.logo-fx-spark {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 1) 0 2px, rgba(255, 236, 190, 0.9) 3px, rgba(243, 208, 143, 0) 10px),
+    linear-gradient(90deg, transparent 0, rgba(255, 244, 214, 0.95) 50%, transparent 100%) center / 100% 2px no-repeat,
+    linear-gradient(0deg, transparent 0, rgba(255, 244, 214, 0.95) 50%, transparent 100%) center / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 6px rgba(255, 226, 160, 0.9));
+}
+.logo-fx.is-playing .logo-fx-inner {
+  animation: logo-spin 2.4s cubic-bezier(0.45, 0, 0.25, 1);
+}
+.logo-fx.is-playing .logo-fx-shine {
+  animation: logo-shine 2.4s ease-in-out;
+}
+.logo-fx.is-playing .logo-fx-spark {
+  animation: logo-spark 2.4s ease-in-out;
+}
+@keyframes logo-spin {
+  0% { transform: rotateY(0deg) scale(1); }
+  50% { transform: rotateY(180deg) scale(1.28); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+@keyframes logo-shine {
+  0% { background-position: 100% 0%; opacity: 1; }
+  100% { background-position: 0% 100%; opacity: 1; }
+}
+@keyframes logo-spark {
+  0% { left: 0%; top: 100%; opacity: 0; transform: scale(0.4) rotate(0deg); }
+  15% { opacity: 1; }
+  50% { transform: scale(1.2) rotate(90deg); }
+  85% { opacity: 1; }
+  100% { left: 100%; top: 0%; opacity: 0; transform: scale(0.4) rotate(180deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-fx.is-playing .logo-fx-inner,
+  .logo-fx.is-playing .logo-fx-spark { animation: none; }
+}
