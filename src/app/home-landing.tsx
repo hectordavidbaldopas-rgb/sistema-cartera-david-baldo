@@ -4,6 +4,7 @@ import { LogoFull, LogoMark, LogoStacked } from "@/components/logo";
 import { primaryButtonClass, secondaryButtonClass, whatsappButtonClass } from "@/lib/ui";
 import OfficeJourney from "@/components/office-journey";
 import LogoFx from "@/components/logo-fx";
+import TapZoom from "@/components/tap-zoom";
 import { Lines } from "@/components/fx-text";
 import {
   WhatsAppIcon,
@@ -279,31 +280,30 @@ export default function HomeLanding() {
       <section id="quien-soy" data-scene className={sceneClass}>
         <div className={`mx-auto grid w-full max-w-6xl items-center gap-7 sm:grid-cols-2 sm:gap-14 ${panelClass}`} data-panel>
           <div>
-            <div data-fx="fade" className="group relative mx-auto max-w-[15rem] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105">
+            <TapZoom data-fx="fade" className="group relative mx-auto max-w-[13rem] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105 data-[on=true]:scale-105">
               <div
                 aria-hidden
                 className="absolute -bottom-2.5 -right-2.5 h-full w-full rounded-2xl sm:-bottom-4 sm:-right-4 bg-[image:var(--gradient-gold)] opacity-90"
               />
               {/* Foto recortada sin la franja de logos de abajo; al pasar el mouse crece todo el
-                  recuadro y, sutilmente, también la foto dentro del marco */}
+                  recuadro y, sutilmente, también la foto dentro del marco (en el celular, al tocarla) */}
               <div className="relative aspect-[1000/850] overflow-hidden rounded-2xl border border-gold-500/30">
                 <Image
                   src="/david-quien-soy-2.jpg"
                   alt="David Baldo, Productor Asesor de Seguros — Quién soy"
                   fill
-                  className="object-cover transition-[scale] duration-700 ease-out group-hover:scale-[1.06]"
+                  className="object-cover transition-[scale] duration-700 ease-out group-hover:scale-[1.06] group-data-[on=true]:scale-[1.06]"
                   sizes="(max-width: 640px) 100vw, 420px"
                 />
               </div>
-            </div>
+            </TapZoom>
           </div>
           <div>
             <p className="mb-4 text-lg font-medium leading-snug text-white sm:mb-5 sm:text-2xl">
               Hace 20 años acompaño a familias y empresas de Las Parejas y la zona a proteger lo que más
               les importa: el auto, el hogar, el campo, el negocio.
             </p>
-            {/* En el celular no entra: las compañías se ven en la sección siguiente */}
-            <p className="mb-6 hidden text-white/70 sm:block">
+            <p className="mb-4 text-sm text-white/70 sm:mb-6 sm:text-base">
               Trabajo junto a Mapfre, San Cristóbal, Mercantil Andina, Asociart, Swiss Medical,
               Segurometal y Andina ART para ofrecerte la cobertura que mejor se adapta a vos, con
               asesoramiento real — no solo una póliza más.
