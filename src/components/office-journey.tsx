@@ -102,14 +102,28 @@ export default function OfficeJourney() {
     let heights: number[] = [];
     let counters: HTMLElement[][] = [];
     let stops: number[] = [];
-    // Alto realmente visible de la pantalla (innerHeight: en el celular crece
-    // cuando se esconde la barra del navegador; las secciones usan 100dvh, que
-    // también la sigue, así la última parada llega siempre al final).
-    const viewH = () => window.innerHeight;
-    const maxScroll = () => document.documentElement.scrollHeight - viewH();
+    // Alto realmente visible de la pantalla: el mismo 100dvh que usan las
+    // secciones, medido con un elemento invisible. En varios celulares
+    // innerHeight es mayor (cuenta lo que queda detrás de la barra del
+    // navegador), y con eso la sección siguiente asomaba en cada parada (dos
+    // fotos de fondo superpuestas) y el final de la página quedaba tapado.
+    const probe = document.createElement("div");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:fixed;top:0;left:0;width:1px;height:100dvh;visibility:hidden;pointer-events:none";
+    document.body.appendChild(probe);
+    const viewH = () => probe.offsetHeight || window.innerHeight;
+    // Hasta dónde deja bajar el navegador (usa innerHeight)
+    const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
     let vh = viewH();
+    let pad = -1; // margen agregado al final (ver measure)
+    const padNeeded = () => Math.max(0, Math.round(window.innerHeight - viewH()));
     const measure = () => {
       vh = viewH();
+      // Si el navegador cuenta más alto que el visible, se agrega ese margen al
+      // final para que la última parada (Contacto) se pueda alcanzar entera.
+      pad = padNeeded();
+      const page = sections[0]?.parentElement ?? document.querySelector<HTMLElement>("[data-scene]")?.parentElement;
+      if (page) page.style.paddingBottom = `${pad}px`;
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       document.documentElement.style.setProperty("--header-h", `${header?.offsetHeight ?? 0}px`);
       sections = Array.from(document.querySelectorAll<HTMLElement>("[data-scene]"));
@@ -356,6 +370,7 @@ export default function OfficeJourney() {
         ? (stops.find((s) => s > y + 2 && s < maxScroll() - 2) ?? (y < maxScroll() - 2 ? maxScroll() : undefined))
         : [...stops].reverse().find((s) => s < y - 2);
     const page = (dir: number) => {
+      if (padNeeded() !== pad) measure();
       const to = next(goal >= 0 ? goal : window.scrollY, dir);
       if (to !== undefined) glideTo(to, PAGE_MS);
     };
@@ -390,6 +405,7 @@ export default function OfficeJourney() {
     const onTouchEnd = () => {
       if (!dragging) return;
       dragging = false;
+      if (padNeeded() !== pad) measure(); // la barra del navegador pudo cambiar
       const d = touchY0 - touchY;
       const speed = Math.abs(d) / Math.max(1, performance.now() - touchT0);
       const to = Math.abs(d) > 30 || speed > 0.3 ? (next(touchScroll, d) ?? nearest(touchScroll)) : nearest(touchScroll);
@@ -426,6 +442,7 @@ export default function OfficeJourney() {
       const target = id ? document.getElementById(id) : null;
       if (!link || !target) return;
       ev.preventDefault();
+      if (padNeeded() !== pad) measure();
       // Desde la portada, el logo da su giro con brillo mientras nos alejamos
       link.closest("[data-scene]")?.querySelector(".logo-fx")?.classList.add("is-playing");
       const headerH = parseFloat(root.style.getPropertyValue("--header-h")) || 0;
@@ -441,10 +458,7 @@ export default function OfficeJourney() {
       measure();
       request();
     };
-    const onResize = () => {
-      if (window.innerHeight !== vh || sections.length === 0) remeasure();
-      else request();
-    };
+    const onResize = remeasure;
     measure();
     const ro = new ResizeObserver(remeasure);
     sections.forEach((sec) => ro.observe(sec));
@@ -470,6 +484,7 @@ export default function OfficeJourney() {
     window.addEventListener("mousemove", onMouse, { passive: true });
     return () => {
       ro.disconnect();
+      probe.remove();
       cancelAnimationFrame(raf);
       stopGlide();
       document.removeEventListener("click", onClick);

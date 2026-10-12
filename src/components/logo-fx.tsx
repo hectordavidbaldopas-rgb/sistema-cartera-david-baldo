@@ -66,7 +66,9 @@ export default function LogoFx({
       ([entry]) => {
         if (entry.isIntersecting) el.classList.add("is-playing");
       },
-      { threshold: 0.8 },
+      // El 30% de abajo no cuenta: en el celular puede quedar detrás de la barra
+      // del navegador, y el logo se animaría antes de que se vea
+      { threshold: 0.8, rootMargin: "0px 0px -30% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
