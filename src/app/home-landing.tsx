@@ -249,7 +249,7 @@ export default function HomeLanding() {
                   c.logo ? (
                     <span
                       key={c.name}
-                      className="flex items-center rounded-md bg-white/95 px-2 py-1"
+                      className="flex items-center rounded-md bg-white px-2 py-1"
                     >
                       <Image src={c.logo} alt={c.name} width={72} height={18} className="h-3.5 w-auto object-contain" />
                     </span>

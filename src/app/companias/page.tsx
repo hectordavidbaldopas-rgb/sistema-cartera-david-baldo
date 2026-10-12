@@ -48,8 +48,10 @@ export default function CompaniasPage() {
                 id={c.slug}
                 className="scroll-mt-24 rounded-2xl border border-gold-500/25 bg-navy-950/70 p-5 target:border-gold-400 target:shadow-[0_0_0_1px_var(--color-gold-400)] sm:flex sm:gap-6 sm:p-6"
               >
-                <div className="mb-4 flex h-20 shrink-0 items-center justify-center rounded-xl bg-white/95 px-4 sm:mb-0 sm:w-48">
-                  <Image src={c.logo} alt={c.name} width={160} height={40} className="h-8 w-auto max-w-full object-contain" />
+                <div className="mb-4 flex h-24 shrink-0 items-center justify-center rounded-xl bg-white px-4 sm:mb-0 sm:w-56">
+                  <span className="relative block h-3/4 w-full">
+                    <Image src={c.logo} alt={c.name} fill sizes="(max-width: 640px) 90vw, 224px" className="object-contain" />
+                  </span>
                 </div>
                 <div>
                   <h2 className="mb-1 text-xl font-bold text-white">{c.name}</h2>

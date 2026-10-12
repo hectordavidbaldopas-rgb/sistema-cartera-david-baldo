@@ -12,7 +12,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "mapfre",
     name: "Mapfre",
-    logo: "/logo-mapfre.png",
+    logo: "/aseguradoras/mapfre.png",
     origin: "Madrid, España",
     founded: "1933 · en Argentina desde 1986",
     text:
@@ -21,7 +21,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "swiss-medical",
     name: "Swiss Medical",
-    logo: "/logo-swissmedical.png",
+    logo: "/aseguradoras/swiss-medical.png",
     origin: "Buenos Aires, Argentina",
     founded: "Grupo Swiss Medical desde 1989",
     text:
@@ -30,7 +30,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "mercantil-andina",
     name: "Mercantil Andina",
-    logo: "/logo-mercantilandina.png",
+    logo: "/aseguradoras/mercantil-andina.png",
     origin: "Mendoza, Argentina",
     founded: "1923",
     text:
@@ -39,7 +39,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "andina-art",
     name: "Andina ART",
-    logo: "/logo-andinaart.png",
+    logo: "/aseguradoras/andina-art.png",
     origin: "Mendoza, Argentina",
     founded: "2022",
     text:
@@ -48,7 +48,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "san-cristobal",
     name: "San Cristóbal Seguros",
-    logo: "/logo-sancristobal.png",
+    logo: "/aseguradoras/san-cristobal.png",
     origin: "Rosario, Santa Fe",
     founded: "1939",
     text:
@@ -57,7 +57,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "asociart",
     name: "Asociart ART",
-    logo: "/logo-asociart.png",
+    logo: "/aseguradoras/asociart.png",
     origin: "Buenos Aires, Argentina",
     founded: "1996",
     text:
@@ -66,7 +66,7 @@ export const COMPANIES: Company[] = [
   {
     slug: "segurometal",
     name: "Segurometal",
-    logo: "/logo-segurometal.png",
+    logo: "/aseguradoras/segurometal.png",
     origin: "Rosario, Santa Fe",
     founded: "1959",
     text:
