@@ -2,16 +2,25 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { Company } from "@/lib/companies";
 
-// Logo de una compañía en la landing: crece al pasar el mouse y, al tocarlo,
-// da una vuelta sobre su eje (.company-spin en globals.css) y recién ahí abre
-// su ficha en /companias.
+// Logo de una compañía: crece al pasar el mouse y, al tocarlo, da medio giro
+// sobre su eje (.company-spin en globals.css) y recién ahí abre su página
+// /companias/<slug>.
 export default function CompanyCard({ company, className }: { company: Company; className?: string }) {
   const router = useRouter();
   const ref = useRef<HTMLSpanElement>(null);
-  const href = `/companias#${company.slug}`;
+  const href = `/companias/${company.slug}`;
+
+  // Precarga la página para que entre apenas termina el giro
+  useEffect(() => router.prefetch(href), [router, href]);
+  // Al volver con "atrás" (página restaurada del historial), el logo vuelve a verse
+  useEffect(() => {
+    const reset = () => ref.current?.classList.remove("company-spin");
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
 
   const open = (ev: React.MouseEvent<HTMLAnchorElement>) => {
     if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
@@ -20,7 +29,15 @@ export default function CompanyCard({ company, className }: { company: Company; 
     if (!el || el.classList.contains("company-spin")) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return router.push(href);
     el.classList.add("company-spin");
-    window.setTimeout(() => router.push(href), 650);
+    // Entra al terminar el giro (con un respaldo por si el evento no llega)
+    let gone = false;
+    const go = () => {
+      if (gone) return;
+      gone = true;
+      router.push(href);
+    };
+    el.addEventListener("animationend", go, { once: true });
+    window.setTimeout(go, 1400);
   };
 
   return (
