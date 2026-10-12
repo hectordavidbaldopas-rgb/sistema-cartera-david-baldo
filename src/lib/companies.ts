@@ -3,6 +3,8 @@ export type Company = {
   slug: string;
   name: string;
   logo: string;
+  // Achica el logo dentro de su recuadro si a simple vista queda más grande que los demás
+  logoScale?: number;
   origin: string;
   founded: string;
   text: string;
@@ -22,6 +24,7 @@ export const COMPANIES: Company[] = [
     slug: "swiss-medical",
     name: "Swiss Medical",
     logo: "/aseguradoras/swiss-medical.png",
+    logoScale: 0.8,
     origin: "Buenos Aires, Argentina",
     founded: "Grupo Swiss Medical desde 1989",
     text:

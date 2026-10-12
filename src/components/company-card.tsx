@@ -30,7 +30,7 @@ export default function CompanyCard({ company, className }: { company: Company; 
         className="flex h-20 w-full items-center justify-center rounded-xl bg-white px-1.5 shadow-sm transition-[scale] duration-200 hover:scale-110 sm:h-24 sm:px-4"
       >
         {/* El logo ocupa todo el ancho del recuadro (o el 62% del alto, si es más compacto, para que no queden muy desparejos) */}
-        <span className="relative block h-[62%] w-full">
+        <span className="relative block h-[62%] w-full" style={{ scale: company.logoScale }}>
           <Image src={company.logo} alt={company.name} fill sizes="(max-width: 640px) 45vw, 200px" className="object-contain" />
         </span>
       </span>
