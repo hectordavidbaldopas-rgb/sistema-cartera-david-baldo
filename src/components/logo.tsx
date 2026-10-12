@@ -38,13 +38,20 @@ export function LogoStacked({
   width = 160,
   className = "",
   autoPlay = false,
+  playOnView = false,
 }: {
   width?: number | string;
   className?: string;
   autoPlay?: boolean;
+  playOnView?: boolean;
 }) {
   return (
-    <LogoFx mark={{ left: 29, top: 0, width: 43.3, height: 61.4 }} className={className} autoPlay={autoPlay}>
+    <LogoFx
+      mark={{ left: 29, top: 0, width: 43.3, height: 61.4 }}
+      className={className}
+      autoPlay={autoPlay}
+      playOnView={playOnView}
+    >
       <Image
         src="/logo-baldo-vertical.png"
         alt="Baldo Seguros"

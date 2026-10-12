@@ -14,6 +14,8 @@ import { useEffect, useRef } from "react";
 // terminar se puede volver a disparar. Con autoPlay entra solo al cargar
 // (portada de la landing): llega desde lejos mientras gira, recién cuando la
 // imagen ya está cargada para que el brillo no aparezca sobre un logo vacío.
+// Con playOnView se dispara solo cada vez que aparece en pantalla (el logo del
+// final de la página, como cierre).
 export type Box = { left: number; top: number; width: number; height: number };
 
 export default function LogoFx({
@@ -21,6 +23,7 @@ export default function LogoFx({
   className,
   round = false,
   autoPlay = false,
+  playOnView = false,
   children,
 }: {
   mark: Box;
@@ -28,6 +31,7 @@ export default function LogoFx({
   // round: para fotos circulares (equipo): el brillo cubre el círculo, sin máscara de la B
   round?: boolean;
   autoPlay?: boolean;
+  playOnView?: boolean;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -55,6 +59,18 @@ export default function LogoFx({
       img.removeEventListener("error", start);
     };
   }, [autoPlay]);
+  useEffect(() => {
+    const el = ref.current;
+    if (!playOnView || !el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) el.classList.add("is-playing");
+      },
+      { threshold: 0.8 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [playOnView]);
   const done = (e: React.AnimationEvent) => {
     // El brillo dura lo mismo que el giro y corre siempre (aun con "reducir movimiento")
     if (e.animationName === "logo-shine") ref.current?.classList.remove("is-playing");

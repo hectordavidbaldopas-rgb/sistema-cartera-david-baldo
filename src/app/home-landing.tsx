@@ -148,7 +148,7 @@ export default function HomeLanding() {
   return (
     <div className="min-h-screen">
       <OfficeJourney />
-      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/80 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <LogoMark size={36} className="shrink-0 sm:hidden" />
           <LogoFull width={160} className="hidden shrink-0 sm:block" />
@@ -451,7 +451,7 @@ export default function HomeLanding() {
       {/* CONTACTO / FOOTER */}
       <footer id="contacto" data-scene className={sceneClass}>
         <div className={`mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center ${panelClass}`} data-panel>
-          <LogoStacked width={150} />
+          <LogoStacked width={150} playOnView />
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>
           <SocialButtons className="justify-center" />
           <PortalButtons className="mt-4" />
