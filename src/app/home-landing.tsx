@@ -55,15 +55,16 @@ const TEAM = [
 // Cada sección es una "parada" del recorrido por la oficina (ver
 // components/office-journey): ocupa el alto visible debajo del encabezado (así
 // cada barrida encastra justo en la sección siguiente) y su contenido (data-panel)
-// entra y sale animado acompañando el movimiento de la cámara.
-const sceneClass = "flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-x-clip px-4 py-20 sm:px-6";
+// entra y sale animado acompañando el movimiento de la cámara. En el celular
+// todo va más compacto para que cada sección entre entera en una pantalla.
+const sceneClass = "flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-x-clip px-4 py-4 sm:px-6 sm:py-20";
 const panelClass = "scene-text";
 
 // Tarjetas que llevan a WhatsApp: se agrandan apenas y el borde se pone dorado
 const linkCardClass = "transition-[scale,border-color] duration-200 hover:scale-[1.03] hover:border-gold-400/60";
 
 function TeamCard({ href, children }: { href?: string; children: React.ReactNode }) {
-  const className = "block h-full rounded-2xl border border-gold-500/30 bg-navy-950/70 p-6";
+  const className = "block h-full rounded-2xl border border-gold-500/30 bg-navy-950/70 p-5 sm:p-6";
   return href ? (
     <a data-fx href={href} target="_blank" rel="noopener noreferrer" className={`${className} ${linkCardClass}`}>
       {children}
@@ -187,13 +188,13 @@ export default function HomeLanding() {
       </section>
 
       {/* HERO */}
-      <section id="inicio" data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-hidden px-6 py-16">
+      <section id="inicio" data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-hidden px-5 py-4 sm:px-6 sm:py-16">
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div className={panelClass} data-panel>
-            <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">
+            <p className="mb-3 inline-block rounded-xl sm:mb-5 border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">
               Nueva imagen — la confianza, la de siempre
             </p>
-            <h1 className="max-w-xl text-4xl font-bold leading-tight text-white sm:text-5xl">
+            <h1 className="max-w-xl text-[2rem] font-bold leading-tight text-white sm:text-5xl">
               <Lines
                 lines={[
                   <ZoomWords key="1" text="Pro·te·ge·mos lo que" />,
@@ -202,12 +203,12 @@ export default function HomeLanding() {
                 ]}
               />
             </h1>
-            <p className="mt-6 max-w-lg text-lg text-white/70">
+            <p className="mt-4 max-w-lg text-base text-white/70 sm:mt-6 sm:text-lg">
               Soy David Baldo, Productor Asesor de Seguros — Matrícula N° 63225. Acompaño a
               familias y empresas de Las Parejas y la zona con asesoramiento real, no solo una
               póliza más.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3 sm:mt-8">
               <a
                 href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")}
                 target="_blank"
@@ -221,13 +222,8 @@ export default function HomeLanding() {
                 Conocé más
               </a>
             </div>
-            <div className="mt-10 max-w-lg rounded-2xl border border-gold-500/20 bg-navy-950/40 px-5 py-6">
-              <p className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-gold-400">
-                Nuestras redes y contacto
-              </p>
-              <SocialButtons className="justify-center" />
-            </div>
-            <div className="mt-12 grid max-w-md grid-cols-3 gap-4 border-t border-gold-500/20 pt-6">
+            {/* Las redes y el contacto quedan solo al final (Contacto) */}
+            <div className="mt-6 grid max-w-md grid-cols-3 gap-4 border-t border-gold-500/20 pt-4 sm:mt-12 sm:pt-6">
               {STATS.map((s) => (
                 <a
                   key={s.label}
@@ -281,12 +277,12 @@ export default function HomeLanding() {
 
       {/* QUIÉN SOY */}
       <section id="quien-soy" data-scene className={sceneClass}>
-        <div className={`mx-auto grid w-full max-w-6xl items-center gap-14 sm:grid-cols-2 ${panelClass}`} data-panel>
+        <div className={`mx-auto grid w-full max-w-6xl items-center gap-7 sm:grid-cols-2 sm:gap-14 ${panelClass}`} data-panel>
           <div>
-            <div data-fx="fade" className="group relative mx-auto max-w-sm transition-[scale] duration-500 ease-out hover:scale-105">
+            <div data-fx="fade" className="group relative mx-auto max-w-[15rem] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105">
               <div
                 aria-hidden
-                className="absolute -bottom-4 -right-4 h-full w-full rounded-2xl bg-[image:var(--gradient-gold)] opacity-90"
+                className="absolute -bottom-2.5 -right-2.5 h-full w-full rounded-2xl sm:-bottom-4 sm:-right-4 bg-[image:var(--gradient-gold)] opacity-90"
               />
               {/* Foto recortada sin la franja de logos de abajo; al pasar el mouse crece todo el
                   recuadro y, sutilmente, también la foto dentro del marco */}
@@ -302,11 +298,12 @@ export default function HomeLanding() {
             </div>
           </div>
           <div>
-            <p className="mb-5 text-xl font-medium leading-snug text-white sm:text-2xl">
+            <p className="mb-4 text-lg font-medium leading-snug text-white sm:mb-5 sm:text-2xl">
               Hace 20 años acompaño a familias y empresas de Las Parejas y la zona a proteger lo que más
               les importa: el auto, el hogar, el campo, el negocio.
             </p>
-            <p className="mb-6 text-white/70">
+            {/* En el celular no entra: las compañías se ven en la sección siguiente */}
+            <p className="mb-6 hidden text-white/70 sm:block">
               Trabajo junto a Mapfre, San Cristóbal, Mercantil Andina, Asociart, Swiss Medical,
               Segurometal y Andina ART para ofrecerte la cobertura que mejor se adapta a vos, con
               asesoramiento real — no solo una póliza más.
@@ -361,11 +358,11 @@ export default function HomeLanding() {
             <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
               Ramas que trabajo
             </p>
-            <h2 className="mb-8 text-center text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mb-5 text-center text-3xl font-bold text-white sm:mb-8 sm:text-4xl">
               <Lines lines={["Un seguro", <span key="m">para cada necesidad.</span>]} />
             </h2>
             <BranchesChips />
-            <div className="mt-8 flex justify-center">
+            <div className="mt-5 flex justify-center sm:mt-8">
               <Link href="/ramas" className={secondaryButtonClass}>
                 Ver el detalle de cada rama →
               </Link>
@@ -381,13 +378,13 @@ export default function HomeLanding() {
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold-400">
               Cómo trabajo
             </p>
-            <h2 className="mb-12 text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mb-4 text-3xl font-bold text-white sm:mb-12 sm:text-4xl">
               <a href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")} target="_blank" rel="noopener noreferrer">
                 <Lines lines={["Cotizá tu seguro", <span key="m" className="text-gradient-gold">en 24 horas.</span>]} />
               </a>
             </h2>
           </div>
-          <div className="mb-10 grid gap-8 sm:grid-cols-3">
+          <div className="mb-4 grid gap-2.5 sm:mb-10 sm:grid-cols-3 sm:gap-8">
             {STEPS.map((s) => (
               <div key={s.n}>
                 {/* Cada paso abre el chat de WhatsApp para cotizar */}
@@ -396,11 +393,14 @@ export default function HomeLanding() {
                   href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`relative block h-full rounded-2xl border border-white/10 bg-navy-950/60 p-6 ${linkCardClass}`}
+                  className={`relative flex h-full items-start gap-3.5 rounded-2xl border border-white/10 bg-navy-950/60 px-4 py-3 sm:block sm:p-6 ${linkCardClass}`}
                 >
-                  <p className="mb-3 text-3xl font-bold text-gold-400">{s.n}</p>
-                  <p className="mb-1 font-semibold text-white">{s.title}</p>
-                  <p className="text-sm text-white/60">{s.text}</p>
+                  {/* En el celular el número va al costado, para ocupar menos alto */}
+                  <p className="text-2xl font-bold leading-none text-gold-400 sm:mb-3 sm:text-3xl">{s.n}</p>
+                  <span className="block">
+                    <span className="mb-1 block font-semibold text-white">{s.title}</span>
+                    <span className="block text-xs text-white/60 sm:text-sm">{s.text}</span>
+                  </span>
                 </a>
               </div>
             ))}
@@ -424,7 +424,7 @@ export default function HomeLanding() {
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-gold-400">
               Nuestro equipo
             </p>
-            <h2 className="mb-12 text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mb-6 text-3xl font-bold text-white sm:mb-12 sm:text-4xl">
               <Lines lines={["Con quién", <span key="m">vas a hablar.</span>]} />
             </h2>
           </div>
@@ -451,11 +451,11 @@ export default function HomeLanding() {
 
       {/* CONTACTO / FOOTER */}
       <footer id="contacto" data-scene className={sceneClass}>
-        <div className={`mx-auto flex w-full max-w-3xl flex-col items-center gap-6 text-center ${panelClass}`} data-panel>
+        <div className={`mx-auto flex w-full max-w-3xl flex-col items-center gap-5 text-center sm:gap-6 ${panelClass}`} data-panel>
           <LogoStacked width={150} playOnView />
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>
           <SocialButtons className="justify-center" />
-          <PortalButtons className="mt-4" />
+          <PortalButtons className="mt-2 sm:mt-4" />
           <p className="text-xs text-white/30">© {new Date().getFullYear()} Baldo Seguros</p>
         </div>
       </footer>

@@ -153,12 +153,12 @@ function slugify(label: string) {
 // detalle en /ramas. El listado completo con descripciones vive en esa página.
 export function BranchesChips() {
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
       {BRANCHES.map((b) => (
         <Link
           key={b.label}
           href={`/ramas#${slugify(b.label)}`}
-          className="flex items-center gap-2 rounded-full border border-gold-500/25 bg-navy-950 px-3.5 py-2 text-sm text-white/80 transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
+          className="flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-navy-950 px-3 py-1.5 text-xs text-white/80 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
         >
           <b.Icon className="h-4 w-4 text-gold-300" />
           {b.label}
