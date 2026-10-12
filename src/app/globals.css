@@ -46,6 +46,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Fotos del recorrido por la oficina (components/office-journey.tsx). En
+   pantalla vertical se ven completas, sin recorte, y el espacio de arriba y
+   abajo se rellena con la misma foto muy desenfocada. */
+.journey-layer {
+  background: var(--img) center / cover no-repeat;
+}
+@media (orientation: portrait) {
+  .journey-layer {
+    background:
+      var(--img) center / contain no-repeat,
+      var(--img-fill) center / cover no-repeat;
+  }
+}
+
 /* Landing: el paso de página lo maneja components/office-journey.tsx (cada
    barrida va a la sección siguiente); sin el "rebote" del navegador en los bordes. */
 html:has(.landing-snap) {

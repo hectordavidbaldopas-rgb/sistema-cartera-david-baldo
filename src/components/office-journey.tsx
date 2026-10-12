@@ -30,6 +30,11 @@ const SCENES = [
 const ZOOM_OUT = 2.4; // cuánto se acerca la escena que se va
 const ZOOM_IN = 0.92; // de qué tamaño arranca la escena que llega
 const OVERSCALE = 1.1; // margen para el paralaje y para que ZOOM_IN no deje bordes
+// Pantalla vertical (celular): las fotos son horizontales, así que se muestran
+// completas (sin recortar ni hacer zoom) y los costados se rellenan con una
+// versión muy desenfocada de la misma foto (*-relleno.webp, ver .journey-layer
+// en globals.css). Las escenas pasan fundiéndose, sin el zoom de cámara.
+const FLAT_QUERY = "(orientation: portrait)";
 // Las fotos ya vienen levemente desenfocadas (las pantallas de los monitores
 // tienen texto que no tiene que competir con la página); se hornea en el
 // archivo en vez de usar filter: blur, que en el celular trababa el scroll.
@@ -46,6 +51,7 @@ export default function OfficeJourney() {
 
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const flatMedia = window.matchMedia(FLAT_QUERY);
     let raf = 0;
     let mx = 0;
     let my = 0;
@@ -187,6 +193,7 @@ export default function OfficeJourney() {
 
       const e = easeInOut(t);
       const fade = smooth(0.25, 0.75, t);
+      const still = reduced || flatMedia.matches; // sin zoom ni paralaje
 
       layers.current.forEach((el, j) => {
         if (!el) return;
@@ -195,16 +202,16 @@ export default function OfficeJourney() {
         let origin = "50% 50%";
         if (j === i) {
           opacity = i + 1 < SCENES.length ? 1 - fade : 1;
-          scale = reduced ? 1 : 1 + (ZOOM_OUT - 1) * e;
+          scale = still ? 1 : 1 + (ZOOM_OUT - 1) * e;
           origin = SCENES[j].focus;
         } else if (j === i + 1) {
           opacity = fade;
-          scale = reduced ? 1 : ZOOM_IN + (1 - ZOOM_IN) * e;
+          scale = still ? 1 : ZOOM_IN + (1 - ZOOM_IN) * e;
         }
         // Pequeño paralaje con el mouse para dar sensación de profundidad
-        const px = reduced ? 0 : mx * 14;
-        const py = reduced ? 0 : my * 10;
-        const transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) scale(${(scale * OVERSCALE).toFixed(4)})`;
+        const px = still ? 0 : mx * 14;
+        const py = still ? 0 : my * 10;
+        const transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) scale(${(scale * (still ? 1 : OVERSCALE)).toFixed(4)})`;
         const state = opacity === 0 ? "hidden" : `${opacity.toFixed(3)}|${j === i + 1 ? 2 : 1}|${origin}|${transform}`;
         if (layerState[j] === state) return; // nada cambió: no tocar el DOM
         layerState[j] = state;
@@ -508,13 +515,15 @@ export default function OfficeJourney() {
           ref={(el) => {
             layers.current[j] = el;
           }}
-          className="absolute inset-0 bg-cover bg-center will-change-transform"
-          style={{
-            backgroundImage: `url(${s.src})`,
-            opacity: j === 0 ? 1 : 0,
-            visibility: j === 0 ? "visible" : "hidden",
-            transform: `scale(${OVERSCALE})`,
-          }}
+          className="journey-layer absolute inset-0 will-change-transform"
+          style={
+            {
+              "--img": `url(${s.src})`,
+              "--img-fill": `url(${s.src.replace(".webp", "-relleno.webp")})`,
+              opacity: j === 0 ? 1 : 0,
+              visibility: j === 0 ? "visible" : "hidden",
+            } as React.CSSProperties
+          }
         />
       ))}
       {/* Velo navy (sin desenfoque) para que el texto se lea sobre las fotos

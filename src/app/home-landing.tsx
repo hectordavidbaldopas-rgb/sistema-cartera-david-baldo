@@ -358,7 +358,7 @@ export default function HomeLanding() {
             <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
               Ramas que trabajo
             </p>
-            <h2 className="mb-5 text-center text-3xl font-bold text-white sm:mb-8 sm:text-4xl">
+            <h2 className="mb-4 text-center text-2xl font-bold text-white sm:mb-8 sm:text-4xl">
               <Lines lines={["Un seguro", <span key="m">para cada necesidad.</span>]} />
             </h2>
             <BranchesChips />

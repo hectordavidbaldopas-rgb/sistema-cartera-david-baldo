@@ -140,6 +140,87 @@ const BRANCHES = [
   },
 ];
 
+// Rubros para filtrar las ramas (una rama puede estar en varios rubros).
+const CATEGORIES = [
+  {
+    label: "Automotor",
+    branches: ["Automotores", "Cascos", "Granizo", "Robo", "Responsabilidad civil", "Accidentes personales"],
+  },
+  { label: "Vida", branches: ["Vida", "Accidentes personales"] },
+  {
+    label: "Hogar",
+    branches: [
+      "Seguro combinado familiar",
+      "Incendio",
+      "Robo",
+      "Cristales",
+      "Granizo",
+      "Responsabilidad civil",
+      "Seguro integral para consorcio",
+    ],
+  },
+  {
+    label: "Comercio",
+    branches: [
+      "Seguro integral para comercio e industria",
+      "Incendio",
+      "Robo",
+      "Cristales",
+      "Responsabilidad civil",
+      "Transporte",
+      "Seguro técnico",
+    ],
+  },
+  {
+    label: "Industria",
+    branches: [
+      "Seguro integral para comercio e industria",
+      "Seguro técnico",
+      "Incendio",
+      "Transporte",
+      "Responsabilidad civil",
+      "Cascos",
+    ],
+  },
+  {
+    label: "Agro",
+    branches: ["Granizo", "Cascos", "Transporte", "Incendio", "Responsabilidad civil", "Accidentes personales"],
+  },
+  { label: "Turismo", branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
+];
+
+// Botones de rubro: "Todas" muestra todas las ramas; tocar un rubro deja solo las suyas.
+function CategoryFilter({ value, onChange }: { value: string | null; onChange: (v: string | null) => void }) {
+  const pill = (active: boolean) =>
+    `rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide transition duration-150 sm:px-3 sm:text-xs ${
+      active
+        ? "border-gold-400 bg-[image:var(--gradient-gold)] text-navy-950"
+        : "border-gold-500/40 bg-navy-950/85 text-gold-300 hover:border-gold-400"
+    }`;
+  return (
+    <div className="mb-3 flex flex-wrap justify-center gap-1.5 sm:mb-5 sm:gap-2">
+      <button type="button" onClick={() => onChange(null)} className={pill(value === null)} aria-pressed={value === null}>
+        Todas
+      </button>
+      {CATEGORIES.map((c) => (
+        <button
+          key={c.label}
+          type="button"
+          onClick={() => onChange(value === c.label ? null : c.label)}
+          className={pill(value === c.label)}
+          aria-pressed={value === c.label}
+        >
+          {c.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function inCategory(label: string, category: string | null) {
+  return category === null || !!CATEGORIES.find((c) => c.label === category)?.branches.includes(label);
+}
+
 // "Seguro combinado familiar" -> "seguro-combinado-familiar": ancla para /ramas#<slug>.
 function slugify(label: string) {
   return label
@@ -152,24 +233,29 @@ function slugify(label: string) {
 // Versión compacta para la landing: solo ícono + nombre, cada uno lleva a su
 // detalle en /ramas. El listado completo con descripciones vive en esa página.
 export function BranchesChips() {
+  const [category, setCategory] = useState<string | null>(null);
   return (
-    <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
-      {BRANCHES.map((b) => (
-        <Link
-          key={b.label}
-          href={`/ramas#${slugify(b.label)}`}
-          className="flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-navy-950 px-3 py-1.5 text-xs text-white/80 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
-        >
-          <b.Icon className="h-4 w-4 text-gold-300" />
-          {b.label}
-        </Link>
-      ))}
-    </div>
+    <>
+      <CategoryFilter value={category} onChange={setCategory} />
+      <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+        {BRANCHES.filter((b) => inCategory(b.label, category)).map((b) => (
+          <Link
+            key={b.label}
+            href={`/ramas#${slugify(b.label)}`}
+            className="flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-navy-950 px-3 py-1.5 text-xs text-white/80 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
+          >
+            <b.Icon className="h-4 w-4 text-gold-300" />
+            {b.label}
+          </Link>
+        ))}
+      </div>
+    </>
   );
 }
 
 export default function BranchesGrid() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
 
   // Si se llega desde un chip de la landing (/ramas#vida), abrir esa rama.
   useEffect(() => {
@@ -204,23 +290,26 @@ export default function BranchesGrid() {
 
   return (
     <>
+      <CategoryFilter value={category} onChange={setCategory} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {BRANCHES.map((b, i) => (
-          <Reveal key={b.label} delay={i * 40}>
-            <button
-              type="button"
-              onClick={() => setOpenIndex(i)}
-              className="flex h-full w-full flex-col gap-3 rounded-2xl border border-gold-500/25 bg-navy-950 p-5 text-left transition duration-150 hover:border-gold-400/60 hover:bg-navy-950/60"
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold-500/40 text-gold-300">
-                <b.Icon className="h-5 w-5" />
-              </span>
-              <p className="text-base font-semibold text-white/90">{b.label}</p>
-              <p className="text-sm text-white/60">{b.description}</p>
-              <span className="mt-auto text-xs font-medium text-gold-400">Ver más →</span>
-            </button>
-          </Reveal>
-        ))}
+        {BRANCHES.map((b, i) => ({ b, i }))
+          .filter(({ b }) => inCategory(b.label, category))
+          .map(({ b, i }) => (
+            <Reveal key={b.label} delay={i * 40}>
+              <button
+                type="button"
+                onClick={() => setOpenIndex(i)}
+                className="flex h-full w-full flex-col gap-3 rounded-2xl border border-gold-500/25 bg-navy-950 p-5 text-left transition duration-150 hover:border-gold-400/60 hover:bg-navy-950/60"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold-500/40 text-gold-300">
+                  <b.Icon className="h-5 w-5" />
+                </span>
+                <p className="text-base font-semibold text-white/90">{b.label}</p>
+                <p className="text-sm text-white/60">{b.description}</p>
+                <span className="mt-auto text-xs font-medium text-gold-400">Ver más →</span>
+              </button>
+            </Reveal>
+          ))}
       </div>
 
       {open && (
