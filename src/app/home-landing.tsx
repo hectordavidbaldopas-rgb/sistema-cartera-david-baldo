@@ -280,7 +280,7 @@ export default function HomeLanding() {
       <section id="quien-soy" data-scene className={sceneClass}>
         <div className={`mx-auto grid w-full max-w-6xl items-center gap-7 sm:grid-cols-2 sm:gap-14 ${panelClass}`} data-panel>
           <div>
-            <TapZoom data-fx="fade" className="group relative mx-auto max-w-[13rem] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105 data-[on=true]:scale-105">
+            <TapZoom data-fx="fade" className="group relative mx-auto max-w-[min(18rem,calc((100dvh-27.5rem)*1.17))] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105 data-[on=true]:scale-105">
               <div
                 aria-hidden
                 className="absolute -bottom-2.5 -right-2.5 h-full w-full rounded-2xl sm:-bottom-4 sm:-right-4 bg-[image:var(--gradient-gold)] opacity-90"
@@ -384,7 +384,7 @@ export default function HomeLanding() {
               </a>
             </h2>
           </div>
-          <div className="mb-4 grid gap-2.5 sm:mb-10 sm:grid-cols-3 sm:gap-8">
+          <div className="mb-4 grid auto-rows-fr gap-2.5 sm:mb-10 sm:grid-cols-3 sm:gap-8">
             {STEPS.map((s) => (
               <div key={s.n}>
                 {/* Cada paso abre el chat de WhatsApp para cotizar */}
