@@ -5,6 +5,8 @@ import { primaryButtonClass, secondaryButtonClass, whatsappButtonClass } from "@
 import OfficeJourney from "@/components/office-journey";
 import LogoFx from "@/components/logo-fx";
 import TapZoom from "@/components/tap-zoom";
+import CompanyCard from "@/components/company-card";
+import { COMPANIES } from "@/lib/companies";
 import { Lines } from "@/components/fx-text";
 import {
   WhatsAppIcon,
@@ -29,16 +31,6 @@ const STATS = [
   { value: "+20", label: "años de experiencia", href: "#quien-soy" },
   { value: "7", label: "compañías aseguradoras", href: "#companias" },
   { value: "14", label: "ramas de seguros", href: "#ramas" },
-];
-
-const COMPANIES = [
-  { name: "Mapfre", logo: "/logo-mapfre.png" },
-  { name: "Swiss Medical", logo: "/logo-swissmedical.png" },
-  { name: "Mercantil Andina", logo: "/logo-mercantilandina.png" },
-  { name: "Andina ART", logo: "/logo-andinaart.png" },
-  { name: "San Cristóbal Seguros", logo: "/logo-sancristobal.png" },
-  { name: "Asociart", logo: "/logo-asociart.png" },
-  { name: "Segurometal", logo: "/logo-segurometal.png" },
 ];
 
 const STEPS = [
@@ -328,26 +320,14 @@ export default function HomeLanding() {
           <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-white/40">
             Trabajo con las principales aseguradoras
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            {COMPANIES.map((c) =>
-              c.logo ? (
-                <span
-                  key={c.name}
-                  data-fx="zoom"
-                  className="flex items-center rounded-lg bg-white/95 px-4 py-2.5 shadow-sm transition-[scale] duration-200 hover:scale-115"
-                >
-                  <Image src={c.logo} alt={c.name} width={110} height={28} className="h-6 w-auto object-contain" />
-                </span>
-              ) : (
-                <span
-                  key={c.name}
-                  className="rounded-lg border border-gold-500/25 px-4 py-2.5 text-sm font-medium text-white/60"
-                >
-                  {c.name}
-                </span>
-              ),
-            )}
+          {/* De a dos en el celular (de a cuatro en la compu), todos del mismo tamaño;
+              el último, si queda solo, va centrado */}
+          <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-3 sm:gap-5">
+            {COMPANIES.map((c) => (
+              <CompanyCard key={c.slug} company={c} className="w-[calc(50%-0.375rem)] sm:w-[calc(25%-0.9375rem)]" />
+            ))}
           </div>
+          <p className="mt-5 text-center text-xs text-white/50">Tocá una compañía para conocerla.</p>
         </div>
       </section>
 
