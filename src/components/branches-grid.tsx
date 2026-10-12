@@ -144,11 +144,13 @@ const BRANCHES = [
 const CATEGORIES = [
   {
     label: "Automotor",
+    Icon: CarIcon,
     branches: ["Automotores", "Cascos", "Granizo", "Robo", "Responsabilidad civil", "Accidentes personales"],
   },
-  { label: "Vida", branches: ["Vida", "Accidentes personales"] },
+  { label: "Vida", Icon: ShieldHeartIcon, branches: ["Vida", "Accidentes personales"] },
   {
     label: "Hogar",
+    Icon: HomeIcon,
     branches: [
       "Seguro combinado familiar",
       "Incendio",
@@ -161,6 +163,7 @@ const CATEGORIES = [
   },
   {
     label: "Comercio",
+    Icon: StoreIcon,
     branches: [
       "Seguro integral para comercio e industria",
       "Incendio",
@@ -173,6 +176,7 @@ const CATEGORIES = [
   },
   {
     label: "Industria",
+    Icon: GearIcon,
     branches: [
       "Seguro integral para comercio e industria",
       "Seguro técnico",
@@ -184,9 +188,10 @@ const CATEGORIES = [
   },
   {
     label: "Agro",
+    Icon: HailIcon,
     branches: ["Granizo", "Cascos", "Transporte", "Incendio", "Responsabilidad civil", "Accidentes personales"],
   },
-  { label: "Turismo", branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
+  { label: "Turismo", Icon: AnchorIcon, branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
 ];
 
 // Botones de rubro: "Todas" muestra todas las ramas; tocar un rubro deja solo las suyas.
@@ -230,25 +235,51 @@ function slugify(label: string) {
     .replace(/[^a-z0-9]+/g, "-");
 }
 
-// Versión compacta para la landing: solo ícono + nombre, cada uno lleva a su
-// detalle en /ramas. El listado completo con descripciones vive en esa página.
+// Versión compacta para la landing: primero se ven solo los rubros; al tocar
+// uno aparecen sus ramas (ícono + nombre, cada una lleva a su detalle en
+// /ramas). Tocar el mismo rubro otra vez las vuelve a ocultar.
 export function BranchesChips() {
   const [category, setCategory] = useState<string | null>(null);
   return (
     <>
-      <CategoryFilter value={category} onChange={setCategory} />
-      <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
-        {BRANCHES.filter((b) => inCategory(b.label, category)).map((b) => (
-          <Link
-            key={b.label}
-            href={`/ramas#${slugify(b.label)}`}
-            className="flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-navy-950 px-3 py-1.5 text-xs text-white/80 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
-          >
-            <b.Icon className="h-4 w-4 text-gold-300" />
-            {b.label}
-          </Link>
-        ))}
+      <div className="flex flex-wrap justify-center gap-2 sm:flex-nowrap sm:gap-3">
+        {CATEGORIES.map((c) => {
+          const active = category === c.label;
+          return (
+            <button
+              key={c.label}
+              type="button"
+              onClick={() => setCategory(active ? null : c.label)}
+              aria-expanded={active}
+              className={`flex w-[calc(25%-0.375rem)] flex-col items-center gap-1.5 rounded-2xl border px-1 py-2.5 sm:w-auto sm:flex-1 text-[11px] font-semibold uppercase tracking-wide transition duration-150 sm:py-4 sm:text-xs ${
+                active
+                  ? "border-gold-400 bg-[image:var(--gradient-gold)] text-navy-950"
+                  : "border-gold-500/40 bg-navy-950/85 text-gold-300 hover:border-gold-400"
+              }`}
+            >
+              <c.Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+              {c.label}
+            </button>
+          );
+        })}
       </div>
+      {category === null ? (
+        <p className="mt-4 text-center text-sm text-white/60">Tocá un rubro para ver sus seguros.</p>
+      ) : (
+        <div className="mt-4 flex flex-wrap justify-center gap-1.5 sm:mt-6 sm:gap-2">
+          {BRANCHES.filter((b) => inCategory(b.label, category)).map((b, i) => (
+            <Link
+              key={`${category}-${b.label}`}
+              href={`/ramas#${slugify(b.label)}`}
+              style={{ animationDelay: `${i * 45}ms` }}
+              className="chip-in flex items-center gap-1.5 rounded-full border border-gold-500/25 bg-navy-950 px-3 py-1.5 text-xs text-white/80 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm transition duration-150 hover:border-gold-400/60 hover:text-gold-300 active:translate-y-px"
+            >
+              <b.Icon className="h-4 w-4 text-gold-300" />
+              {b.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </>
   );
 }
