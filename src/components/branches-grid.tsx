@@ -141,7 +141,7 @@ const BRANCHES = [
 ];
 
 // Rubros para filtrar las ramas (una rama puede estar en varios rubros).
-const CATEGORIES = [
+export const CATEGORIES = [
   {
     label: "Automotor",
     Icon: CarIcon,
@@ -227,7 +227,7 @@ function inCategory(label: string, category: string | null) {
 }
 
 // "Seguro combinado familiar" -> "seguro-combinado-familiar": ancla para /ramas#<slug>.
-function slugify(label: string) {
+export function slugify(label: string) {
   return label
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")

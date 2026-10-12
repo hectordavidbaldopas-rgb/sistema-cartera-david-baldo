@@ -6,6 +6,7 @@ import OfficeJourney from "@/components/office-journey";
 import LogoFx from "@/components/logo-fx";
 import TapZoom from "@/components/tap-zoom";
 import CompanyCard from "@/components/company-card";
+import SideMenu from "@/components/side-menu";
 import { COMPANIES } from "@/lib/companies";
 import { Lines } from "@/components/fx-text";
 import {
@@ -145,8 +146,10 @@ export default function HomeLanding() {
       <OfficeJourney />
       <header data-site-header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-          <LogoMark size={36} className="shrink-0 sm:hidden" />
-          <LogoFull width={160} className="hidden shrink-0 sm:block" />
+          <SideMenu>
+            <LogoMark size={36} className="shrink-0 sm:hidden" />
+            <LogoFull width={160} className="hidden shrink-0 sm:block" />
+          </SideMenu>
           <nav className="hidden items-center gap-6 lg:flex">
             {NAV_LINKS.map((l) => (
               <a
