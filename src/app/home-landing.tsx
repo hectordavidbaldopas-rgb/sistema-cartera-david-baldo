@@ -148,7 +148,7 @@ function SocialButtons({ className = "" }: { className?: string }) {
 
 export default function HomeLanding() {
   return (
-    <div className="landing-snap min-h-screen">
+    <div className="landing-snap min-h-screen overflow-x-clip">
       <OfficeJourney />
       <header data-site-header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
@@ -170,7 +170,7 @@ export default function HomeLanding() {
       </header>
 
       {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
-      <section data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] flex-col items-center justify-center px-4 py-16">
+      <section data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] flex-col items-center justify-center overflow-x-clip px-4 py-16">
         <div className="flex flex-col items-center" data-panel>
           <div data-fx="logo">
             <LogoStacked width="100%" autoPlay className="block w-[min(72vw,360px)]" />
