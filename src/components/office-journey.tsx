@@ -54,15 +54,18 @@ export default function OfficeJourney() {
     // - tarjetas ([data-fx]): se deslizan de costado, una atrás de otra;
     //   con data-fx="zoom" crecen desde su centro (logos de compañías) y con
     //   data-fx="fade" aparecen en su lugar, de desenfocado a nítido (foto de Quién soy)
+    // - logo de la portada (data-fx="logo"): al bajar queda fijo en el centro y
+    //   se acerca a la cámara desvaneciéndose, como si la atravesáramos
     // - botones: entran enteros, subiendo
     // - resto (textos, ítems de lista): suben / se deslizan desenfocados
     // Si uno está dentro de otro (un link dentro de un párrafo) se anima el de afuera.
-    type Kind = "line" | "text" | "button" | "list" | "card" | "zoom" | "fade";
+    type Kind = "line" | "text" | "button" | "list" | "card" | "zoom" | "fade" | "logo";
     type Item = { el: HTMLElement; kind: Kind };
     const SEL = "h1, h2, h3, p, li, a, button, [data-fx]";
     const kindOf = (el: HTMLElement): Kind => {
       if (el.getAttribute("data-fx") === "zoom") return "zoom";
       if (el.getAttribute("data-fx") === "fade") return "fade";
+      if (el.getAttribute("data-fx") === "logo") return "logo";
       if (el.hasAttribute("data-fx")) return "card";
       const tag = el.tagName;
       if (tag === "A" || tag === "BUTTON") return "button";
@@ -149,6 +152,16 @@ export default function OfficeJourney() {
         let cardN = 0;
         items.forEach((item, n) => {
           const { el, kind } = item;
+          if (kind === "logo") {
+            // Entra con su propia animación (logo-fx--intro); acá solo la salida
+            const p = clamp(-r.top / (r.height * 0.75));
+            el.style.opacity = String(1 - smooth(0.15, 1, p));
+            el.style.pointerEvents = p > 0.5 ? "none" : "";
+            if (reduced) return;
+            el.style.transform = p > 0 ? `translate3d(0, ${(-r.top).toFixed(1)}px, 0) scale(${(1 + p * p * 2.2).toFixed(3)})` : "";
+            el.style.filter = p > 0 ? `blur(${(p * 10).toFixed(1)}px)` : "";
+            return;
+          }
           // Escalonado: cada elemento arranca un poco después que el anterior;
           // las tarjetas tienen su propio escalonado para deslizarse en fila.
           const delay =
@@ -232,12 +245,58 @@ export default function OfficeJourney() {
       request();
     };
 
+    // Links internos (#seccion): en vez del salto rápido del navegador, la
+    // página baja despacio y con aceleración suave, así la cámara recorre la
+    // oficina y el contenido entra de a poco. Se corta si el usuario scrollea.
+    let glide = 0;
+    const stopGlide = () => {
+      cancelAnimationFrame(glide);
+      glide = 0;
+    };
+    const onClick = (ev: MouseEvent) => {
+      if (reduced || ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
+      const link = (ev.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
+      const id = link?.getAttribute("href")?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      if (!link || !target) return;
+      ev.preventDefault();
+      stopGlide();
+      // Desde la portada, el logo da su giro con brillo mientras nos alejamos
+      link.closest("[data-scene]")?.querySelector(".logo-fx")?.classList.add("is-playing");
+      const from = window.scrollY;
+      const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const to = Math.min(
+        target.getBoundingClientRect().top + from - margin,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+      const dist = Math.abs(to - from);
+      const ms = Math.min(3200, Math.max(2000, 1400 + dist * 0.5));
+      const t0 = performance.now();
+      const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2);
+      const step = (now: number) => {
+        const v = clamp((now - t0) / ms);
+        window.scrollTo({ top: from + (to - from) * ease(v), behavior: "instant" });
+        glide = v < 1 ? requestAnimationFrame(step) : 0;
+      };
+      glide = requestAnimationFrame(step);
+      history.pushState(null, "", `#${id}`);
+    };
+
     render();
+    document.addEventListener("click", onClick);
+    window.addEventListener("wheel", stopGlide, { passive: true });
+    window.addEventListener("touchstart", stopGlide, { passive: true });
+    window.addEventListener("keydown", stopGlide);
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
     window.addEventListener("mousemove", onMouse, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
+      stopGlide();
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("wheel", stopGlide);
+      window.removeEventListener("touchstart", stopGlide);
+      window.removeEventListener("keydown", stopGlide);
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", request);
       window.removeEventListener("mousemove", onMouse);

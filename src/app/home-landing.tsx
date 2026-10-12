@@ -170,7 +170,7 @@ export default function HomeLanding() {
       {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
       <section data-scene className="relative flex min-h-[calc(100svh-68px)] flex-col items-center justify-center px-4 py-16">
         <div className="flex flex-col items-center" data-panel>
-          <div data-fx="fade">
+          <div data-fx="logo">
             <LogoStacked width="100%" autoPlay className="block w-[min(72vw,360px)]" />
           </div>
           <a
