@@ -53,9 +53,10 @@ const TEAM = [
 ];
 
 // Cada sección es una "parada" del recorrido por la oficina (ver
-// components/office-journey): ocupa una pantalla y su contenido (data-panel)
+// components/office-journey): ocupa el alto visible debajo del encabezado (así
+// cada barrida encastra justo en la sección siguiente) y su contenido (data-panel)
 // entra y sale animado acompañando el movimiento de la cámara.
-const sceneClass = "flex min-h-[100svh] items-center overflow-x-clip px-4 py-20 sm:px-6";
+const sceneClass = "flex min-h-[calc(100svh-var(--header-h,4rem))] items-center overflow-x-clip px-4 py-20 sm:px-6";
 const panelClass = "scene-text";
 
 // Tarjetas que llevan a WhatsApp: se agrandan apenas y el borde se pone dorado
@@ -146,9 +147,9 @@ function SocialButtons({ className = "" }: { className?: string }) {
 
 export default function HomeLanding() {
   return (
-    <div className="min-h-screen">
+    <div className="landing-snap min-h-screen">
       <OfficeJourney />
-      <header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
+      <header data-site-header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <LogoMark size={36} className="shrink-0 sm:hidden" />
           <LogoFull width={160} className="hidden shrink-0 sm:block" />
@@ -168,7 +169,7 @@ export default function HomeLanding() {
       </header>
 
       {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
-      <section data-scene className="relative flex min-h-[calc(100svh-68px)] flex-col items-center justify-center px-4 py-16">
+      <section data-scene className="relative flex min-h-[calc(100svh-var(--header-h,4rem))] flex-col items-center justify-center px-4 py-16">
         <div className="flex flex-col items-center" data-panel>
           <div data-fx="logo">
             <LogoStacked width="100%" autoPlay className="block w-[min(72vw,360px)]" />
@@ -186,7 +187,7 @@ export default function HomeLanding() {
       </section>
 
       {/* HERO */}
-      <section id="inicio" data-scene className="relative flex min-h-[100svh] scroll-mt-16 items-center overflow-hidden px-6 py-16">
+      <section id="inicio" data-scene className="relative flex min-h-[calc(100svh-var(--header-h,4rem))] items-center overflow-hidden px-6 py-16">
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div className={panelClass} data-panel>
             <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">

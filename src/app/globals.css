@@ -46,6 +46,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Landing: el paso de página lo maneja components/office-journey.tsx (cada
+   barrida va a la sección siguiente); sin el "rebote" del navegador en los bordes. */
+html:has(.landing-snap) {
+  overscroll-behavior-y: none;
+}
+
 body {
   background: var(--color-navy-950);
   color: var(--foreground);

@@ -101,15 +101,41 @@ export default function OfficeJourney() {
     let tops: number[] = [];
     let heights: number[] = [];
     let counters: HTMLElement[][] = [];
-    let vh = window.innerHeight;
+    let stops: number[] = [];
+    // Alto visible de la pantalla (clientHeight: no varía con la barra del
+    // navegador del celular, que aparece y desaparece al scrollear)
+    let vh = document.documentElement.clientHeight;
     let vw = window.innerWidth;
     const measure = () => {
+      const header = document.querySelector<HTMLElement>("[data-site-header]");
+      document.documentElement.style.setProperty("--header-h", `${header?.offsetHeight ?? 0}px`);
       sections = Array.from(document.querySelectorAll<HTMLElement>("[data-scene]"));
       if (sectionItems.length !== sections.length) sectionItems = sections.map(itemsOf);
       counters = sections.map((sec) => Array.from(sec.querySelectorAll<HTMLElement>("[data-count]")));
       const y = window.scrollY;
       tops = sections.map((sec) => sec.getBoundingClientRect().top + y);
       heights = sections.map((sec) => sec.offsetHeight);
+
+      // Paradas del paso de página: el comienzo de cada sección (justo debajo
+      // del encabezado) y, si la sección no entra en la pantalla, pasos
+      // intermedios hasta su final para no saltearse nada.
+      const headerH = header?.offsetHeight ?? 0;
+      const visible = vh - headerH;
+      const maxY = document.documentElement.scrollHeight - vh;
+      const all: number[] = [];
+      sections.forEach((_, k) => {
+        const start = tops[k] - headerH;
+        all.push(start);
+        const extra = heights[k] - visible;
+        if (extra > 40) {
+          const n = Math.ceil(extra / (visible * 0.8));
+          for (let m = 1; m <= n; m++) all.push(start + (extra * m) / n);
+        }
+      });
+      stops = all
+        .map((v) => Math.round(Math.min(maxY, Math.max(0, v))))
+        .sort((a, b) => a - b)
+        .filter((v, n, arr) => n === 0 || v - arr[n - 1] > 4);
     };
 
     const layerState: string[] = [];
@@ -290,40 +316,114 @@ export default function OfficeJourney() {
       request();
     };
 
-    // Links internos (#seccion): en vez del salto seco del navegador, la
-    // página baja en algo más de un segundo, con aceleración suave, así la cámara recorre la
-    // oficina y el contenido entra de a poco. Se corta si el usuario scrollea.
+    // Paso de página: cada barrida con el dedo (o ruedita / flechas) lleva a
+    // la parada siguiente o anterior con una transición corta y frena justo
+    // ahí, nunca a mitad de camino. Las paradas son el comienzo de cada sección
+    // y, en las que no entran en la pantalla, pasos intermedios hasta su final.
+    // Los links internos (#seccion) también bajan así, en un solo recorrido.
+    const root = document.documentElement;
+    const PAGE_MS = 650;
+    const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2);
     let glide = 0;
+    let goal = -1; // parada hacia la que va la página (-1: quieta)
     const stopGlide = () => {
       cancelAnimationFrame(glide);
       glide = 0;
+      goal = -1;
     };
+    const glideTo = (to: number, ms: number) => {
+      stopGlide();
+      const from = window.scrollY;
+      if (Math.abs(to - from) < 1) return;
+      goal = to;
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const v = clamp((now - t0) / ms);
+        window.scrollTo({ top: from + (to - from) * ease(v), behavior: "instant" });
+        if (v < 1) glide = requestAnimationFrame(step);
+        else stopGlide();
+      };
+      glide = requestAnimationFrame(step);
+    };
+    const nearest = (y: number) => stops.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a), 0);
+    const next = (y: number, dir: number) =>
+      dir > 0 ? stops.find((s) => s > y + 2) : [...stops].reverse().find((s) => s < y - 2);
+    const page = (dir: number) => {
+      const to = next(goal >= 0 ? goal : window.scrollY, dir);
+      if (to !== undefined) glideTo(to, PAGE_MS);
+    };
+    // Gestos que no son para pasar de página: varios dedos, campos de texto,
+    // ventanas emergentes (las fichas de ramas) y el botón flotante.
+    const ignored = (target: EventTarget | null) =>
+      target instanceof Element && !!target.closest("input, textarea, select, .fixed");
+
+    let touchY0 = 0;
+    let touchY = 0;
+    let touchScroll = 0;
+    let touchT0 = 0;
+    let dragging = false;
+    const onTouchStart = (ev: TouchEvent) => {
+      dragging = ev.touches.length === 1 && !ignored(ev.target);
+      if (!dragging) return;
+      stopGlide();
+      touchY0 = touchY = ev.touches[0].clientY;
+      touchScroll = window.scrollY;
+      touchT0 = performance.now();
+    };
+    const onTouchMove = (ev: TouchEvent) => {
+      if (!dragging) return;
+      if (ev.touches.length !== 1) {
+        dragging = false;
+        return;
+      }
+      ev.preventDefault(); // la página sigue al dedo, sin el scroll libre del navegador
+      touchY = ev.touches[0].clientY;
+      window.scrollTo({ top: touchScroll + (touchY0 - touchY), behavior: "instant" });
+    };
+    const onTouchEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      const d = touchY0 - touchY;
+      const speed = Math.abs(d) / Math.max(1, performance.now() - touchT0);
+      const to = Math.abs(d) > 30 || speed > 0.3 ? (next(touchScroll, d) ?? nearest(touchScroll)) : nearest(touchScroll);
+      glideTo(to, Math.min(PAGE_MS, Math.max(300, 250 + Math.abs(to - window.scrollY) * 0.6)));
+    };
+
+    // Ruedita / trackpad: un paso por gesto. El trackpad sigue mandando
+    // eventos por inercia un rato; solo cuenta como gesto nuevo si hubo una
+    // pausa o si ya pasó bastante desde el último paso.
+    let lastWheel = 0;
+    let lastStep = 0;
+    const onWheel = (ev: WheelEvent) => {
+      if (ev.ctrlKey || ignored(ev.target)) return; // ctrl + ruedita = zoom
+      ev.preventDefault();
+      const now = performance.now();
+      const fresh = now - lastWheel > 220;
+      lastWheel = now;
+      if (Math.abs(ev.deltaY) < 4 || (!fresh && now - lastStep < 1100)) return;
+      lastStep = now;
+      page(Math.sign(ev.deltaY));
+    };
+    const onKey = (ev: KeyboardEvent) => {
+      if (ignored(ev.target) || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      const dir = { ArrowDown: 1, PageDown: 1, " ": ev.shiftKey ? -1 : 1, ArrowUp: -1, PageUp: -1 }[ev.key];
+      if (!dir) return;
+      ev.preventDefault();
+      page(dir);
+    };
+
     const onClick = (ev: MouseEvent) => {
-      if (reduced || ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
+      if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey) return;
       const link = (ev.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
       const id = link?.getAttribute("href")?.slice(1);
       const target = id ? document.getElementById(id) : null;
       if (!link || !target) return;
       ev.preventDefault();
-      stopGlide();
       // Desde la portada, el logo da su giro con brillo mientras nos alejamos
       link.closest("[data-scene]")?.querySelector(".logo-fx")?.classList.add("is-playing");
-      const from = window.scrollY;
-      const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-      const to = Math.min(
-        target.getBoundingClientRect().top + from - margin,
-        document.documentElement.scrollHeight - window.innerHeight,
-      );
-      const dist = Math.abs(to - from);
-      const ms = Math.min(1700, Math.max(1000, 700 + dist * 0.4));
-      const t0 = performance.now();
-      const ease = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2);
-      const step = (now: number) => {
-        const v = clamp((now - t0) / ms);
-        window.scrollTo({ top: from + (to - from) * ease(v), behavior: "instant" });
-        glide = v < 1 ? requestAnimationFrame(step) : 0;
-      };
-      glide = requestAnimationFrame(step);
+      const headerH = parseFloat(root.style.getPropertyValue("--header-h")) || 0;
+      const to = nearest(target.getBoundingClientRect().top + window.scrollY - headerH);
+      glideTo(to, Math.min(1300, Math.max(800, 550 + Math.abs(to - window.scrollY) * 0.25)));
       history.pushState(null, "", `#${id}`);
     };
 
@@ -335,9 +435,9 @@ export default function OfficeJourney() {
       request();
     };
     const onResize = () => {
-      if (window.innerWidth !== vw || Math.abs(window.innerHeight - vh) > 160) {
+      if (window.innerWidth !== vw || Math.abs(document.documentElement.clientHeight - vh) > 160) {
         vw = window.innerWidth;
-        vh = window.innerHeight;
+        vh = document.documentElement.clientHeight;
         remeasure();
       }
     };
@@ -355,9 +455,12 @@ export default function OfficeJourney() {
 
     render();
     document.addEventListener("click", onClick);
-    window.addEventListener("wheel", stopGlide, { passive: true });
-    window.addEventListener("touchstart", stopGlide, { passive: true });
-    window.addEventListener("keydown", stopGlide);
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchEnd);
+    window.addEventListener("keydown", onKey);
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", onResize);
     window.addEventListener("mousemove", onMouse, { passive: true });
@@ -366,9 +469,12 @@ export default function OfficeJourney() {
       cancelAnimationFrame(raf);
       stopGlide();
       document.removeEventListener("click", onClick);
-      window.removeEventListener("wheel", stopGlide);
-      window.removeEventListener("touchstart", stopGlide);
-      window.removeEventListener("keydown", stopGlide);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMouse);
