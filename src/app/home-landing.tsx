@@ -56,7 +56,7 @@ const TEAM = [
 // components/office-journey): ocupa el alto visible debajo del encabezado (así
 // cada barrida encastra justo en la sección siguiente) y su contenido (data-panel)
 // entra y sale animado acompañando el movimiento de la cámara.
-const sceneClass = "flex min-h-[calc(100svh-var(--header-h,4rem))] items-center overflow-x-clip px-4 py-20 sm:px-6";
+const sceneClass = "flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-x-clip px-4 py-20 sm:px-6";
 const panelClass = "scene-text";
 
 // Tarjetas que llevan a WhatsApp: se agrandan apenas y el borde se pone dorado
@@ -169,7 +169,7 @@ export default function HomeLanding() {
       </header>
 
       {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
-      <section data-scene className="relative flex min-h-[calc(100svh-var(--header-h,4rem))] flex-col items-center justify-center px-4 py-16">
+      <section data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] flex-col items-center justify-center px-4 py-16">
         <div className="flex flex-col items-center" data-panel>
           <div data-fx="logo">
             <LogoStacked width="100%" autoPlay className="block w-[min(72vw,360px)]" />
@@ -187,7 +187,7 @@ export default function HomeLanding() {
       </section>
 
       {/* HERO */}
-      <section id="inicio" data-scene className="relative flex min-h-[calc(100svh-var(--header-h,4rem))] items-center overflow-hidden px-6 py-16">
+      <section id="inicio" data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] items-center overflow-hidden px-6 py-16">
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div className={panelClass} data-panel>
             <p className="mb-5 inline-block rounded-xl border border-gold-500/40 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-snug tracking-wide text-gold-400 sm:rounded-full sm:px-3 sm:py-1 sm:text-xs sm:tracking-widest">

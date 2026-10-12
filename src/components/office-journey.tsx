@@ -102,11 +102,14 @@ export default function OfficeJourney() {
     let heights: number[] = [];
     let counters: HTMLElement[][] = [];
     let stops: number[] = [];
-    // Alto visible de la pantalla (clientHeight: no varía con la barra del
-    // navegador del celular, que aparece y desaparece al scrollear)
-    let vh = document.documentElement.clientHeight;
-    let vw = window.innerWidth;
+    // Alto realmente visible de la pantalla (innerHeight: en el celular crece
+    // cuando se esconde la barra del navegador; las secciones usan 100dvh, que
+    // también la sigue, así la última parada llega siempre al final).
+    const viewH = () => window.innerHeight;
+    const maxScroll = () => document.documentElement.scrollHeight - viewH();
+    let vh = viewH();
     const measure = () => {
+      vh = viewH();
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       document.documentElement.style.setProperty("--header-h", `${header?.offsetHeight ?? 0}px`);
       sections = Array.from(document.querySelectorAll<HTMLElement>("[data-scene]"));
@@ -121,7 +124,7 @@ export default function OfficeJourney() {
       // intermedios hasta su final para no saltearse nada.
       const headerH = header?.offsetHeight ?? 0;
       const visible = vh - headerH;
-      const maxY = document.documentElement.scrollHeight - vh;
+      const maxY = maxScroll();
       const all: number[] = [];
       sections.forEach((_, k) => {
         const start = tops[k] - headerH;
@@ -346,8 +349,12 @@ export default function OfficeJourney() {
       glide = requestAnimationFrame(step);
     };
     const nearest = (y: number) => stops.reduce((a, b) => (Math.abs(b - y) < Math.abs(a - y) ? b : a), 0);
+    // Bajando, el final real de la página es siempre la última parada (por si
+    // algo cambió de alto desde la última medición)
     const next = (y: number, dir: number) =>
-      dir > 0 ? stops.find((s) => s > y + 2) : [...stops].reverse().find((s) => s < y - 2);
+      dir > 0
+        ? (stops.find((s) => s > y + 2 && s < maxScroll() - 2) ?? (y < maxScroll() - 2 ? maxScroll() : undefined))
+        : [...stops].reverse().find((s) => s < y - 2);
     const page = (dir: number) => {
       const to = next(goal >= 0 ? goal : window.scrollY, dir);
       if (to !== undefined) glideTo(to, PAGE_MS);
@@ -427,19 +434,16 @@ export default function OfficeJourney() {
       history.pushState(null, "", `#${id}`);
     };
 
-    // Medidas: al cargar, si cambia el ancho (no la barra del navegador del
-    // celular, que cambia el alto al scrollear) y si cambia el tamaño de alguna
-    // sección (imágenes o fuentes que terminan de cargar).
+    // Medidas: al cargar, si cambia el tamaño de la pantalla (también cuando
+    // aparece o se esconde la barra del navegador del celular) y si cambia el
+    // tamaño de alguna sección (imágenes o fuentes que terminan de cargar).
     const remeasure = () => {
       measure();
       request();
     };
     const onResize = () => {
-      if (window.innerWidth !== vw || Math.abs(document.documentElement.clientHeight - vh) > 160) {
-        vw = window.innerWidth;
-        vh = document.documentElement.clientHeight;
-        remeasure();
-      }
+      if (window.innerHeight !== vh || sections.length === 0) remeasure();
+      else request();
     };
     measure();
     const ro = new ResizeObserver(remeasure);
