@@ -7,27 +7,32 @@ import { useEffect, useRef } from "react";
 // su foto de la misma oficina desde otro ángulo; al scrollear hacia la sección
 // siguiente la cámara se acerca al objeto donde está la próxima parada y se
 // funde con la foto de ese ángulo. El contenido de cada sección ([data-panel])
-// entra desde abajo, de desenfocado a nítido y escalonado, a medida que la
-// cámara llega, y sale hacia arriba cuando se va. Fotos en public/oficina:
-// versiones con la marca BALDO editadas por el cliente (v2-*), a partir de la
-// sesión de Tran Mau Tri Tam en Pexels (uso libre).
+// entra desde abajo, escalonado, a medida que la cámara llega, y sale hacia
+// arriba cuando se va. Fotos en public/oficina: versiones con la marca BALDO
+// editadas por el cliente, con un desenfoque leve ya aplicado (v3-*), a partir
+// de la sesión de Tran Mau Tri Tam en Pexels (uso libre).
 const SCENES = [
   // focus = hacia dónde se acerca la cámara al salir de esta escena (% de la foto)
-  { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%", key: "intro" }, // portada del logo → la agenda
-  { src: "/oficina/v2-3-companias-agenda.webp", focus: "50% 50%" }, // → alejándose a la vista general
-  { src: "/oficina/v2-2-quien-soy-general.webp", focus: "58% 82%" }, // → la agenda del escritorio
-  { src: "/oficina/v2-1-inicio-monitor.webp", focus: "60% 80%" }, // → bajando hacia el escritorio
-  { src: "/oficina/v2-4-ramas-mouse.webp", focus: "55% 78%" }, // → el escritorio desde arriba
-  { src: "/oficina/v2-5-como-trabajo-arriba.webp", focus: "18% 40%" }, // → el costado de los monitores
-  { src: "/oficina/v2-6-equipo-gatito.webp", focus: "50% 3%" }, // → el estante de arriba
-  { src: "/oficina/v2-7-contacto-estante.webp", focus: "50% 50%" },
+  { src: "/oficina/v3-3-companias-agenda.webp", focus: "50% 50%" }, // portada del logo → el monitor
+  // inicio: repite la del gatito (parecida a la general, se vuelve a ver recién en Equipo)
+  { src: "/oficina/v3-6-equipo-gatito.webp", focus: "50% 85%", key: "inicio" }, // → bajando al escritorio
+  { src: "/oficina/v3-2-quien-soy-general.webp", focus: "58% 82%" }, // → la agenda del escritorio
+  { src: "/oficina/v3-1-inicio-monitor.webp", focus: "60% 80%" }, // → bajando hacia el escritorio
+  { src: "/oficina/v3-4-ramas-mouse.webp", focus: "55% 78%" }, // → el escritorio desde arriba
+  { src: "/oficina/v3-5-como-trabajo-arriba.webp", focus: "18% 40%" }, // → el costado de los monitores
+  { src: "/oficina/v3-6-equipo-gatito.webp", focus: "50% 3%" }, // → el estante de arriba
+  { src: "/oficina/v3-7-contacto-estante.webp", focus: "50% 50%" },
 ];
 
+// La cámara siempre avanza: la escena que se va se acerca (ZOOM_OUT) y la que
+// llega también viene creciendo un poco (de ZOOM_IN a 1), sin el efecto de
+// "acercar y después alejar" que se veía como un movimiento doble.
 const ZOOM_OUT = 2.4; // cuánto se acerca la escena que se va
-const ZOOM_IN = 1.3; // de qué tamaño arranca la escena que llega
-// Desenfoque fijo de las fotos: las pantallas de los monitores tienen texto y
-// no tiene que competir con el contenido de la página.
-const BASE_BLUR = 1.5;
+const ZOOM_IN = 0.92; // de qué tamaño arranca la escena que llega
+const OVERSCALE = 1.1; // margen para el paralaje y para que ZOOM_IN no deje bordes
+// Las fotos ya vienen levemente desenfocadas (las pantallas de los monitores
+// tienen texto que no tiene que competir con la página); se hornea en el
+// archivo en vez de usar filter: blur, que en el celular trababa el scroll.
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a: number, b: number, v: number) => {
@@ -57,10 +62,11 @@ export default function OfficeJourney() {
     // - logo de la portada (data-fx="logo"): al bajar queda fijo en el centro y
     //   se acerca a la cámara desvaneciéndose, como si la atravesáramos
     // - botones: entran enteros, subiendo
-    // - resto (textos, ítems de lista): suben / se deslizan desenfocados
+    // - resto (textos, ítems de lista): suben / se deslizan (sin desenfoque: trababa el celular)
     // Si uno está dentro de otro (un link dentro de un párrafo) se anima el de afuera.
     type Kind = "line" | "text" | "button" | "list" | "card" | "zoom" | "fade" | "logo";
-    type Item = { el: HTMLElement; kind: Kind };
+    // last: último avance dibujado, para no reescribir estilos que no cambiaron
+    type Item = { el: HTMLElement; kind: Kind; last?: string };
     const SEL = "h1, h2, h3, p, li, a, button, [data-fx]";
     const kindOf = (el: HTMLElement): Kind => {
       if (el.getAttribute("data-fx") === "zoom") return "zoom";
@@ -118,7 +124,6 @@ export default function OfficeJourney() {
 
       const e = easeInOut(t);
       const fade = smooth(0.3, 0.8, t);
-      const blur = reduced ? 0 : Math.sin(Math.PI * t) * 5;
 
       layers.current.forEach((el, j) => {
         if (!el) return;
@@ -130,17 +135,17 @@ export default function OfficeJourney() {
           el.style.transformOrigin = SCENES[j].focus;
         } else if (j === i + 1) {
           opacity = fade;
-          scale = reduced ? 1 : ZOOM_IN - (ZOOM_IN - 1) * e;
+          scale = reduced ? 1 : ZOOM_IN + (1 - ZOOM_IN) * e;
           el.style.transformOrigin = "50% 50%";
         }
         el.style.opacity = String(opacity);
         el.style.visibility = opacity > 0 ? "visible" : "hidden";
         el.style.zIndex = j === i + 1 ? "2" : "1";
+        if (opacity === 0) return; // las capas ocultas no se mueven
         // Pequeño paralaje con el mouse para dar sensación de profundidad
         const px = reduced ? 0 : mx * 14;
         const py = reduced ? 0 : my * 10;
-        el.style.transform = `translate3d(${px}px, ${py}px, 0) scale(${scale * 1.04})`;
-        el.style.filter = `blur(${(BASE_BLUR + blur).toFixed(1)}px)`;
+        el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) scale(${(scale * OVERSCALE).toFixed(4)})`;
       });
 
       // Texto: entra mientras la sección sube a su lugar y sale al irse
@@ -172,6 +177,10 @@ export default function OfficeJourney() {
           const v = Math.min(a, b);
           const entering = a < b; // entra desde abajo; al irse sale hacia arriba
           const dir = entering ? 1 : -0.7;
+          // Sin cambios desde el último cuadro (secciones fuera de pantalla): no tocar
+          const key = `${v.toFixed(3)}${entering ? "+" : "-"}`;
+          if (item.last === key) return;
+          item.last = key;
 
           if (reduced) {
             el.style.opacity = String(v);
@@ -179,6 +188,11 @@ export default function OfficeJourney() {
           }
           // Cerca del final se deja el elemento limpio (sin recorte ni desplazamiento
           // residual), así los botones quedan exactamente con su forma.
+          if (v >= 0.985 || v <= 0) {
+            el.style.willChange = "";
+          } else {
+            el.style.willChange = "transform, opacity"; // en su propia capa mientras se mueve
+          }
           if (v >= 0.985) {
             el.style.opacity = "";
             el.style.transform = "";
@@ -202,7 +216,6 @@ export default function OfficeJourney() {
             case "card": // se desliza desde la derecha, en fila
               el.style.transform = `perspective(1000px) translate3d(${(w * 180 * (entering ? 1 : -0.6)).toFixed(1)}px, ${(w * 20).toFixed(1)}px, 0) rotateY(${(-w * 14).toFixed(1)}deg)`;
               el.style.opacity = String(smooth(0, 1, v));
-              el.style.filter = `blur(${(w * 6).toFixed(1)}px)`;
               return;
             case "zoom": // crece desde su centro, desde cero (logos de compañías)
               el.style.transform = `scale(${v.toFixed(3)})`;
@@ -221,7 +234,6 @@ export default function OfficeJourney() {
               el.style.transform = `translate3d(0, ${(w * 44 * dir).toFixed(1)}px, 0)`;
           }
           el.style.opacity = String(smooth(0, 1, v));
-          el.style.filter = `blur(${(w * 10).toFixed(1)}px)`;
         });
 
         // Números que cuentan (data-count="+20") a medida que entra la sección
@@ -229,7 +241,8 @@ export default function OfficeJourney() {
           const m = (el.dataset.count ?? "").match(/^(\D*)(\d+)(.*)$/); // "+20" → "+", 20, ""
           if (!m) return;
           const p = k === 0 ? Math.min(enter, intro) : enter;
-          el.textContent = `${m[1]}${Math.round(Number(m[2]) * easeInOut(clamp(p * 1.3 - 0.2)))}${m[3]}`;
+          const text = `${m[1]}${Math.round(Number(m[2]) * easeInOut(clamp(p * 1.3 - 0.2)))}${m[3]}`;
+          if (el.textContent !== text) el.textContent = text;
         });
       });
 
@@ -316,7 +329,7 @@ export default function OfficeJourney() {
             backgroundImage: `url(${s.src})`,
             opacity: j === 0 ? 1 : 0,
             visibility: j === 0 ? "visible" : "hidden",
-            filter: `blur(${BASE_BLUR}px)`,
+            transform: `scale(${OVERSCALE})`,
           }}
         />
       ))}
