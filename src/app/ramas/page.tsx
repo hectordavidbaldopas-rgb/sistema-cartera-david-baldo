@@ -21,7 +21,7 @@ export default function RamasPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
           <Link href="/" aria-label="Ir al inicio">
             <LogoMark size={36} className="shrink-0 sm:hidden" />
-            <LogoFull width={160} className="hidden shrink-0 sm:block" />
+            <LogoFull width={132} className="hidden shrink-0 sm:block" />
           </Link>
           <Link href="/" className={secondaryButtonClass}>
             ← Volver al inicio

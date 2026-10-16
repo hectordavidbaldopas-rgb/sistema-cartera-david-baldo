@@ -136,10 +136,6 @@ h1, h2, h3 {
   color: transparent;
 }
 
-/* Prueba "estilo banner": logo en blanco */
-.logo-white {
-  filter: brightness(0) invert(1);
-}
 
 
 /* Texto apoyado directo sobre las fotos del recorrido por la oficina
@@ -180,8 +176,8 @@ h1, h2, h3 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  mask-image: url("/logo-baldo-mark.png");
-  -webkit-mask-image: url("/logo-baldo-mark.png");
+  mask-image: url("/marca/baldo-b-blanco.webp");
+  -webkit-mask-image: url("/marca/baldo-b-blanco.webp");
   mask-size: 100% 100%;
   -webkit-mask-size: 100% 100%;
   mask-repeat: no-repeat;

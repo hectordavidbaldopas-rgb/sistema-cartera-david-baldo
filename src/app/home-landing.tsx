@@ -148,7 +148,7 @@ export default function HomeLanding() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <SideMenu>
             <LogoMark size={36} className="shrink-0 sm:hidden" />
-            <LogoFull width={160} className="hidden shrink-0 sm:block" />
+            <LogoFull width={132} className="hidden shrink-0 sm:block" />
           </SideMenu>
           <nav className="hidden items-center gap-6 lg:flex">
             {NAV_LINKS.map((l) => (

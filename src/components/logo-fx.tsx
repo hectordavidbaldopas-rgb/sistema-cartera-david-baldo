@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 // su eje acercándose y alejándose, mientras un brillo dorado con un destello
 // sube en diagonal recorriendo solo la B. `mark` es el recuadro de la B dentro
 // de cada PNG (en %, medido sobre la imagen); ahí va el brillo, con la B sola
-// (logo-baldo-mark.png) como máscara para que no se vea en el fondo ni sobre
+// (marca/baldo-b-blanco.webp) como máscara para que no se vea en el fondo ni sobre
 // "BALDO SEGUROS".
 //
 // Se dispara al pasar el mouse, al hacer clic o al tocarlo en el celular, y

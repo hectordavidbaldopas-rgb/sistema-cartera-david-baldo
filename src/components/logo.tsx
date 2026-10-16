@@ -1,16 +1,20 @@
 import Image from "next/image";
 import LogoFx from "@/components/logo-fx";
 
+// Logos de marca en public/marca/ (versiones blanca y azul de cada uno): acá se
+// usan los blancos porque van sobre el fondo navy. Los azules quedan para
+// fondos claros. `mark` es el recuadro de la B dentro de cada imagen (en %).
+
 export function LogoMark({ size = 40, className = "" }: { size?: number; className?: string }) {
   return (
     <LogoFx mark={{ left: 0, top: 0, width: 100, height: 100 }} className={className}>
       <Image
-        src="/logo-baldo-mark.png"
+        src="/marca/baldo-b-blanco.webp"
         alt="Baldo Seguros"
-        width={327}
-        height={440}
+        width={663}
+        height={905}
         style={{ height: size, width: "auto" }}
-        className="logo-white block"
+        className="block"
         priority
       />
     </LogoFx>
@@ -19,14 +23,14 @@ export function LogoMark({ size = 40, className = "" }: { size?: number; classNa
 
 export function LogoFull({ width = 220, className = "" }: { width?: number; className?: string }) {
   return (
-    <LogoFx mark={{ left: 0, top: 1.1, width: 20.2, height: 98.9 }} className={className}>
+    <LogoFx mark={{ left: 0, top: 0, width: 25.5, height: 100 }} className={className}>
       <Image
-        src="/logo-baldo.png"
+        src="/marca/baldo-horizontal-blanco.webp"
         alt="Baldo Seguros"
-        width={1000}
-        height={274}
+        width={1993}
+        height={721}
         style={{ width, height: "auto" }}
-        className="logo-white block"
+        className="block"
         priority
       />
     </LogoFx>
@@ -47,18 +51,18 @@ export function LogoStacked({
 }) {
   return (
     <LogoFx
-      mark={{ left: 29, top: 0, width: 43.3, height: 61.4 }}
+      mark={{ left: 33.68, top: 0, width: 33.18, height: 58.01 }}
       className={className}
       autoPlay={autoPlay}
       playOnView={playOnView}
     >
       <Image
-        src="/logo-baldo-vertical.png"
+        src="/marca/baldo-vertical-blanco.webp"
         alt="Baldo Seguros"
-        width={600}
-        height={570}
+        width={1998}
+        height={1560}
         style={{ width, height: "auto" }}
-        className="logo-white block"
+        className="block"
         priority={autoPlay}
       />
     </LogoFx>
