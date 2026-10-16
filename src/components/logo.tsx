@@ -51,16 +51,16 @@ export function LogoStacked({
 }) {
   return (
     <LogoFx
-      mark={{ left: 33.68, top: 0, width: 33.18, height: 58.01 }}
+      mark={{ left: 27.33, top: 0, width: 46.05, height: 62.95 }}
       className={className}
       autoPlay={autoPlay}
       playOnView={playOnView}
     >
       <Image
-        src="/marca/baldo-vertical-blanco.webp"
+        src="/marca/baldo-vertical-blanco-v2.webp"
         alt="Baldo Seguros"
-        width={1998}
-        height={1560}
+        width={1950}
+        height={1954}
         style={{ width, height: "auto" }}
         className="block"
         priority={autoPlay}
