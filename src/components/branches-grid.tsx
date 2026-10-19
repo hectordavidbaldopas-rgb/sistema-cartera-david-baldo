@@ -18,6 +18,9 @@ import {
   HailIcon,
   ScaleIcon,
   BuildingIcon,
+  FactoryIcon,
+  SproutIcon,
+  PlaneIcon,
 } from "@/components/brand-icons";
 
 const BRANCHES = [
@@ -176,7 +179,7 @@ export const CATEGORIES = [
   },
   {
     label: "Industria",
-    Icon: GearIcon,
+    Icon: FactoryIcon,
     branches: [
       "Seguro integral para comercio e industria",
       "Seguro técnico",
@@ -188,10 +191,10 @@ export const CATEGORIES = [
   },
   {
     label: "Agro",
-    Icon: HailIcon,
+    Icon: SproutIcon,
     branches: ["Granizo", "Cascos", "Transporte", "Incendio", "Responsabilidad civil", "Accidentes personales"],
   },
-  { label: "Turismo", Icon: AnchorIcon, branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
+  { label: "Turismo", Icon: PlaneIcon, branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
 ];
 
 // Botones de rubro: "Todas" muestra todas las ramas; tocar un rubro deja solo las suyas.

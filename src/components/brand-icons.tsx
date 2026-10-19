@@ -49,16 +49,6 @@ export function StoreIcon({ className = base }: IconProps) {
   );
 }
 
-export function FactoryIcon({ className = base }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
-      <path d="M3 20.5V13l5 3.2V13l5 3.2V10l6 3.8v6.7Z" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17 13.5V8.5l2.5 2V8.5L22 10.5v3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M3 20.5h19" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export function ShieldHeartIcon({ className = base }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
@@ -74,14 +64,6 @@ export function HardHatIcon({ className = base }: IconProps) {
       <path d="M4 17a8 8 0 0 1 16 0" strokeLinecap="round" />
       <path d="M12 8V5" strokeLinecap="round" />
       <path d="M3 17h18v1.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-export function PlaneIcon({ className = base }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
-      <path d="M3 12.5 21 5l-6.5 8.5L21 19l-9-4-3.5 3.5-.7-3.8L3 12.5Z" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -203,6 +185,37 @@ export function HailIcon({ className = base }: IconProps) {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
       <path d="M6.5 12.5a4 4 0 0 1 .3-8 5 5 0 0 1 9.7-1.2A4.3 4.3 0 0 1 17 12.5Z" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M8 16v1.5M12 16v1.5M16 16v1.5M8 19.5v.5M12 19.5v.5M16 19.5v.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function FactoryIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M3 20.5V10l5 3V10l5 3V10l5 3V4h3v16.5Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 20.5h20M7 17h1.5M11 17h1.5M15 17h1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function SproutIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path d="M12 21v-9" strokeLinecap="round" />
+      <path d="M12 12C12 7.5 9 5 4 5c0 4.5 3 7 8 7Z" strokeLinejoin="round" />
+      <path d="M12 14.5c0-4 2.7-6.5 7.5-6.5 0 4-2.7 6.5-7.5 6.5Z" strokeLinejoin="round" />
+      <path d="M7 21h10" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function PlaneIcon({ className = base }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path
+        d="M10.5 3.5c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5V9l8 4.5v2l-8-2.5v5l2.5 2v1.5L12 20l-4 1.5V20l2.5-2v-5l-8 2.5v-2l8-4.5Z"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
