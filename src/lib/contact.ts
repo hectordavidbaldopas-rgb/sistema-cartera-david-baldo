@@ -8,3 +8,7 @@ export const WHATSAPP_HREF = (msg: string) =>
 export const INSTAGRAM_HREF = "https://www.instagram.com/pas.david.baldo";
 export const FACEBOOK_HREF = "https://www.facebook.com/profile.php?id=100027309113999";
 export const EMAIL = "hectordavidbaldo.pas@gmail.com";
+// "Compartir con un amigo": abre WhatsApp sin destinatario, con el link a la web.
+export const SHARE_HREF = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+  "Mirá la página de Baldo Seguros: seguros para autos, hogar, comercio, vida y más 👉 https://baldoseguros.vercel.app",
+)}`;

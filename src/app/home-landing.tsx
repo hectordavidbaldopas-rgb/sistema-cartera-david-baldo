@@ -15,9 +15,13 @@ import {
   FacebookIcon,
   MailIcon,
   CheckIcon,
+  ShareIcon,
 } from "@/components/brand-icons";
 import { BranchesChips } from "@/components/branches-grid";
-import { WHATSAPP_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, EMAIL } from "@/lib/contact";
+import { WHATSAPP_HREF, SHARE_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, EMAIL } from "@/lib/contact";
+
+const shareClass =
+  "inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/90 text-navy-950 shadow-[0_10px_26px_rgba(0,0,0,0.35)] transition duration-200 hover:-translate-y-0.5";
 
 const NAV_LINKS = [
   { href: "#quien-soy", label: "Quién soy" },
@@ -439,9 +443,29 @@ export default function HomeLanding() {
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>
           <SocialButtons className="justify-center" />
           <PortalButtons className="mt-2 sm:mt-4" />
+          <a
+            href={SHARE_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${shareClass} px-[18px] py-[11px] text-xs font-semibold uppercase tracking-wider`}
+          >
+            <ShareIcon className="h-[18px] w-[18px]" />
+            Compartir con un amigo
+          </a>
           <p className="text-xs text-white/30">© {new Date().getFullYear()} Baldo Seguros</p>
         </div>
       </footer>
+
+      {/* Compartir flotante, arriba del de WhatsApp */}
+      <a
+        href={SHARE_HREF}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Compartir con un amigo"
+        className={`${shareClass} fixed bottom-[5.75rem] right-6 z-30 h-12 w-12`}
+      >
+        <ShareIcon className="h-[18px] w-[18px]" />
+      </a>
 
       {/* CTA flotante */}
       <a
