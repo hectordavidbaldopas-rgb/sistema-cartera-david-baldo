@@ -21,6 +21,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  // Base para que og:image y canonical salgan con URL absoluta.
+  metadataBase: new URL("https://davidbaldo.vercel.app"),
   title: "Sistema de Cartera — Baldo Seguros",
   description: "Gestión de cartera de clientes y pólizas de Baldo Seguros.",
   // Nombre debajo del ícono al agregarla a la pantalla de inicio del iPhone.
@@ -32,7 +34,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
 
   return (
     <html
-      lang="en"
+      lang="es-AR"
       className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
