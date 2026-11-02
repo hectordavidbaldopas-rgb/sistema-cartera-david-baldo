@@ -22,7 +22,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   // Base para que og:image y canonical salgan con URL absoluta.
-  metadataBase: new URL("https://davidbaldo.vercel.app"),
+  metadataBase: new URL("https://baldoseguros.vercel.app"),
   title: "Sistema de Cartera — Baldo Seguros",
   description: "Gestión de cartera de clientes y pólizas de Baldo Seguros.",
   // Nombre debajo del ícono al agregarla a la pantalla de inicio del iPhone.

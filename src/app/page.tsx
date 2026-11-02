@@ -30,8 +30,8 @@ const jsonLd = {
   "@type": "InsuranceAgency",
   name: "Baldo Seguros — David Baldo",
   description: DESCRIPTION,
-  url: "https://davidbaldo.vercel.app",
-  image: "https://davidbaldo.vercel.app/opengraph-image.jpg",
+  url: "https://baldoseguros.vercel.app",
+  image: "https://baldoseguros.vercel.app/opengraph-image.jpg",
   telephone: `+${WHATSAPP_NUMBER}`,
   email: EMAIL,
   address: {
