@@ -8,6 +8,8 @@ export type Company = {
   origin: string;
   founded: string;
   text: string;
+  // Compañías que gestionamos a través de otra (slug de la compañía por la que llegamos)
+  via?: string;
 };
 
 export const COMPANIES: Company[] = [
@@ -75,4 +77,38 @@ export const COMPANIES: Company[] = [
     text:
       "Cooperativa de seguros fundada en Rosario el 22 de mayo de 1959 por empresarios metalúrgicos de la región, para proteger sus fábricas, importaciones y exportaciones. En 1964 sumó los seguros de autos y camiones y adoptó su nombre actual.",
   },
+  // Asistencia al viajero: convenios de Mercantil Andina (Mercantil Andina | Masturismo)
+  {
+    slug: "universal-assistance",
+    name: "Universal Assistance",
+    logo: "/aseguradoras/universal-assistance.png",
+    origin: "Buenos Aires, Argentina",
+    founded: "Grupo Zurich desde 2018",
+    via: "mercantil-andina",
+    text:
+      "Una de las empresas líderes de asistencia al viajero en Argentina, hoy parte del grupo Zurich. Tiene planes con distintos niveles de cobertura para adaptarse a cada viaje y a cada presupuesto, y una amplia red de prestadores en todo el mundo para recibir atención médica de calidad estés donde estés.",
+  },
+  {
+    slug: "europ-assistance",
+    name: "Europ Assistance",
+    logo: "/aseguradoras/europ-assistance.png",
+    origin: "París, Francia",
+    founded: "Fundada en 1963 · Grupo Generali",
+    via: "mercantil-andina",
+    text:
+      "Nació en París en 1963 como el primer servicio de asistencia para quienes viajaban al exterior, y hoy pertenece al grupo Generali. Brinda asistencia médica, de viaje, legal y de seguridad, con una red de prestadores en más de 200 países.",
+  },
+  {
+    slug: "assist-card",
+    name: "Assist Card",
+    logo: "/aseguradoras/assist-card.png",
+    origin: "Ginebra, Suiza",
+    founded: "Fundada en 1972",
+    via: "mercantil-andina",
+    text:
+      "Con más de 50 años de trayectoria, te cubre no solo en lo médico (urgencias odontológicas, esguinces, fracturas o malestares en general) sino también si se pierde el equipaje, si el vuelo se demora o se cancela, o si te roban o perdés los documentos.",
+  },
 ];
+
+export const INSURERS = COMPANIES.filter((c) => !c.via);
+export const TRAVEL = COMPANIES.filter((c) => c.via === "mercantil-andina");

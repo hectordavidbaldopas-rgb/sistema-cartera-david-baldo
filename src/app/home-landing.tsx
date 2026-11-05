@@ -7,7 +7,7 @@ import LogoFx from "@/components/logo-fx";
 import TapZoom from "@/components/tap-zoom";
 import CompanyCard from "@/components/company-card";
 import SideMenu from "@/components/side-menu";
-import { COMPANIES } from "@/lib/companies";
+import { INSURERS, TRAVEL } from "@/lib/companies";
 import { Lines } from "@/components/fx-text";
 import {
   WhatsAppIcon,
@@ -35,7 +35,7 @@ const STATS = [
   // href: cada número lleva a la sección que lo explica
   { value: "+20", label: "años de experiencia", href: "#quien-soy" },
   { value: "7", label: "compañías aseguradoras", href: "#companias" },
-  { value: "14", label: "ramas de seguros", href: "#ramas" },
+  { value: "15", label: "ramas de seguros", href: "#ramas" },
 ];
 
 const STEPS = [
@@ -252,7 +252,7 @@ export default function HomeLanding() {
               <p className="text-xs uppercase tracking-widest text-gold-400">Matrícula</p>
               <p className="text-lg font-semibold text-gold-300">N° 63225</p>
               <div className="mt-6 flex flex-wrap items-center gap-2">
-                {COMPANIES.map((c) =>
+                {INSURERS.map((c) =>
                   c.logo ? (
                     <span
                       key={c.name}
@@ -330,11 +330,47 @@ export default function HomeLanding() {
           {/* De a dos en el celular (de a cuatro en la compu), todos del mismo tamaño;
               el último, si queda solo, va centrado */}
           <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-3 sm:gap-5">
-            {COMPANIES.map((c) => (
+            {INSURERS.map((c) => (
               <CompanyCard key={c.slug} company={c} className="w-[calc(50%-0.375rem)] sm:w-[calc(25%-0.9375rem)]" />
             ))}
           </div>
           <p className="mt-5 text-center text-xs text-white/50">Tocá una compañía para conocerla.</p>
+        </div>
+      </section>
+
+      {/* TURISMO Y ASISTENCIA AL VIAJERO: convenios de Mercantil Andina */}
+      <section id="viajes" data-scene className={sceneClass}>
+        <div className={`mx-auto w-full max-w-4xl ${panelClass}`} data-panel>
+          <p className="mb-2 text-center text-sm font-semibold uppercase tracking-widest text-gold-400">
+            Turismo y asistencia al viajero
+          </p>
+          <h2 className="mb-3 text-center text-2xl font-bold text-white sm:mb-4 sm:text-4xl">
+            <Lines lines={["Viajá tranquilo,", <span key="m">estés donde estés.</span>]} />
+          </h2>
+          <p className="mx-auto mb-5 max-w-2xl text-center text-sm text-white/70 sm:mb-8 sm:text-base">
+            Atención médica, odontológica de urgencia, equipaje perdido, vuelos demorados o
+            cancelados y documentos robados, para viajes por el país o por el mundo. Lo gestionamos
+            gracias a nuestra alianza con{" "}
+            <Link href="/companias/mercantil-andina" className="font-semibold text-gold-300 underline-offset-4 hover:underline">
+              Mercantil Andina
+            </Link>
+            , que trabaja con estas tres compañías:
+          </p>
+          <div className="mx-auto flex max-w-3xl flex-wrap justify-center gap-3 sm:gap-5">
+            {TRAVEL.map((c) => (
+              <CompanyCard key={c.slug} company={c} className="w-[calc(33.333%-0.5rem)] sm:w-[calc(33.333%-0.834rem)]" />
+            ))}
+          </div>
+          <div className="mt-5 flex justify-center sm:mt-8">
+            <a
+              href={WHATSAPP_HREF("Hola David! Me voy de viaje y quiero cotizar una asistencia al viajero.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={secondaryButtonClass}
+            >
+              Cotizá tu viaje por WhatsApp →
+            </a>
+          </div>
         </div>
       </section>
 

@@ -9,7 +9,7 @@ import { WHATSAPP_HREF, WHATSAPP_DISPLAY } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "Ramas que trabajo — Baldo Seguros",
   description:
-    "Las 14 ramas de seguros que trabaja Baldo Seguros en Las Parejas y la zona: auto, hogar, comercio, campo, vida, responsabilidad civil y más.",
+    "Las 15 ramas de seguros que trabaja Baldo Seguros en Las Parejas y la zona: auto, hogar, comercio, campo, vida, responsabilidad civil, asistencia al viajero y más.",
 };
 
 // Listado completo de ramas, separado de la landing para que la home no quede

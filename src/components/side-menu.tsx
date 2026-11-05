@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { CATEGORIES, slugify } from "@/components/branches-grid";
-import { COMPANIES } from "@/lib/companies";
+import { INSURERS, TRAVEL } from "@/lib/companies";
 
 type Item = { label: string; href?: string; children?: Item[] };
 
@@ -17,7 +17,12 @@ const ITEMS: Item[] = [
   {
     label: "Compañías",
     href: "#companias",
-    children: COMPANIES.map((c) => ({ label: c.name, href: `/companias/${c.slug}` })),
+    children: INSURERS.map((c) => ({ label: c.name, href: `/companias/${c.slug}` })),
+  },
+  {
+    label: "Asistencia al viajero",
+    href: "#viajes",
+    children: TRAVEL.map((c) => ({ label: c.name, href: `/companias/${c.slug}` })),
   },
   {
     label: "Ramas",

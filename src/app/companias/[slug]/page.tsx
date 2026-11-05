@@ -7,7 +7,7 @@ import CompanyCard from "@/components/company-card";
 import { WhatsAppIcon } from "@/components/brand-icons";
 import { secondaryButtonClass, whatsappButtonClass } from "@/lib/ui";
 import { WHATSAPP_HREF, WHATSAPP_DISPLAY } from "@/lib/contact";
-import { COMPANIES } from "@/lib/companies";
+import { COMPANIES, TRAVEL } from "@/lib/companies";
 
 export function generateStaticParams() {
   return COMPANIES.map((c) => ({ slug: c.slug }));
@@ -27,6 +27,10 @@ export default async function CompaniaPage(props: PageProps<"/companias/[slug]">
   const c = COMPANIES.find((x) => x.slug === slug);
   if (!c) notFound();
   const others = COMPANIES.filter((x) => x.slug !== slug);
+  // Asistencia al viajero: se gestiona por la alianza con Mercantil Andina, así que
+  // cada una enlaza a Mercantil y la página de Mercantil, a las tres.
+  const via = c.via ? COMPANIES.find((x) => x.slug === c.via) : undefined;
+  const travel = c.slug === "mercantil-andina" ? TRAVEL : [];
 
   return (
     <div className="min-h-screen bg-texture-navy">
@@ -59,11 +63,38 @@ export default async function CompaniaPage(props: PageProps<"/companias/[slug]">
               <span className="rounded-full border border-gold-500/40 px-3 py-1">{c.founded}</span>
             </div>
             <p className="leading-relaxed text-white/75">{c.text}</p>
+            {via && (
+              <Link
+                href={`/companias/${via.slug}`}
+                className="mt-6 flex items-center gap-4 rounded-xl border border-gold-500/30 bg-white/5 p-4 transition hover:border-gold-400"
+              >
+                <span className="relative block h-10 w-24 shrink-0 rounded-md bg-white">
+                  <Image src={via.logo} alt={via.name} fill sizes="96px" className="object-contain p-1.5" />
+                </span>
+                <span className="text-sm text-white/75">
+                  Asistencia al viajero que gestionamos gracias a nuestra alianza con{" "}
+                  <span className="font-semibold text-gold-300">{via.name} →</span>
+                </span>
+              </Link>
+            )}
+            {travel.length > 0 && (
+              <div className="mt-6 rounded-xl border border-gold-500/30 bg-white/5 p-4">
+                <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-gold-300">Turismo y asistencia al viajero</p>
+                <p className="mb-4 text-sm text-white/70">
+                  Gracias a esta alianza también te ofrecemos asistencia al viajero con tres compañías líderes:
+                </p>
+                <div className="flex gap-3">
+                  {travel.map((t) => (
+                    <CompanyCard key={t.slug} company={t} className="flex-1" />
+                  ))}
+                </div>
+              </div>
+            )}
           </article>
 
           <div className="mt-8 flex justify-center">
             <a
-              href={WHATSAPP_HREF(`Hola David! Quiero cotizar un seguro con ${c.name}.`)}
+              href={WHATSAPP_HREF(c.via ? `Hola David! Quiero cotizar una asistencia al viajero con ${c.name}.` : `Hola David! Quiero cotizar un seguro con ${c.name}.`)}
               target="_blank"
               rel="noopener noreferrer"
               className={`${whatsappButtonClass} inline-flex items-center gap-2`}

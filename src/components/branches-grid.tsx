@@ -141,6 +141,14 @@ const BRANCHES = [
       "Brinda protección económica a tu familia en caso de fallecimiento o invalidez, ya sea de forma individual o como seguro colectivo para empleados de una empresa. Es una forma de asegurar la tranquilidad económica de quienes dependen de vos.",
     related: ["Accidentes personales"],
   },
+  {
+    Icon: PlaneIcon,
+    label: "Asistencia al viajero",
+    description: "Atención médica y ayuda ante imprevistos cuando viajás, por el país o por el mundo.",
+    detail:
+      "Te asiste las 24 horas durante el viaje: atención médica y odontológica de urgencia, medicamentos, traslados y repatriación, y ayuda si se pierde el equipaje, se demora o cancela el vuelo, o te roban los documentos. La gestionamos gracias a nuestra alianza con Mercantil Andina, con Universal Assistance, Europ Assistance y Assist Card.",
+    related: ["Accidentes personales", "Vida"],
+  },
 ];
 
 // Rubros para filtrar las ramas (una rama puede estar en varios rubros).
@@ -194,7 +202,7 @@ export const CATEGORIES = [
     Icon: SproutIcon,
     branches: ["Granizo", "Cascos", "Transporte", "Incendio", "Responsabilidad civil", "Accidentes personales"],
   },
-  { label: "Turismo", Icon: PlaneIcon, branches: ["Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
+  { label: "Turismo", Icon: PlaneIcon, branches: ["Asistencia al viajero", "Accidentes personales", "Automotores", "Cascos", "Responsabilidad civil"] },
 ];
 
 // Botones de rubro: "Todas" muestra todas las ramas; tocar un rubro deja solo las suyas.
