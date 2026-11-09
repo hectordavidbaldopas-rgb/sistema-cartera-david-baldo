@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { auth } from "@/auth";
 import { EMAIL, FACEBOOK_HREF, INSTAGRAM_HREF, WHATSAPP_NUMBER } from "@/lib/contact";
 import HomeLanding from "./home-landing";
@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+};
+
+// Color de la barra del navegador en el celular (= fondo del encabezado) y
+// controles nativos en modo oscuro. Solo la landing: la cartera queda igual.
+export const viewport: Viewport = {
+  themeColor: "#071a36",
+  colorScheme: "dark",
 };
 
 // Datos estructurados para Google (búsquedas locales tipo "seguros Las Parejas").

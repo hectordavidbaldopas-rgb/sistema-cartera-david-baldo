@@ -14,6 +14,7 @@ export function LogoMark({ size = 40, className = "" }: { size?: number; classNa
         width={663}
         height={905}
         style={{ height: size, width: "auto" }}
+        sizes={`${Math.ceil((size * 663) / 905)}px`}
         className="block"
         priority
       />
@@ -30,6 +31,7 @@ export function LogoFull({ width = 220, className = "" }: { width?: number; clas
         width={1993}
         height={721}
         style={{ width, height: "auto" }}
+        sizes={`${width}px`}
         className="block"
         priority
       />
@@ -62,6 +64,8 @@ export function LogoStacked({
         width={1950}
         height={1954}
         style={{ width, height: "auto" }}
+        // El de la portada ocupa min(72vw, 360px); el del footer, su ancho fijo.
+        sizes={typeof width === "number" ? `${width}px` : "(max-width: 500px) 72vw, 360px"}
         className="block"
         priority={autoPlay}
       />

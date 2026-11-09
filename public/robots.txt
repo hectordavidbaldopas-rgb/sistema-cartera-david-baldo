@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /portal
+Disallow: /admin
+Disallow: /api
+Disallow: /login
+
+Sitemap: https://baldoseguros.vercel.app/sitemap.xml

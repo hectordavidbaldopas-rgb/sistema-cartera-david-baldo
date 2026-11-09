@@ -45,6 +45,9 @@
 html {
   scroll-behavior: smooth;
 }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 /* Ramas de un rubro en la landing: aparecen de a una al tocar el rubro */
 .chip-in {
@@ -56,6 +59,7 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .chip-in { animation: none; }
+  .company-spin { animation: none; }
 }
 
 /* Logo de una compañía al tocarlo: medio giro acercándose, a la velocidad del

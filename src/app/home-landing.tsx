@@ -146,8 +146,14 @@ function SocialButtons({ className = "" }: { className?: string }) {
 
 export default function HomeLanding() {
   return (
-    <div className="landing-snap min-h-screen overflow-x-clip">
+    <div className="landing-snap min-h-screen overflow-x-clip [&_:is(a,button):focus-visible]:outline-2 [&_:is(a,button):focus-visible]:outline-offset-2 [&_:is(a,button):focus-visible]:outline-gold-400">
       <OfficeJourney />
+      <a
+        href="#contenido"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-gold-300 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-navy-950"
+      >
+        Saltar al contenido
+      </a>
       <header data-site-header className="sticky top-0 z-20 border-b border-gold-500/20 bg-[#071a36]/95">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
           <SideMenu>
@@ -169,6 +175,7 @@ export default function HomeLanding() {
         </div>
       </header>
 
+      <main id="contenido">
       {/* PORTADA: el logo en primer plano, llega girando con zoom y brillo */}
       <section data-scene className="relative flex min-h-[calc(100dvh-var(--header-h,4rem))] flex-col items-center justify-center overflow-x-clip px-4 py-16">
         <div className="flex flex-col items-center" data-panel>
@@ -180,7 +187,7 @@ export default function HomeLanding() {
             className="mt-14 flex flex-col items-center gap-1 text-xs font-medium uppercase tracking-widest text-gold-300/80 transition hover:text-gold-300"
           >
             Conocenos
-            <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 animate-bounce" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5 motion-safe:animate-bounce" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
@@ -197,8 +204,8 @@ export default function HomeLanding() {
             <h1 className="max-w-xl text-[2rem] font-bold leading-tight text-white sm:text-5xl">
               <Lines
                 lines={[
-                  <ZoomWords key="1" text="Pro·te·ge·mos lo que" />,
-                  <ZoomWords key="2" text="más te im·por·ta," />,
+                  <ZoomWords key="1" text="Pro·te·ge·mos lo que " />,
+                  <ZoomWords key="2" text="más te im·por·ta, " />,
                   <ZoomWords key="3" text="ha·ce 20 a·ños." className="text-gradient-gold" />,
                 ]}
               />
@@ -277,6 +284,7 @@ export default function HomeLanding() {
 
       {/* QUIÉN SOY */}
       <section id="quien-soy" data-scene className={sceneClass}>
+        <h2 className="sr-only">Quién soy</h2>
         <div className={`mx-auto grid w-full max-w-6xl items-center gap-7 sm:grid-cols-2 sm:gap-14 ${panelClass}`} data-panel>
           <div>
             <TapZoom data-fx="fade" className="group relative mx-auto max-w-[min(18rem,calc((100dvh-27.5rem)*1.17))] transition-[scale] sm:max-w-sm duration-500 ease-out hover:scale-105 data-[on=true]:scale-105">
@@ -324,9 +332,9 @@ export default function HomeLanding() {
       {/* COMPAÑÍAS */}
       <section id="companias" data-scene className={sceneClass}>
         <div className={`mx-auto w-full max-w-6xl ${panelClass}`} data-panel>
-          <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-white/40">
+          <h2 className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-white/40">
             Trabajo con las principales aseguradoras
-          </p>
+          </h2>
           {/* De a dos en el celular (de a cuatro en la compu), todos del mismo tamaño;
               el último, si queda solo, va centrado */}
           <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-3 sm:gap-5">
@@ -345,7 +353,7 @@ export default function HomeLanding() {
             Turismo y asistencia al viajero
           </p>
           <h2 className="mb-3 text-center text-2xl font-bold text-white sm:mb-4 sm:text-4xl">
-            <Lines lines={["Viajá tranquilo,", <span key="m">estés donde estés.</span>]} />
+            <Lines lines={["Viajá tranquilo, ", <span key="m">estés donde estés.</span>]} />
           </h2>
           <p className="mx-auto mb-5 max-w-2xl text-center text-sm text-white/70 sm:mb-8 sm:text-base">
             Atención médica, odontológica de urgencia, equipaje perdido, vuelos demorados o
@@ -382,7 +390,7 @@ export default function HomeLanding() {
               Ramas que trabajo
             </p>
             <h2 className="mb-4 text-center text-2xl font-bold text-white sm:mb-8 sm:text-4xl">
-              <Lines lines={["Un seguro", <span key="m">para cada necesidad.</span>]} />
+              <Lines lines={["Un seguro ", <span key="m">para cada necesidad.</span>]} />
             </h2>
             <BranchesChips />
             <div className="mt-5 flex justify-center sm:mt-8">
@@ -403,7 +411,7 @@ export default function HomeLanding() {
             </p>
             <h2 className="mb-4 text-3xl font-bold text-white sm:mb-12 sm:text-4xl">
               <a href={WHATSAPP_HREF("Hola David! Quiero cotizar un seguro.")} target="_blank" rel="noopener noreferrer">
-                <Lines lines={["Cotizá tu seguro", <span key="m" className="text-gradient-gold">en 24 horas.</span>]} />
+                <Lines lines={["Cotizá tu seguro ", <span key="m" className="text-gradient-gold">en 24 horas.</span>]} />
               </a>
             </h2>
           </div>
@@ -448,7 +456,7 @@ export default function HomeLanding() {
               Nuestro equipo
             </p>
             <h2 className="mb-6 text-3xl font-bold text-white sm:mb-12 sm:text-4xl">
-              <Lines lines={["Con quién", <span key="m">vas a hablar.</span>]} />
+              <Lines lines={["Con quién ", <span key="m">vas a hablar.</span>]} />
             </h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-3">
@@ -472,9 +480,12 @@ export default function HomeLanding() {
         </div>
       </section>
 
+      </main>
+
       {/* CONTACTO / FOOTER */}
       <footer id="contacto" data-scene className={sceneClass}>
         <div className={`mx-auto flex w-full max-w-3xl flex-col items-center gap-5 text-center sm:gap-6 ${panelClass}`} data-panel>
+          <h2 className="sr-only">Contacto</h2>
           <LogoStacked width={150} playOnView />
           <p className="text-sm text-white/60">Las Parejas, Santa Fe</p>
           <SocialButtons className="justify-center" />
