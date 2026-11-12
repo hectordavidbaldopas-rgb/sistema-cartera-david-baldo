@@ -43,6 +43,8 @@ const jsonLd = {
   email: EMAIL,
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Calle 15 N° 1053",
+    postalCode: "2505",
     addressLocality: "Las Parejas",
     addressRegion: "Santa Fe",
     addressCountry: "AR",
