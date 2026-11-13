@@ -5,6 +5,7 @@ import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react
 import { createPortal } from "react-dom";
 import { CATEGORIES, slugify } from "@/components/branches-grid";
 import { INSURERS, TRAVEL } from "@/lib/companies";
+import { CARTERA_ACTIVA } from "@/lib/cartera";
 
 type Item = { label: string; href?: string; children?: Item[] };
 
@@ -38,8 +39,12 @@ const ITEMS: Item[] = [
   { label: "Cómo trabajo", href: "#como-trabajo" },
   { label: "Equipo", href: "#equipo" },
   { label: "Contacto", href: "#contacto" },
-  { label: "Portal clientes", href: "/login?portal=cliente" },
-  { label: "Portal vendedores", href: "/login?portal=vendedor" },
+  ...(CARTERA_ACTIVA
+    ? [
+        { label: "Portal clientes", href: "/login?portal=cliente" },
+        { label: "Portal vendedores", href: "/login?portal=vendedor" },
+      ]
+    : []),
 ];
 
 function Chevron({ open }: { open: boolean }) {

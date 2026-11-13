@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { auth } from "@/auth";
 import { EMAIL, FACEBOOK_HREF, INSTAGRAM_HREF, WHATSAPP_NUMBER } from "@/lib/contact";
 import HomeLanding from "./home-landing";
+import { CARTERA_ACTIVA } from "@/lib/cartera";
 
 const TITLE = "Baldo Seguros — David Baldo, Productor Asesor de Seguros, Mat. N° 63225";
 const DESCRIPTION =
@@ -55,7 +56,7 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const session = await auth();
+  const session = CARTERA_ACTIVA ? await auth() : null;
   if (!session?.user)
     return (
       <>

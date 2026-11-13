@@ -19,6 +19,7 @@ import {
 } from "@/components/brand-icons";
 import { BranchesChips } from "@/components/branches-grid";
 import { WHATSAPP_HREF, SHARE_HREF, INSTAGRAM_HREF, FACEBOOK_HREF, EMAIL } from "@/lib/contact";
+import { CARTERA_ACTIVA } from "@/lib/cartera";
 
 const shareClass =
   "inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/90 text-navy-950 shadow-[0_10px_26px_rgba(0,0,0,0.35)] transition duration-200 hover:-translate-y-0.5";
@@ -103,6 +104,7 @@ const compactSecondaryClass = secondaryButtonClass.replace("px-5 py-2.5 text-sm"
 const compactPrimaryClass = primaryButtonClass.replace("px-5 py-2.5 text-sm", compactSize);
 
 function PortalButtons({ className = "", compact = false }: { className?: string; compact?: boolean }) {
+  if (!CARTERA_ACTIVA) return null;
   return (
     <div className={`flex items-center gap-1.5 sm:gap-2 ${className}`}>
       <Link href="/login?portal=cliente" className={`${compact ? compactSecondaryClass : secondaryButtonClass} whitespace-nowrap`}>

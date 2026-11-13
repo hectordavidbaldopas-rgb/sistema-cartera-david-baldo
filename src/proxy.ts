@@ -1,11 +1,19 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import { CARTERA_ACTIVA } from "@/lib/cartera";
 
 // Reglas de acceso por rol — ver ARQUITECTURA_BASE_DE_DATOS_APP_PAS.md sección 35.
 // admin: acceso total. seller: solo /dashboard (filtra su propia cartera dentro).
 // client: solo /portal.
 export default auth((req) => {
   const { pathname } = req.nextUrl;
+
+  // Cartera apagada: todo vuelve a la web pública y las APIs no responden.
+  if (!CARTERA_ACTIVA) {
+    if (pathname.startsWith("/api/")) return new NextResponse(null, { status: 404 });
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
+  }
+
   const session = req.auth;
 
   const isAuthRoute = pathname.startsWith("/login");
@@ -46,5 +54,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/admin/:path*", "/portal/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/portal/:path*", "/login", "/api/auth/:path*", "/api/policies/:path*"],
 };
